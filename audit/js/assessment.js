@@ -822,7 +822,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Section Badges & Labels
         sectionTag.textContent = q.section.replace('_', ' ');
-        sectionTag.className = `bga-section-tag bga-section-tag--${q.section.toLowerCase().replace('_', '-')}`;
+        sectionTag.className = `bga-category-tag bga-category-tag--${q.section.toLowerCase().replace('_', '-')}`;
         questionText.textContent = q.question;
 
         // Progress Calculations
@@ -839,9 +839,11 @@ document.addEventListener('DOMContentLoaded', () => {
         nextBtn.disabled = true;
 
         if (q.type === 'profile') {
+            questionText.style.display = 'none'; // Hide redundant question text for profile
             profileInputContainer.style.display = 'block';
             renderProfileField(q);
         } else {
+            questionText.style.display = 'block'; // Show question text
             optionsContainer.style.display = 'flex';
             renderOptionCards(q);
         }
