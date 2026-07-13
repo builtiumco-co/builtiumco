@@ -1,0 +1,98 @@
+[
+    {
+        "id": "jcutz",
+        "project_name": "JCUTZ",
+        "project_tagline": "Modern Barbershop Booking Platform",
+        "short_description": "A modern digital experience for Jcutz Barbershop. Designed to showcase precision grooming services with a seamless online booking system, blending classic craft with modern convenience.",
+        "tags": ["Web Design", "Branding", "Booking"],
+        "key_metric": "+30% Booking Increase",
+        "problem_text": "Jcutz needed a way to streamline their booking process, reduce no-shows, and present a premium brand image online.",
+        "strategy_intro": "We focused on creating a seamless digital experience that connects modern barbers with their clients intuitively.",
+        "strategy_points": [
+            "Mobile-first booking flow",
+            "Clear call-to-action",
+            "Premium visual branding"
+        ],
+        "product_description": "We built a smooth, responsive interface prioritizing user experience and fast booking.",
+        "metrics": [
+            { "value": "+30%", "label": "Booking Increase" },
+            { "value": "75%", "label": "Mobile Traffic" },
+            { "value": "20hrs", "label": "Admin Time Saved" }
+        ],
+        "client_quote": "Builtium transformed our booking process and elevated our brand to match the quality of our cuts.",
+        "client_name": "John Doe",
+        "client_role": "Owner, JCUTZ"
+    },
+    {
+        "id": "sky-interior",
+        "project_name": "SKY Interior",
+        "project_tagline": "High-end Digital Portfolio",
+        "short_description": "A high-end digital portfolio for SKY Interior, a premier interior design firm. We created a visually-driven website that showcases their luxury projects with a focus on architectural elegance and modern aesthetics.",
+        "tags": ["Web Design", "Branding", "Interior Design"],
+        "key_metric": "+45% Lead Generation",
+        "problem_text": "SKY Interior required a digital presence that reflected the premium nature of their physical interior design projects.",
+        "strategy_intro": "Our approach centered on letting the imagery speak, framing their work like an art gallery.",
+        "strategy_points": [
+            "Minimalist layout",
+            "High-resolution image optimization",
+            "Smooth page transitions"
+        ],
+        "product_description": "A high-end digital portfolio for SKY Interior, a premier interior design firm.",
+        "metrics": [
+            { "value": "+45%", "label": "Inquiries" },
+            { "value": "60%", "label": "Bounce Rate Drop" },
+            { "value": "3x", "label": "More Portfolio Views" }
+        ],
+        "client_quote": "Our new website perfectly captures the essence of our designs. It feels like a true extension of our brand.",
+        "client_name": "Jane Smith",
+        "client_role": "Creative Director, SKY Interior"
+    },
+    {
+        "id": "lexbound",
+        "project_name": "Lexbound",
+        "project_tagline": "Modern Law Firm Digital Experience",
+        "short_description": "A high-end digital portfolio for Lexbound, a premier law firm. We created a visually-driven website that showcases their system.",
+        "tags": ["Web Design", "Audit", "Law Firm"],
+        "key_metric": "2x Client Engagement",
+        "problem_text": "Lexbound needed to break away from traditional law firm websites and showcase their modern, tech-forward approach.",
+        "strategy_intro": "We positioned Lexbound as an innovative firm through clean design, clear messaging, and a modern tech stack.",
+        "strategy_points": [
+            "Professional yet modern typography",
+            "Clear service pathways",
+            "Trust-building case studies"
+        ],
+        "product_description": "A visually-driven website that showcases their expertise and builds immediate trust with potential clients.",
+        "metrics": [
+            { "value": "2x", "label": "Client Engagement" },
+            { "value": "40%", "label": "Increase in consultations" },
+            { "value": "1.5x", "label": "Longer Session Time" }
+        ],
+        "client_quote": "The website completely reimagined how we present our legal services to the modern client.",
+        "client_name": "Alex Johnson",
+        "client_role": "Managing Partner, Lexbound"
+    },
+    {
+        "id": "top-slides",
+        "project_name": "Top Slides",
+        "project_tagline": "Artisanal Luxury Slides",
+        "short_description": "An elegant e-commerce experience showcasing artisanal luxury slides handmade in Lagos. We created a visually stunning platform reflecting their deliberate, 72-hour craftsmanship.",
+        "tags": ["Web Design", "E-commerce", "Fashion"],
+        "key_metric": "Premium Brand Positioning",
+        "problem_text": "Top Slides needed a digital storefront that communicated the premium quality and craftsmanship behind their luxury footwear, setting them apart from fast fashion.",
+        "strategy_intro": "We focused on a clean, minimalist web design that lets the artisan details of the footwear shine, paired with a seamless path to purchase.",
+        "strategy_points": [
+            "Seamless e-commerce flow",
+            "High-resolution product showcasing",
+            "Brand storytelling integration"
+        ],
+        "product_description": "A refined digital storefront prioritizing effortless navigation, high-end visual storytelling, and a seamless checkout experience.",
+        "metrics": [
+            { "value": "+40%", "label": "Online Sales" },
+            { "value": "1.5x", "label": "Session Duration" },
+            { "value": "2x", "label": "Conversion Rate" }
+        ],
+        "client_quote": "Finally, a Nigerian brand that understands the balance between luxury and everyday comfort.",
+        "client_name": "The Mover",
+        "client_role": "Verified Customer"
+    }
+]

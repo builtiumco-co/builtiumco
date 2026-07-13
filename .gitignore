@@ -1,0 +1,24 @@
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# Log files
+*.log
+debug.log
+
+# Temporary/Cache files
+.sass-cache/
+.eslintcache
+.parcel-cache/
+.cache/
+.gemini/
+.agents/
+.system_generated/
+tasks/
+walkthrough.md
+implementation_plan.md
+task.md
+browser/

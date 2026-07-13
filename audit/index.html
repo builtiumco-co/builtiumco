@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Growth Assessment | Builtium</title>
+
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="Business Growth Assessment | Builtium">
+    <meta name="description"
+        content="Discover your digital growth potential with our free 5-minute assessment. Get a personalized readiness score and actionable insights for your business.">
+    <meta name="keywords"
+        content="business growth assessment, digital readiness score, business audit, growth potential, digital assessment, Builtium">
+    <meta name="author" content="Builtium">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#3a7bff">
+    <link rel="canonical" href="https://www.builtiumco.com/audit/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.builtiumco.com/audit/">
+    <meta property="og:title" content="Business Growth Assessment | Builtium">
+    <meta property="og:description"
+        content="Take our free 5-minute assessment and discover your digital growth potential. Personalized score and actionable insights.">
+    <meta property="og:image" content="https://www.builtiumco.com/og-image.webp">
+    <meta property="og:site_name" content="Builtium">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Business Growth Assessment | Builtium">
+    <meta name="twitter:description"
+        content="Take our free 5-minute assessment and discover your digital growth potential.">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="../Assests/logo/B ICON.svg">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="css/assessment.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <header class="site-header">
+        <div class="container header-container">
+            <a href="../" class="brand-logo">
+                <img src="../Assests/logo/B ICON.svg" alt="Builtium Logo" class="logo-icon">
+                <span class="brand-name">Builtium</span>
+            </a>
+
+            <button class="mobile-nav-toggle" aria-label="Toggle navigation">
+                <svg class="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+                <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
+            <nav class="site-nav">
+                <a href="../" class="nav-link">Home</a>
+                <a href="../#services" class="nav-link">Services</a>
+                <a href="../#work" class="nav-link">Work</a>
+                <a href="#" class="nav-link" style="color: var(--accent-color);">Audit</a>
+                <a href="../#contact" class="nav-link">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="bga-main">
+
+        <!-- ============================== -->
+        <!-- STEP 1: INTRO / LANDING SCREEN -->
+        <!-- ============================== -->
+        <section id="bga-intro" class="bga-screen bga-screen--active">
+            <div class="bga-intro-container">
+                <div class="bga-intro-icon">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#3a7bff" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                        <polyline points="4 10 12 2 20 8"></polyline>
+                    </svg>
+                </div>
+                <h1 class="bga-intro-headline">Discover Your Digital Growth Potential</h1>
+                <p class="bga-intro-subheadline">5-minute assessment. Personalized insights. No credit card needed.</p>
+
+                <form id="bga-intro-form" class="bga-intro-form" name="bga-start" method="POST" data-netlify="true"
+                    netlify>
+                    <input type="hidden" name="form-name" value="bga-start">
+                    <div class="bga-form-group">
+                        <label for="bga-business-name" class="bga-form-label">Business Name</label>
+                        <input type="text" id="bga-business-name" name="businessName" class="bga-form-input" required
+                            placeholder="Enter your business name">
+                    </div>
+                    <div class="bga-form-group">
+                        <label for="bga-email" class="bga-form-label">Email Address</label>
+                        <input type="email" id="bga-email" name="email" class="bga-form-input" required
+                            placeholder="you@company.com">
+                    </div>
+                    <button type="submit" class="bga-cta-button" id="bga-start-btn">Start Assessment</button>
+                    <p class="bga-intro-note">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        Takes ~5 minutes • 55 questions • Personalized results
+                    </p>
+                </form>
+
+                <!-- Resume prompt (hidden by default) -->
+                <div id="bga-resume-prompt" class="bga-resume-prompt" style="display: none;">
+                    <p>You have a saved assessment in progress.</p>
+                    <div class="bga-resume-actions">
+                        <button id="bga-resume-btn" class="bga-cta-button">Resume Assessment</button>
+                        <button id="bga-restart-btn" class="bga-cta-button bga-cta-button--secondary">Start Fresh
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================== -->
+        <!-- STEP 2: QUESTION SCREEN        -->
+        <!-- ============================== -->
+        <section id="bga-questions" class="bga-screen">
+            <div class="bga-question-container">
+                <!-- Progress Bar -->
+                <div class="bga-progress-wrapper">
+                    <div class="bga-progress-text" id="bga-progress-text">Section 1 of 10 • Question 1 of 7</div>
+                    <div class="bga-progress-bar-container">
+                        <div id="bga-progress-bar" class="bga-progress-bar"></div>
+                    </div>
+                </div>
+
+                <!-- Section Tag -->
+                <div class="bga-section-tag" id="bga-section-tag">BUSINESS PROFILE</div>
+
+                <!-- Question -->
+                <h2 class="bga-question-text" id="bga-question-text">Question text here?</h2>
+
+                <!-- Options Container (for radio-card questions) -->
+                <div class="bga-options" id="bga-options">
+                    <!-- Options injected dynamically -->
+                </div>
+
+                <!-- Profile Form Container (for profile input questions) -->
+                <div class="bga-profile-input" id="bga-profile-input" style="display: none;">
+                    <!-- Profile form fields injected dynamically -->
+                </div>
+
+                <!-- Navigation -->
+                <div class="bga-nav-buttons">
+                    <button id="bga-back-btn" class="bga-nav-btn bga-nav-btn--back" type="button">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                        Back
+                    </button>
+                    <button id="bga-next-btn" class="bga-cta-button bga-nav-btn--next" type="button" disabled>
+                        Next
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================== -->
+        <!-- STEP 3: CALCULATING SCREEN     -->
+        <!-- ============================== -->
+        <section id="bga-calculating" class="bga-screen">
+            <div class="bga-calculating-container">
+                <div class="bga-calculating-spinner"></div>
+                <h2 class="bga-calculating-text">Analyzing your responses...</h2>
+                <p class="bga-calculating-subtext">Building your personalized growth report</p>
+            </div>
+        </section>
+
+        <!-- ============================== -->
+        <!-- STEP 4: RESULTS SCREEN         -->
+        <!-- ============================== -->
+        <section id="bga-results" class="bga-screen">
+            <div class="bga-results-container">
+
+                <!-- 4A: Score Overview -->
+                <div class="bga-score-overview">
+                    <div class="bga-score-circle">
+                        <svg class="bga-score-ring" width="200" height="200" viewBox="0 0 200 200">
+                            <circle class="bga-score-ring-bg" cx="100" cy="100" r="88" fill="none" stroke="#f1f5f9"
+                                stroke-width="12" />
+                            <circle id="bga-score-ring-fill" class="bga-score-ring-fill" cx="100" cy="100" r="88"
+                                fill="none" stroke="#3a7bff" stroke-width="12" stroke-linecap="round"
+                                stroke-dasharray="553" stroke-dashoffset="553"
+                                transform="rotate(-90 100 100)" />
+                        </svg>
+                        <div class="bga-score-value">
+                            <span id="bga-score-number" class="bga-score-number">0</span>
+                            <span class="bga-score-suffix">/ 100</span>
+                        </div>
+                    </div>
+                    <div id="bga-readiness-badge" class="bga-readiness-badge">Growing Business</div>
+                    <h2 class="bga-score-headline">Your Digital Readiness Score</h2>
+                    <p id="bga-score-description" class="bga-score-description">Based on Your Business</p>
+                </div>
+
+                <!-- Score Interpretation -->
+                <div class="bga-score-interpretation">
+                    <h3 id="bga-score-message" class="bga-score-message">Room for Growth</h3>
+                    <p id="bga-score-recommendation" class="bga-score-recommendation">Recommendation text here.</p>
+                </div>
+
+                <!-- 4B: Section Breakdown -->
+                <div class="bga-breakdown">
+                    <h3 class="bga-section-title">Score Breakdown</h3>
+                    <div id="bga-breakdown" class="bga-breakdown-list">
+                        <!-- Breakdown bars injected dynamically -->
+                    </div>
+                </div>
+
+                <!-- 5: Strengths & Opportunities -->
+                <div class="bga-strengths-opportunities">
+                    <div class="bga-strengths-col">
+                        <h3 class="bga-section-title">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2ecc71"
+                                stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Your Biggest Strengths
+                        </h3>
+                        <div id="bga-strengths" class="bga-list">
+                            <!-- Strengths injected dynamically -->
+                        </div>
+                    </div>
+                    <div class="bga-opportunities-col">
+                        <h3 class="bga-section-title">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f59e0b"
+                                stroke-width="2">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                <line x1="12" y1="9" x2="12" y2="13"></line>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                            Biggest Growth Opportunities
+                        </h3>
+                        <div id="bga-opportunities" class="bga-list">
+                            <!-- Opportunities injected dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6: Opportunity Cards -->
+                <div class="bga-opportunity-section">
+                    <h3 class="bga-section-title bga-section-title--center">What Changes If You Fix These?</h3>
+                    <div id="bga-opportunity-cards" class="bga-opportunity-cards">
+                        <!-- Cards injected dynamically -->
+                    </div>
+                </div>
+
+                <!-- 7: Future Snapshot -->
+                <div class="bga-future-snapshot" id="bga-future-snapshot">
+                    <h3 class="bga-section-title bga-section-title--center">Your Business: Today vs. Potential</h3>
+                    <div class="bga-snapshot-grid">
+                        <div class="bga-snapshot-col bga-snapshot-col--today">
+                            <h4 class="bga-snapshot-label">Today</h4>
+                            <div id="bga-today-list" class="bga-snapshot-list">
+                                <!-- Today items injected dynamically -->
+                            </div>
+                        </div>
+                        <div class="bga-snapshot-arrow">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#3a7bff"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </div>
+                        <div class="bga-snapshot-col bga-snapshot-col--future">
+                            <h4 class="bga-snapshot-label">With Improvements</h4>
+                            <div id="bga-future-list" class="bga-snapshot-list">
+                                <!-- Future items injected dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bga-potential-score">
+                        <span>Estimated Potential Score:</span>
+                        <strong id="bga-potential-score">90+</strong>
+                        <span>/ 100</span>
+                    </div>
+                </div>
+
+                <!-- 8: Upsell — Growth Blueprint -->
+                <div class="bga-upsell" id="bga-upsell">
+                    <h3 class="bga-upsell-headline">Ready to Close These Gaps?</h3>
+                    <div class="bga-upsell-grid">
+                        <div class="bga-upsell-offer">
+                            <div class="bga-upsell-icon">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#3a7bff"
+                                    stroke-width="1.5">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10 9 9 9 8 9"></polyline>
+                                </svg>
+                            </div>
+                            <h4 class="bga-upsell-title">Unlock Your Complete Growth Blueprint</h4>
+                            <div class="bga-upsell-price">
+                                <span class="bga-price-amount">₦3,000 – ₦5,000</span>
+                                <span class="bga-price-note">One-time payment</span>
+                            </div>
+                            <a href="#" class="bga-cta-button bga-upsell-cta" id="bga-blueprint-cta">Unlock Full
+                                Blueprint</a>
+                        </div>
+                        <div class="bga-upsell-benefits">
+                            <h4 class="bga-benefits-title">What's Included</h4>
+                            <ul class="bga-benefits-list">
+                                <li>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2ecc71"
+                                        stroke-width="2.5">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    Comprehensive Business Analysis
+                                </li>
+                                <li>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2ecc71"
+                                        stroke-width="2.5">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    20+ Page Personalized Report
+                                </li>
+                                <li>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2ecc71"
+                                        stroke-width="2.5">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    Competitor Analysis
+                                </li>
+                                <li>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2ecc71"
+                                        stroke-width="2.5">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    Website & UX Review
+                                </li>
+                                <li>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2ecc71"
+                                        stroke-width="2.5">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    Local SEO Audit
+                                </li>
+                                <li>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2ecc71"
+                                        stroke-width="2.5">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    Branding Recommendations
+                                </li>
+                                <li>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2ecc71"
+                                        stroke-width="2.5">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    Lead Generation Strategy
+                                </li>
+                                <li>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2ecc71"
+                                        stroke-width="2.5">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    Customer Journey Review
+                                </li>
+                                <li>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2ecc71"
+                                        stroke-width="2.5">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    Conversion Optimization Plan
+                                </li>
+                                <li>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2ecc71"
+                                        stroke-width="2.5">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    Growth Roadmap
+                                </li>
+                                <li>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2ecc71"
+                                        stroke-width="2.5">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    30-Day Content Calendar
+                                </li>
+                                <li>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2ecc71"
+                                        stroke-width="2.5">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    15-Min Google Meet Call
+                                </li>
+                                <li>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2ecc71"
+                                        stroke-width="2.5">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    WhatsApp Follow-Up Support
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 9: Monthly Partnership -->
+                <div class="bga-partnership" id="bga-partnership">
+                    <h3 class="bga-section-title bga-section-title--center">Want Ongoing Growth Support?</h3>
+                    <div class="bga-partnership-card">
+                        <div class="bga-partnership-badge">Most Popular</div>
+                        <h4 class="bga-partnership-name">Builtium Growth Partner</h4>
+                        <div class="bga-partnership-price">
+                            <span class="bga-partnership-amount">₦100,000</span>
+                            <span class="bga-partnership-period">/ Month</span>
+                        </div>
+                        <ul class="bga-partnership-features">
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2ecc71"
+                                    stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                Website Updates & Maintenance
+                            </li>
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2ecc71"
+                                    stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                Monthly Growth Strategy
+                            </li>
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2ecc71"
+                                    stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                SEO Improvements
+                            </li>
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2ecc71"
+                                    stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                Monthly Performance Reports
+                            </li>
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2ecc71"
+                                    stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                Content Planning & Calendar
+                            </li>
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2ecc71"
+                                    stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                Priority Tech Support
+                            </li>
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2ecc71"
+                                    stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                Business Consulting
+                            </li>
+                        </ul>
+                        <a href="/#contact" class="bga-cta-button bga-partnership-cta">Learn More</a>
+                    </div>
+                </div>
+
+                <!-- Hidden Netlify Form for Data Capture -->
+                <form id="bga-lead-form" class="bga-hidden-form" name="bga-results" method="POST" data-netlify="true"
+                    netlify style="display:none;">
+                    <input type="hidden" name="form-name" value="bga-results">
+                    <input type="hidden" id="bga-hidden-name" name="businessName" value="">
+                    <input type="hidden" id="bga-hidden-email" name="email" value="">
+                    <input type="hidden" id="bga-hidden-score" name="score" value="">
+                    <input type="hidden" id="bga-hidden-scores" name="sectionScores" value="">
+                    <input type="hidden" id="bga-hidden-answers" name="answers" value="">
+                    <input type="hidden" id="bga-hidden-level" name="readinessLevel" value="">
+                    <input type="hidden" id="bga-hidden-timestamp" name="timestamp" value="">
+                </form>
+
+                <!-- 10: Footer CTA -->
+                <div class="bga-footer-cta" id="bga-footer-cta">
+                    <h3 class="bga-footer-cta-headline">Have Questions?</h3>
+                    <p class="bga-footer-cta-text">We're here to help you grow your business.</p>
+                    <div class="bga-footer-cta-links">
+                        <a href="mailto:hello@builtiumco.com" class="bga-footer-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path
+                                    d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                </path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                            hello@builtiumco.com
+                        </a>
+                        <a href="/#contact" class="bga-footer-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path
+                                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                </path>
+                            </svg>
+                            Book a Quick Call
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container footer-container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <div class="brand-row">
+                        <img src="../Assests/logo/B ICON.svg" alt="Builtium Logo" class="footer-logo">
+                        <span class="brand-name footer-wordmark">Builtium</span>
+                    </div>
+                    <p class="footer-tagline">Digital foundations for the future.</p>
+                </div>
+                <nav class="footer-nav">
+                    <a href="../" class="footer-link">Home</a>
+                    <a href="../#services" class="footer-link">Services</a>
+                    <a href="../#work" class="footer-link">Work</a>
+                    <a href="#" class="footer-link">Audit</a>
+                    <a href="../#vision" class="footer-link">Vision</a>
+                    <a href="../#contact" class="footer-link">Contact</a>
+                </nav>
+                <div class="footer-socials">
+                    <a href="https://x.com/builtium" class="social-link twitter" aria-label="Twitter">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="currentColor">
+                            <path
+                                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                        </svg>
+                    </a>
+                    <a href="https://web.facebook.com/profile.php?id=61577700583132" class="social-link facebook"
+                        aria-label="Facebook">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="currentColor">
+                            <path
+                                d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                        </svg>
+                    </a>
+                    <a href="https://www.instagram.com/builtium/" class="social-link instagram" aria-label="Instagram">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="currentColor">
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="copyright">&copy; 2026 Builtium. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Nav Toggle Script -->
+    <script>
+        const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+        if (mobileNavToggle) {
+            mobileNavToggle.addEventListener('click', () => document.body.classList.toggle('nav-open'));
+        }
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => document.body.classList.remove('nav-open'));
+        });
+    </script>
+
+    <!-- Assessment Engine -->
+    <script src="js/assessment.js" defer></script>
+</body>
+
+</html>
