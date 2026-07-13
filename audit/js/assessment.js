@@ -857,21 +857,21 @@ document.addEventListener('DOMContentLoaded', () => {
             // Check if option was previously selected
             const isSelected = answers[currentQuestionIndex] && answers[currentQuestionIndex].text === opt.text;
             if (isSelected) {
-                card.classList.add('bga-option-card--selected');
+                card.classList.add('selected');
                 nextBtn.disabled = false;
             }
 
             card.innerHTML = `
-                <div class="bga-option-radio"></div>
-                <div class="bga-option-text">${opt.text}</div>
+                <div class="bga-option-card__radio"></div>
+                <div class="bga-option-card__text">${opt.text}</div>
             `;
 
             card.addEventListener('click', () => {
                 // Clear selections
                 optionsContainer.querySelectorAll('.bga-option-card').forEach(c => {
-                    c.classList.remove('bga-option-card--selected');
+                    c.classList.remove('selected');
                 });
-                card.classList.add('bga-option-card--selected');
+                card.classList.add('selected');
                 answers[currentQuestionIndex] = opt;
                 nextBtn.disabled = false;
 
@@ -894,10 +894,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderProfileField(q) {
         const formGroup = document.createElement('div');
-        formGroup.className = 'bga-form-group';
+        formGroup.className = 'bga-intro__form-group';
 
         const label = document.createElement('label');
-        label.className = 'bga-form-label';
         label.textContent = q.label;
         formGroup.appendChild(label);
 
@@ -906,7 +905,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (q.inputType === 'text' || q.inputType === 'url') {
             const input = document.createElement('input');
             input.type = q.inputType;
-            input.className = 'bga-form-input';
+            input.className = 'bga-intro__input';
             input.value = savedVal;
             input.placeholder = q.placeholder || "";
             input.required = q.required;
@@ -917,7 +916,7 @@ document.addEventListener('DOMContentLoaded', () => {
             nextBtn.disabled = q.required && input.value.trim() === "";
         } else if (q.inputType === 'select') {
             const select = document.createElement('select');
-            select.className = 'bga-form-input';
+            select.className = 'bga-intro__input';
             select.required = q.required;
 
             const defaultOpt = document.createElement('option');
@@ -987,6 +986,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (q.required && inputEl.value.trim() === "") {
             inputEl.classList.add('bga-form-input--error');
+            inputEl.classList.add('error');
             return false;
         }
 
@@ -1133,21 +1133,23 @@ document.addEventListener('DOMContentLoaded', () => {
             const percent = Math.min(Math.round((scoreVal / maxVal) * 100), 100);
 
             const breakdownItem = document.createElement('div');
-            breakdownItem.className = 'bga-breakdown-item';
+            breakdownItem.className = 'bga-breakdown__item';
+            const catClass = `bga-bar--${cat.toLowerCase().replace('_', '-')}`;
             breakdownItem.innerHTML = `
-                <div class="bga-breakdown-label">
-                    <span class="bga-breakdown-cat-name">${cat.replace('_', ' ')}</span>
-                    <span class="bga-breakdown-percentage">${percent}%</span>
+                <div class="bga-breakdown__label">
+                    <span class="bga-breakdown__label-name">${cat.replace('_', ' ')}</span>
+                    <span class="bga-breakdown__label-dot"></span>
+                    <span class="bga-breakdown__label-score">${percent}%</span>
                 </div>
-                <div class="bga-breakdown-bar-bg">
-                    <div class="bga-breakdown-bar-fill bga-breakdown-bar-fill--${cat.toLowerCase().replace('_', '-')}" style="width: 0%;"></div>
+                <div class="bga-breakdown__bar-track">
+                    <div class="bga-breakdown__bar-fill ${catClass}" style="width: 0%;"></div>
                 </div>
             `;
             breakdownContainer.appendChild(breakdownItem);
 
             // Stagger animation for breakdown bars
             setTimeout(() => {
-                const fillBar = breakdownItem.querySelector('.bga-breakdown-bar-fill');
+                const fillBar = breakdownItem.querySelector('.bga-breakdown__bar-fill');
                 if (fillBar) fillBar.style.width = `${percent}%`;
             }, 100 + (index * 60));
         });
@@ -1168,13 +1170,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const topStrengths = sortedCats.slice(0, 3);
         topStrengths.forEach(s => {
             const item = document.createElement('div');
-            item.className = 'bga-list-item';
+            item.className = 'bga-so__item';
             item.innerHTML = `
-                <div class="bga-list-item-icon bga-list-item-icon--success">✓</div>
-                <div class="bga-list-item-content">
-                    <strong class="bga-list-item-title">${s.name.replace('_', ' ')} (${s.percentage}%)</strong>
-                    <span class="bga-list-item-desc">Your brand baseline is healthy and positioned nicely for digital scalability.</span>
-                </div>
+                <svg class="bga-so__icon bga-so__icon--check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width:18px; height:18px;">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span><strong>${s.name.replace('_', ' ')} (${s.percentage}%)</strong> — Your brand baseline is healthy in this area.</span>
             `;
             strengthsList.appendChild(item);
         });
@@ -1185,53 +1186,56 @@ document.addEventListener('DOMContentLoaded', () => {
         const topOpportunities = sortedCats.slice(-3).reverse(); // lowest scoring
         topOpportunities.forEach(o => {
             const item = document.createElement('div');
-            item.className = 'bga-list-item';
+            item.className = 'bga-so__item';
             item.innerHTML = `
-                <div class="bga-list-item-icon bga-list-item-icon--warning">⚠</div>
-                <div class="bga-list-item-content">
-                    <strong class="bga-list-item-title">${o.name.replace('_', ' ')} (${o.percentage}%)</strong>
-                    <span class="bga-list-item-desc">Crucial leaks identified in this area. Resolving this will yield immediate business improvements.</span>
-                </div>
+                <svg class="bga-so__icon bga-so__icon--warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px; height:18px;">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                <span><strong>${o.name.replace('_', ' ')} (${o.percentage}%)</strong> — Crucial leaks identified. Resolving this will yield immediate gains.</span>
             `;
             opportunitiesList.appendChild(item);
         });
 
         // Render Opportunity Cards
-        const cardContainer = document.getElementById('bga-opportunity-cards');
+        const cardContainer = document.getElementById('bga-opportunity-cards-grid');
         cardContainer.innerHTML = '';
         
+        const categoryIcons = {
+            PROFILE: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>`,
+            DISCOVERABILITY: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>`,
+            WEBSITE: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>`,
+            POSITIONING: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>`,
+            SOCIAL_PROOF: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>`,
+            SOCIAL_MEDIA: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>`,
+            LEAD_CAPTURE: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`,
+            RETENTION: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>`,
+            LEGAL: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`,
+            COMPETITIVE: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line><line x1="2" y1="20" x2="22" y2="20"></line></svg>`
+        };
+
         topOpportunities.forEach(o => {
             const outcomes = opportunityOutcomes[o.name] || ['Boost overall conversion rates', 'Acquire customers automatically', 'Establish authority in your field'];
             const card = document.createElement('div');
-            card.className = `bga-opportunity-card bga-opportunity-card--${o.name.toLowerCase().replace('_', '-')}`;
+            card.className = 'bga-opp-card';
             
-            let iconSvg = `
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="8" x2="12" y2="12"></line>
-                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                </svg>
-            `;
-
+            const iconSvg = categoryIcons[o.name] || categoryIcons.PROFILE;
+ 
             card.innerHTML = `
-                <div class="bga-opp-card-header">
-                    <div class="bga-opp-card-icon">${iconSvg}</div>
-                    <h4 class="bga-opp-card-title">${o.name.replace('_', ' ')}</h4>
-                    <span class="bga-opp-card-score">${o.percentage}% Current</span>
-                </div>
-                <div class="bga-opp-card-body">
-                    <p class="bga-opp-card-intro">If you improve this area...</p>
-                    <ul class="bga-opp-card-outcomes">
-                        ${outcomes.map(out => `
-                            <li>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="3">
-                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                </svg>
-                                <span>${out}</span>
-                            </li>
-                        `).join('')}
-                    </ul>
-                </div>
+                <div class="bga-opp-card__icon">${iconSvg}</div>
+                <h4 class="bga-opp-card__area">${o.name.replace('_', ' ')}</h4>
+                <p class="bga-opp-card__prompt">If you improve this area...</p>
+                <ul class="bga-opp-card__outcomes">
+                    ${outcomes.map(out => `
+                        <li class="bga-opp-card__outcome">
+                            <svg class="bga-opp-card__outcome-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>${out}</span>
+                        </li>
+                    `).join('')}
+                </ul>
             `;
             cardContainer.appendChild(card);
         });
@@ -1241,25 +1245,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const futureList = document.getElementById('bga-future-list');
         todayList.innerHTML = '';
         futureList.innerHTML = '';
-
+ 
         // Select lowest categories to populate lists
         const snapshotCats = sortedCats.slice(-5);
         snapshotCats.forEach(sc => {
             const states = snapshotStates[sc.name] || { today: 'Unoptimized processes', future: 'Streamlined growth outcomes' };
             
             const todayItem = document.createElement('div');
-            todayItem.className = 'bga-snapshot-item';
+            todayItem.className = 'bga-future__item';
             todayItem.innerHTML = `
-                <span class="bga-snapshot-bullet bga-snapshot-bullet--today"></span>
-                <span class="bga-snapshot-text">${states.today}</span>
+                <span class="bga-future__dot bga-future__dot--red"></span>
+                <span>${states.today}</span>
             `;
             todayList.appendChild(todayItem);
-
+ 
             const futureItem = document.createElement('div');
-            futureItem.className = 'bga-snapshot-item';
+            futureItem.className = 'bga-future__item';
             futureItem.innerHTML = `
-                <span class="bga-snapshot-bullet bga-snapshot-bullet--future"></span>
-                <span class="bga-snapshot-text">${states.future}</span>
+                <span class="bga-future__dot bga-future__dot--green"></span>
+                <span>${states.future}</span>
             `;
             futureList.appendChild(futureItem);
         });
