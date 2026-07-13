@@ -1,0 +1,11 @@
+# Netlify Configuration File
+# Ensures Netlify always builds the static site from the root directory and configures redirects.
+
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "https://builtiumco.netlify.app/*"
+  to = "https://builtiumco.com/:splat"
+  status = 301
+  force = true
