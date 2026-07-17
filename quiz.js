@@ -146,11 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     introForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        userData.name = document.getElementById('businessName').value;
-        userData.type = document.getElementById('businessType').value;
-
-        showStep(quizIntro, quizQuestions);
-        loadQuestion(0);
+        const businessName = document.getElementById('businessName').value.trim();
+        window.location.href = `audit/?businessName=${encodeURIComponent(businessName)}`;
     });
 
     backBtn.addEventListener('click', () => {

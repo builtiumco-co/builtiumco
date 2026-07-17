@@ -311,6 +311,7 @@ body.nav-open .close-icon {
     font-weight: 600;
     padding: 16px 32px;
     border: none;
+    border-radius: 100px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: inline-block;
     position: relative;
@@ -871,6 +872,7 @@ body.nav-open .close-icon {
     font-weight: 600;
     padding: 16px 32px;
     border: 2px solid var(--accent-color);
+    border-radius: 100px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: inline-block;
     margin-left: 16px;

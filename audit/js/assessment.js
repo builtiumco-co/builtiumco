@@ -744,6 +744,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Init Check ---
     const savedSession = checkResumeState();
 
+    // Prefill business name from URL query parameter if present
+    const urlParams = new URLSearchParams(window.location.search);
+    const businessNameParam = urlParams.get('businessName');
+    if (businessNameParam && document.getElementById('bga-business-name')) {
+        document.getElementById('bga-business-name').value = businessNameParam;
+    }
+
     if (introForm) {
         introForm.addEventListener('submit', (e) => {
             e.preventDefault();
