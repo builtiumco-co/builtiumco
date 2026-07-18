@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Growth Assessment | Builtium</title>
-    <meta name="description" content="Discover your digital readiness score and actionable insights to grow your business online with Builtium's free 5-minute assessment.">
+    <title>Growth Score | Builtium</title>
+    <meta name="description" content="Discover your Growth Score and actionable insights to grow your business online with Builtium's free 5-minute assessment.">
 
     <!-- Open Graph Tags -->
-    <meta property="og:title" content="Business Growth Assessment | Builtium">
-    <meta property="og:description" content="Discover your digital readiness score and actionable insights to grow your business online.">
+    <meta property="og:title" content="Growth Score | Builtium">
+    <meta property="og:description" content="Discover your Growth Score and actionable insights to grow your business online.">
     <meta property="og:image" content="../Assests/images/og-image.webp">
     <meta property="og:url" content="https://www.builtiumco.com/audit/">
     <meta property="og:type" content="website">
@@ -210,10 +210,14 @@
                 <div class="bga-results__stage-block" style="margin-bottom: 64px;">
                     <div class="mono-small" style="color: #64748b; margin-bottom: 8px;">YOUR STAGE</div>
                     <div id="bga-stage-rank" style="font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #64748b; margin-bottom: 16px;">03 / 05</div>
-                    <h1 id="bga-stage-title" style="font-family: 'Space Grotesk', sans-serif; font-size: clamp(36px, 6vw, 64px); font-weight: 700; line-height: 1.1; margin-bottom: 24px; color: #000;">Credible.</h1>
-                    <p id="bga-stage-desc" style="font-size: 20px; line-height: 1.5; color: #334155; max-width: 800px; font-weight: 500;">
-                        You have a credible baseline profile, but nothing pulls anyone back after the first visit, and there's nothing on the page telling strangers to trust you.
-                    </p>
+                    <!-- Section 3: Stage name is PRIMARY (large), subtext below, score as tertiary -->
+                    <h1 id="bga-stage-title" style="font-family: 'Space Grotesk', sans-serif; font-size: clamp(36px, 6vw, 64px); font-weight: 700; line-height: 1.1; margin-bottom: 12px; color: #000;">Credible.</h1>
+                    <p id="bga-stage-subtext" style="font-size: 20px; line-height: 1.5; color: #334155; font-weight: 500; margin-bottom: 12px;">You look legitimate, and convert occasionally.</p>
+                    <p id="bga-stage-score-label" style="font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #64748b; margin-bottom: 16px;">53% Growth Score</p>
+                    <!-- Section 4: Synthesized diagnostic sentence (dynamic) -->
+                    <p id="bga-stage-desc" style="font-size: 16px; line-height: 1.6; color: #475569; max-width: 800px; font-weight: 400;"></p>
+                    <!-- Section 1: Review line -->
+                    <p id="bga-review-line" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 12px;"></p>
                 </div>
 
                 <!-- Growth Ladder horizontal grid -->
@@ -278,10 +282,12 @@
 
                 <!-- NOW VS POTENTIAL STAGE DETAILS (Visible for Free) -->
                 <div id="bga-stage-details-section" class="bga-section-block" style="margin-bottom: 80px; border-top: 1px solid #e2e8f0; padding-top: 48px;">
-                    <div style="display: grid; grid-template-columns: 1fr; gap: 48px;" id="bga-stage-details-grid">
-                        <!-- Filled dynamically in JS based on stage -->
+                    <div class="mono-small" style="color: #64748b; margin-bottom: 12px;">YOUR BUSINESS</div>
+                    <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 700; margin-bottom: 40px;">Today vs. Potential.</h2>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 48px;" id="bga-stage-details-grid">
+                        <!-- Filled dynamically in JS based on bottom-5 categories -->
                     </div>
-                    
+
                     <div id="bga-pattern-block" style="margin-top: 64px; border-top: 1px solid #e2e8f0; padding-top: 48px;">
                         <!-- Pattern observation rendered dynamically in JS -->
                     </div>
@@ -305,8 +311,66 @@
                     </div>
                 </div>
 
-                <!-- 8: Growth Blueprint Upsell (Triggers Checkout) -->
-                <div id="bga-upsell" class="bga-upsell__card" style="margin-bottom: 80px;">
+                <!-- Section 10: Trust Stat -->
+                <div id="bga-trust-stat" style="margin-bottom: 32px; padding: 32px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
+                    <!-- Rendered dynamically in JS -->
+                </div>
+
+                <!-- Section 11: ₦5,000 Unlock Offer -->
+                <div id="bga-unlock-offer" class="bga-section-block" style="margin-bottom: 80px; border-top: 1px solid #e2e8f0; padding-top: 48px;">
+                    <div class="mono-small" style="color: #64748b; margin-bottom: 12px;">SECTION 04</div>
+                    <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 700; margin-bottom: 20px;">Get Your Full Analytics + Strategy Call</h2>
+                    <p style="font-size: 17px; color: #475569; line-height: 1.7; max-width: 680px; margin-bottom: 48px;">
+                        You've seen your Growth Score. Now get the complete picture: every category broken down, a prioritized roadmap of what to fix first, and a scheduled 10-minute strategy call to walk through it with you.
+                    </p>
+
+                    <!-- 3 numbered items -->
+                    <div style="display: flex; flex-direction: column; gap: 32px; margin-bottom: 48px;">
+                        <div style="display: flex; gap: 20px; align-items: flex-start;">
+                            <div style="border: 2px solid #000; padding: 8px 14px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 18px; line-height: 1; color: #000; flex-shrink: 0;">1</div>
+                            <div>
+                                <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: #000; margin-bottom: 6px;">Full Category Breakdown</h4>
+                                <p style="font-size: 15px; color: #64748b; margin: 0; line-height: 1.5;">All 10 areas, not just your top 3 gaps.</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 20px; align-items: flex-start;">
+                            <div style="border: 2px solid #000; padding: 8px 14px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 18px; line-height: 1; color: #000; flex-shrink: 0;">2</div>
+                            <div>
+                                <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: #000; margin-bottom: 6px;">Complete Prioritized Roadmap</h4>
+                                <p style="font-size: 15px; color: #64748b; margin: 0; line-height: 1.5;">What to fix first, second, and third &mdash; and why.</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 20px; align-items: flex-start;">
+                            <div style="border: 2px solid #000; padding: 8px 14px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 18px; line-height: 1; color: #000; flex-shrink: 0;">3</div>
+                            <div>
+                                <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: #000; margin-bottom: 6px;">10-Minute Strategy Call</h4>
+                                <p style="font-size: 15px; color: #64748b; margin: 0; line-height: 1.5;">A real strategist walks you through your results and your options.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p style="font-size: 13px; color: #94a3b8; margin-bottom: 32px; font-style: italic;">
+                        This is a diagnostic step &mdash; no obligation to use any of our other services afterward.
+                    </p>
+
+                    <!-- Price + CTA -->
+                    <div style="display: flex; flex-direction: column; gap: 16px; max-width: 420px;">
+                        <div style="font-family: 'Space Grotesk', sans-serif; font-size: 40px; font-weight: 700; color: #000; letter-spacing: -0.02em;">&#8358;5,000</div>
+                        <p style="font-size: 13px; color: #94a3b8; margin: -8px 0 0 0; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase;">One-time payment &bull; No subscription</p>
+                        <button class="bga-btn bga-btn--full bga-btn-unlock-trigger" id="bga-unlock-offer-cta" style="height: 52px; border-radius: 100px; font-weight: 700; font-size: 16px; margin-top: 8px;">Unlock My Full Analytics</button>
+                        <button id="bga-dismiss-unlock" style="background: none; border: none; color: #94a3b8; font-size: 14px; cursor: pointer; text-align: left; padding: 0; font-family: 'Space Grotesk', sans-serif;">Continue with free results</button>
+                    </div>
+
+                    <!-- Post-payment confirmation (hidden until paid) -->
+                    <div id="bga-unlock-paid-confirm" style="display: none; margin-top: 24px; background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 20px 24px;">
+                        <p style="color: #166534; font-weight: 600; font-size: 15px; margin: 0; line-height: 1.6;">
+                            Payment received. Check your email &mdash; we'll send you available times for your 10-minute call within 24 hours.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Existing upsell card (hidden when unlock offer replaces it) -->
+                <div id="bga-upsell" class="bga-upsell__card" style="margin-bottom: 80px; display: none;">
                     <div class="bga-upsell__inner">
                         <div class="bga-upsell__left">
                             <div class="bga-upsell__badge">Highly Recommended</div>
@@ -460,45 +524,13 @@
 
     </main>
 
-    <!-- Footer -->
-    <footer class="site-footer">
-        <div class="container footer-container">
-            <div class="footer-top">
-                <div class="footer-brand">
-                    <div class="brand-row">
-                        <img src="../Assests/logo/B ICON.svg" alt="Builtium Logo" class="footer-logo">
-                        <span class="brand-name footer-wordmark">Builtium</span>
-                    </div>
-                    <p class="footer-tagline">Digital foundations for the future.</p>
-                </div>
-                <nav class="footer-nav">
-                    <a href="../" class="footer-link">Home</a>
-                    <a href="../#services" class="footer-link">Services</a>
-                    <a href="../#work" class="footer-link">Work</a>
-                    <a href="#" class="footer-link">Audit</a>
-                    <a href="../#vision" class="footer-link">Vision</a>
-                    <a href="../#contact" class="footer-link">Contact</a>
-                </nav>
-                <div class="footer-socials">
-                    <a href="https://x.com/builtium" class="social-link twitter" aria-label="Twitter">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="currentColor">
-                            <path
-                                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                        </svg>
-                    </a>
-                    <a href="https://www.instagram.com/builtium/" class="social-link instagram" aria-label="Instagram">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="currentColor">
-                            <path
-                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
-                        </svg>
-                    </a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p class="copyright">&copy; 2026 Builtium. All rights reserved.</p>
-            </div>
+    <!-- Section 12: Report Closing (replaces full site footer on results page) -->
+    <footer id="bga-report-footer" class="bga-report-closing" style="border-top: 1px solid #e2e8f0; padding: 48px 0; margin-top: 0; background: #fff;">
+        <div class="container" style="text-align: center; display: flex; flex-direction: column; gap: 8px; align-items: center;">
+            <p id="bga-closing-business" style="font-size: 15px; color: #475569; margin: 0;">This report was generated for your business by Builtium.</p>
+            <p style="font-size: 14px; color: #94a3b8; margin: 0;">Digital foundations for the future.</p>
+            <a href="mailto:hello@builtiumco.com" style="font-size: 14px; color: #3a7bff; margin: 0;">hello@builtiumco.com</a>
+            <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #cbd5e1; letter-spacing: 0.1em; text-transform: uppercase; margin: 8px 0 0 0;">&copy; 2026 Builtium. All rights reserved.</p>
         </div>
     </footer>
 

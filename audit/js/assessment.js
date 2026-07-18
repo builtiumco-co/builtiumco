@@ -646,29 +646,128 @@ document.addEventListener('DOMContentLoaded', () => {
         COMPETITIVE: 125
     };
 
-    const opportunityOutcomes = {
-        DISCOVERABILITY: ['Customers find you easily on Google', 'Your business appears in local searches', 'More walk-in and organic traffic'],
-        WEBSITE: ['Visitors trust you more on first visit', 'People know exactly what you offer', 'More visitors take action (call/book/inquire)'],
-        POSITIONING: ['Stand out from competitors clearly', 'Attract your ideal customers', 'Command premium pricing'],
-        SOCIAL_PROOF: ['New customers trust you before calling', 'Rank higher in Google Search', 'Get more organic business'],
-        SOCIAL_MEDIA: ['Build an engaged community', 'Stay top of mind with customers', 'Generate leads organically'],
-        LEAD_CAPTURE: ['Customers book 24/7, even when you sleep', 'Reduce admin work by 15+ hours/month', 'Never miss a booking opportunity'],
-        RETENTION: ['Customers come back more often', 'Get more referrals automatically', 'Increase lifetime customer value'],
-        LEGAL: ['Build customer trust and credibility', 'Protect your business legally', 'Meet industry compliance standards'],
-        COMPETITIVE: ['Identify gaps in your market', 'Learn from competitor strategies', 'Position yourself strategically'],
-        PROFILE: ['Have a clear business identity', 'Present professionally online', 'Make it easy for customers to find you']
+    // --- Per-category display names (used in copy) ---
+    const categoryDisplayNames = {
+        PROFILE: 'Profile',
+        DISCOVERABILITY: 'Discoverability',
+        WEBSITE: 'Website',
+        POSITIONING: 'Positioning',
+        SOCIAL_PROOF: 'Social Proof',
+        SOCIAL_MEDIA: 'Social Media',
+        LEAD_CAPTURE: 'Lead Capture',
+        RETENTION: 'Retention',
+        LEGAL: 'Legal',
+        COMPETITIVE: 'Competitive'
     };
 
-    const snapshotStates = {
-        DISCOVERABILITY: { today: 'Hard to find online', future: 'Easy to discover' },
-        WEBSITE: { today: 'Weak first impression', future: 'Professional presence' },
-        POSITIONING: { today: 'Unclear value proposition', future: 'Clear differentiation' },
-        SOCIAL_PROOF: { today: 'Limited customer trust', future: 'Strong trust signals' },
-        SOCIAL_MEDIA: { today: 'Low social engagement', future: 'Active community' },
-        LEAD_CAPTURE: { today: 'Manual inquiries', future: 'Automated leads' },
-        RETENTION: { today: 'Low repeat business', future: 'Loyal customer base' },
-        LEGAL: { today: 'Missing trust signals', future: 'Full legal compliance' },
-        COMPETITIVE: { today: 'Unaware of competition', future: 'Strategic market position' }
+    // Section 5: Top Strengths per-category lines
+    const categoryStrengthLines = {
+        PROFILE: 'Your business identity is clear and consistent.',
+        DISCOVERABILITY: 'People can find you when they search.',
+        WEBSITE: 'Your website gives visitors a strong first impression.',
+        POSITIONING: "It's clear what you offer and who it's for.",
+        SOCIAL_PROOF: 'Your reputation is working in your favor.',
+        SOCIAL_MEDIA: 'Your presence is active and consistent.',
+        LEAD_CAPTURE: "You're set up to capture interest, not lose it.",
+        RETENTION: 'Customers have a reason to come back.',
+        LEGAL: 'Your business is protected and compliant.',
+        COMPETITIVE: 'You understand where you stand against competitors.'
+    };
+
+    // Section 6: Growth Opportunities per-category lines
+    const categoryGapLines = {
+        PROFILE: "Your business identity isn't landing clearly yet.",
+        DISCOVERABILITY: "People are searching, but not finding you.",
+        WEBSITE: "Your website isn't converting visitors into customers.",
+        POSITIONING: "It's unclear what you offer or why it matters.",
+        SOCIAL_PROOF: "You don't yet have enough trust signals visible.",
+        SOCIAL_MEDIA: 'Your presence is inconsistent or inactive.',
+        LEAD_CAPTURE: 'Interested visitors are leaving without a next step.',
+        RETENTION: "Customers aren't coming back after their first visit.",
+        LEGAL: 'Your business has exposure here that needs attention.',
+        COMPETITIVE: "You don't have visibility into where you stand against competitors."
+    };
+
+    // Section 7: "What changes if you fix these" bullets per category
+    const categoryFixBullets = {
+        PROFILE: [
+            'People recognize your business instantly',
+            'Your identity feels consistent everywhere they find you',
+            'First impressions build trust immediately'
+        ],
+        DISCOVERABILITY: [
+            'More people find you through search',
+            'You show up where your customers are already looking',
+            'Less reliance on word-of-mouth alone'
+        ],
+        WEBSITE: [
+            'Visitors trust you more on first visit',
+            'People know exactly what you offer',
+            'More visitors take action (call/book/inquire)'
+        ],
+        POSITIONING: [
+            'Customers understand your value instantly',
+            'You stand out from competitors offering similar things',
+            'Pricing and offers feel justified, not confusing'
+        ],
+        SOCIAL_PROOF: [
+            'New visitors trust you faster',
+            'Reviews and testimonials do the selling for you',
+            'Skepticism turns into confidence'
+        ],
+        SOCIAL_MEDIA: [
+            'You stay visible between purchases',
+            'Engagement turns into repeat interest',
+            'Your brand feels active and current'
+        ],
+        LEAD_CAPTURE: [
+            'Interested visitors don\'t slip away',
+            'You can follow up instead of losing the lead',
+            'More inquiries convert into paying customers'
+        ],
+        RETENTION: [
+            'Customers come back more often',
+            'Get more referrals automatically',
+            'Increase lifetime customer value'
+        ],
+        LEGAL: [
+            'Build customer trust and credibility',
+            'Protect your business legally',
+            'Meet industry compliance standards'
+        ],
+        COMPETITIVE: [
+            'You know exactly where you stand',
+            'You can act on gaps before competitors close them',
+            'Decisions are based on facts, not guesses'
+        ]
+    };
+
+    // Section 7: Icons per category
+    const categoryIcons = {
+        PROFILE: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>',
+        DISCOVERABILITY: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+        WEBSITE: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>',
+        POSITIONING: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg>',
+        SOCIAL_PROOF: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>',
+        SOCIAL_MEDIA: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>',
+        LEAD_CAPTURE: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>',
+        RETENTION: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>',
+        LEGAL: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>',
+        COMPETITIVE: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>'
+    };
+
+    // Section 8: Today vs Potential pairs
+    const todayVsPotential = {
+        PROFILE: { today: 'Inconsistent first impression', potential: 'Instantly recognizable identity' },
+        DISCOVERABILITY: { today: 'Invisible in search', potential: 'Found by the right people' },
+        WEBSITE: { today: 'Weak first impression', potential: 'Professional presence' },
+        POSITIONING: { today: 'Unclear offer', potential: 'Strategic market position' },
+        SOCIAL_PROOF: { today: 'Missing trust signals', potential: 'Established credibility' },
+        SOCIAL_MEDIA: { today: 'Inactive presence', potential: 'Consistent engagement' },
+        LEAD_CAPTURE: { today: 'Manual inquiries', potential: 'Automated leads' },
+        RETENTION: { today: 'Low repeat business', potential: 'Loyal customer base' },
+        LEGAL: { today: 'Compliance gaps', potential: 'Full legal compliance' },
+        COMPETITIVE: { today: 'Unaware of competition', potential: 'Strategic market position' }
     };
 
     // --- Session ID & Config Loader ---
@@ -1167,7 +1266,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const maxScoreTotal = 1375;
         const totalPercentage = Math.min(Math.round((rawTotal / maxScoreTotal) * 100), 100);
 
-        // Dictionaries for dynamic template explanations
+        // Category "why it matters" explanations (used in gaps section)
         const categoryWhyMatters = {
             PROFILE: "A clear profile defines who you are and who you serve.",
             DISCOVERABILITY: "If customers can't find you, they can't buy from you.",
@@ -1181,32 +1280,19 @@ document.addEventListener('DOMContentLoaded', () => {
             COMPETITIVE: "Understanding the landscape lets you win the comparison game."
         };
 
-        const categoryGapExplanations = {
-            PROFILE: "Your baseline business profiles lack clarity or complete details, making it hard for prospects to quickly understand what you offer.",
-            DISCOVERABILITY: "Your search visibility and map listings are incomplete, hiding your business from active local buyers.",
-            WEBSITE: "Slow load speeds, weak mobile layout, or technical friction are driving visitors away before they convert.",
-            POSITIONING: "Your unique value proposition isn't clear, causing prospects to view you as a commodity rather than a leader.",
-            SOCIAL_PROOF: "A lack of visible reviews, case studies, or client success signals makes prospects hesitant to engage.",
-            SOCIAL_MEDIA: "Inconsistent posts or inactive profiles signal to potential clients that your brand is dormant.",
-            LEAD_CAPTURE: "Interested visitors leave your site without any structured way to stay connected or capture their info.",
-            RETENTION: "There is no systematic follow-up or retention mechanism keeping past clients coming back.",
-            LEGAL: "Missing privacy policies, terms, or clear legal structures expose your brand to risk.",
-            COMPETITIVE: "Lack of active benchmarking means you aren't tracking competitor changes or adjusting pricing strategy."
-        };
-
-        // Dictionaries for Maturity Stages (matching PDF designs)
+        // Maturity Stages — 5-stage model per spec section 3
         const stagesInfo = [
             {
                 name: "Invisible",
+                subtext: "Barely discoverable online.",
                 rank: "01 / 05",
-                looksSubhead: "Unsearchable business, no digital footprint.",
                 bullets: [
                     "You are not visible in local search",
                     "You have no central website storefront",
                     "You rely entirely on manual offline efforts"
                 ],
                 nextStage: "Present",
-                nextLooksSubhead: "Basic online footprint, disjointed presence.",
+                nextSubtext: "You exist online, but passively.",
                 nextBullets: [
                     "Basic website and listings set up",
                     "Found by name, if not by service",
@@ -1216,15 +1302,15 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             {
                 name: "Present",
+                subtext: "You exist online, but passively.",
                 rank: "02 / 05",
-                looksSubhead: "Basic online footprint, disjointed presence.",
                 bullets: [
                     "You are found by name, not by service",
                     "Your website is basic or outdated",
                     "Your profiles lack active postings"
                 ],
                 nextStage: "Credible",
-                nextLooksSubhead: "Looks professional, builds trust.",
+                nextSubtext: "You look legitimate, and convert occasionally.",
                 nextBullets: [
                     "Consistent professional design language",
                     "Clear value proposition and positioning",
@@ -1234,15 +1320,15 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             {
                 name: "Credible",
+                subtext: "You look legitimate, and convert occasionally.",
                 rank: "03 / 05",
-                looksSubhead: "Looks professional, builds trust.",
                 bullets: [
                     "You look professional at a glance",
                     "You convert when someone is already sold",
                     "You depend on referrals and word of mouth"
                 ],
                 nextStage: "Growing",
-                nextLooksSubhead: "Systems in place, consistent traction.",
+                nextSubtext: "Systems are in place, traction is consistent.",
                 nextBullets: [
                     "A structured content and channel rhythm",
                     "Lead capture and follow-up wired together",
@@ -1252,15 +1338,15 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             {
                 name: "Growing",
+                subtext: "Systems are in place, traction is consistent.",
                 rank: "04 / 05",
-                looksSubhead: "Systems in place, consistent traction.",
                 bullets: [
                     "Your content has rhythmic channels",
                     "You capture lead information systematically",
                     "Some traffic returns automatically"
                 ],
                 nextStage: "Compounding",
-                nextLooksSubhead: "Dominating search, automated conversions.",
+                nextSubtext: "You have a retention and referral engine working for you.",
                 nextBullets: [
                     "Full loop automation across channels",
                     "Strong brand referrals and authority",
@@ -1270,15 +1356,15 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             {
                 name: "Compounding",
+                subtext: "You have a retention and referral engine working for you.",
                 rank: "05 / 05",
-                looksSubhead: "Dominating search, automated conversions.",
                 bullets: [
                     "You dominate local discoverability",
                     "Your web conversions are automated",
                     "You retain and grow customer lifetime value"
                 ],
                 nextStage: "Elite",
-                nextLooksSubhead: "Ongoing growth supremacy.",
+                nextSubtext: "Ongoing growth supremacy.",
                 nextBullets: [
                     "Continuous CRO tests running monthly",
                     "Active category expansion strategies"
@@ -1287,23 +1373,25 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         ];
 
-        // Determine active stage based on composite score
-        let activeStageIndex = 2; // Default to Credible (Stage 3)
-        if (totalPercentage <= 30) activeStageIndex = 0;
-        else if (totalPercentage <= 50) activeStageIndex = 1;
-        else if (totalPercentage <= 70) activeStageIndex = 2;
-        else if (totalPercentage <= 85) activeStageIndex = 3;
+        // Section 3 stage threshold — spec: 0-20 Invisible, 21-40 Present, 41-60 Credible, 61-80 Growing, 81-100 Compounding
+        let activeStageIndex;
+        if (totalPercentage <= 20) activeStageIndex = 0;
+        else if (totalPercentage <= 40) activeStageIndex = 1;
+        else if (totalPercentage <= 60) activeStageIndex = 2;
+        else if (totalPercentage <= 80) activeStageIndex = 3;
         else activeStageIndex = 4;
 
-        const activeStage = stagesInfo[activeStageIndex];
 
-        // Render Stage Header & Description
+        // Section 9: Calculate Estimated Potential Score
+        const potentialScore = Math.min(Math.round(totalPercentage + (100 - totalPercentage) * 0.6), 92);
+
+        // Section 3: Render Stage Header — stage name large, subtext below, score as secondary detail
         document.getElementById('bga-stage-rank').textContent = activeStage.rank;
         document.getElementById('bga-stage-title').textContent = activeStage.name + ".";
-        
-        // Assemble diagnostic explanation sentence
-        const diagnosticSentence = `You have a ${activeStage.name.toLowerCase()} baseline presence, but ${activeStage.looksSubhead.toLowerCase()} and ${activeStage.bullets[1].toLowerCase()}.`;
-        document.getElementById('bga-stage-desc').textContent = diagnosticSentence;
+        const stageSubtextEl = document.getElementById('bga-stage-subtext');
+        if (stageSubtextEl) stageSubtextEl.textContent = activeStage.subtext;
+        const stageScoreEl = document.getElementById('bga-stage-score-label');
+        if (stageScoreEl) stageScoreEl.textContent = `${totalPercentage}% Growth Score`;
         document.getElementById('bga-composite-score').textContent = totalPercentage;
 
         // Render Growth Ladder Horizontal Blocks
@@ -1352,39 +1440,82 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Identify Top 3 Gaps (lowest scoring categories)
+        // Identify sorted categories (lowest → highest) for all 10
         const sortedCats = categories.map(cat => {
             const scoreVal = scores[cat] || 0;
             const maxVal = categoryMaxPoints[cat];
             return {
                 name: cat,
+                displayName: categoryDisplayNames[cat] || cat,
                 percentage: Math.round((scoreVal / maxVal) * 100)
             };
-        }).sort((a, b) => a.percentage - b.percentage); // Lowest percentage first
+        }).sort((a, b) => a.percentage - b.percentage);
 
         const top3Gaps = sortedCats.slice(0, 3);
+        const top3Strengths = [...sortedCats].sort((a, b) => b.percentage - a.percentage).slice(0, 3);
 
-        // Render SECTION 02: 3 Leverage Gaps
+        // Section 4: Synthesized diagnostic sentence from bottom-3 category display names
+        const diagSentence = `Your ${top3Gaps[0].displayName}, ${top3Gaps[1].displayName}, and ${top3Gaps[2].displayName} are the areas holding your growth back most right now.`;
+        document.getElementById('bga-stage-desc').textContent = diagSentence;
+
+        // Render SECTION 01: All 10 Category scores with per-category strength/gap lines
+        const breakdownListEl = document.getElementById('bga-breakdown-list');
+        if (breakdownListEl) {
+            breakdownListEl.innerHTML = '';
+            sortedCats.slice().sort((a,b) => b.percentage - a.percentage).forEach(cat => {
+                const isGap = top3Gaps.some(g => g.name === cat.name);
+                const line = isGap ? (categoryGapLines[cat.name] || '') : (categoryStrengthLines[cat.name] || '');
+                const row = document.createElement('div');
+                row.style.padding = '16px 0';
+                row.style.borderBottom = '1px solid #f1f5f9';
+                row.innerHTML = `
+                    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;">
+                        <span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;color:#0f172a;">${cat.displayName}</span>
+                        <span style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;color:${isGap ? '#ef4444' : '#10b981'};">${cat.percentage}%</span>
+                    </div>
+                    <p style="font-size:13px;color:#64748b;margin:0;line-height:1.5;">${line}</p>
+                `;
+                breakdownListEl.appendChild(row);
+            });
+        }
+
+        // Render SECTION 02: 3 Leverage Gaps (section 6 per-category lines)
         const gapsListEl = document.getElementById('bga-gaps-list');
         if (gapsListEl) {
             gapsListEl.innerHTML = '';
             top3Gaps.forEach((gap, idx) => {
-                const whyText = categoryWhyMatters[gap.name] || 'This area represents a crucial foundation for growth.';
-                
+                const gapLine = categoryGapLines[gap.name] || '';
+                const whyText = categoryWhyMatters[gap.name] || '';
+                const bullets = categoryFixBullets[gap.name] || [];
+                const icon = categoryIcons[gap.name] || '';
+
                 const gapItem = document.createElement('div');
                 gapItem.style.borderBottom = '1px solid #e2e8f0';
-                gapItem.style.paddingBottom = '32px';
+                gapItem.style.paddingBottom = '40px';
                 gapItem.innerHTML = `
-                    <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 8px;">
-                        <div>
-                            <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #3a7bff; margin-right: 16px; font-weight: 700;">0${idx+1}</span>
-                            <span style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: #000; text-transform: uppercase;">${gap.name.replace('_', ' ')}</span>
-                        </div>
-                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700; color: #ef4444;">${gap.percentage} / 100</div>
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+                        <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#3a7bff;font-weight:700;">0${idx+1}</span>
+                        <span style="color:#3a7bff;">${icon}</span>
+                        <span style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:#000;">${gap.displayName}</span>
+                        <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#ef4444;margin-left:auto;">${gap.percentage}%</span>
                     </div>
-                    <p style="font-size: 15px; color: #64748b; line-height: 1.6; font-weight: 500; margin: 0;">
+                    <p style="font-size:15px;color:#334155;font-weight:500;line-height:1.6;margin:0 0 12px 0;">
+                        ${gapLine}
+                    </p>
+                    <p style="font-size:13px;color:#64748b;line-height:1.5;margin:0 0 16px 0;">
                         Why it matters &mdash; ${whyText}
                     </p>
+                    ${bullets.length ? `
+                    <div style="margin-top:12px;">
+                        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;color:#94a3b8;text-transform:uppercase;margin-bottom:10px;">WHAT CHANGES IF YOU FIX THIS</div>
+                        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
+                            ${bullets.map(b => `
+                            <li style="display:flex;gap:10px;align-items:baseline;font-size:14px;color:#475569;font-weight:500;">
+                                <span style="color:#3a7bff;flex-shrink:0;">&#43;</span>
+                                <span>${b}</span>
+                            </li>`).join('')}
+                        </ul>
+                    </div>` : ''}
                 `;
                 gapsListEl.appendChild(gapItem);
             });
@@ -1396,77 +1527,85 @@ document.addEventListener('DOMContentLoaded', () => {
             roadmapListEl.innerHTML = '';
             top3Gaps.forEach((gap, idx) => {
                 const nextGap = top3Gaps[idx + 1];
-                const gapDetail = categoryGapExplanations[gap.name] || 'Unoptimized processes slow growth.';
-                const unlocksMsg = nextGap ? `UNLOCKS &rarr; YOU'RE MISSING ${nextGap.name.replace('_', ' ')}.` : '';
-                
+                const gapLine = categoryGapLines[gap.name] || '';
+                const unlocksMsg = nextGap ? `UNLOCKS &rarr; ${nextGap.displayName.toUpperCase()}` : '';
+
                 const stepItem = document.createElement('div');
                 stepItem.style.display = 'flex';
                 stepItem.style.gap = '20px';
                 stepItem.style.alignItems = 'flex-start';
                 stepItem.innerHTML = `
-                    <div style="border: 2px solid #000; padding: 6px 12px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 16px; line-height: 1; color: #000; margin-top: 2px;">
+                    <div style="border:2px solid #000;padding:6px 12px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;line-height:1;color:#000;margin-top:2px;flex-shrink:0;">
                         ${idx + 1}
                     </div>
                     <div>
-                        <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: #000; margin-bottom: 6px; text-transform: uppercase;">
-                            You have no ${gap.name.toLowerCase().replace('_', ' ')} loop.
-                        </h4>
-                        <p style="font-size: 15px; color: #64748b; line-height: 1.5; margin: 0 0 10px 0; font-weight: 500;">
-                            Because ${gapDetail}
-                        </p>
-                        ${unlocksMsg ? `<div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.05em; color: #3a7bff; font-weight: 700; text-transform: uppercase;">${unlocksMsg}</div>` : ''}
+                        <h4 style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;color:#000;margin-bottom:8px;">${gap.displayName}</h4>
+                        <p style="font-size:15px;color:#64748b;line-height:1.5;margin:0 0 10px 0;font-weight:500;">${gapLine}</p>
+                        ${unlocksMsg ? `<div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.05em;color:#3a7bff;font-weight:700;text-transform:uppercase;">${unlocksMsg}</div>` : ''}
                     </div>
                 `;
                 roadmapListEl.appendChild(stepItem);
             });
         }
 
-        // Render NOW vs POTENTIAL stage preview
+        // Section 8: Render "Your Business: Today vs. Potential" — dynamic from bottom-5 categories
+        const bottom5 = sortedCats.slice(0, 5);
         const detailsGridEl = document.getElementById('bga-stage-details-grid');
         if (detailsGridEl) {
+            const todayItems = bottom5.map(c => todayVsPotential[c.name]?.today || c.displayName).join('</li><li style="display:flex;gap:12px;font-size:14px;color:#475569;font-weight:500;align-items:baseline;"><span style="color:#ef4444;font-family:monospace;">—</span><span>');
+            const potentialItems = bottom5.map(c => todayVsPotential[c.name]?.potential || c.displayName).join('</li><li style="display:flex;gap:12px;font-size:14px;color:#475569;font-weight:500;align-items:baseline;"><span style="color:#10b981;font-family:monospace;">+</span><span>');
+            detailsGridEl.style.gridTemplateColumns = 'repeat(2, 1fr)';
             detailsGridEl.innerHTML = `
-                <div style="border-right: 1px solid #f1f5f9; padding-right: 24px;">
-                    <div class="mono-small" style="color: #64748b; margin-bottom: 8px;">NOW</div>
-                    <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; margin-bottom: 8px; color: #000;">${activeStage.name}</h3>
-                    <p style="font-size: 15px; color: #64748b; margin-bottom: 24px; font-weight: 500;">${activeStage.looksSubhead}</p>
-                    <ul style="display: flex; flex-direction: column; gap: 16px; list-style: none; padding: 0;">
-                        ${activeStage.bullets.map(b => `
-                            <li style="display: flex; gap: 12px; font-size: 14px; color: #475569; font-weight: 500; align-items: baseline;">
-                                <span style="color: #ef4444; font-family: monospace;">-</span>
-                                <span>${b}</span>
-                            </li>
-                        `).join('')}
+                <div style="border-right:1px solid #f1f5f9;padding-right:32px;">
+                    <div class="mono-small" style="color:#64748b;margin-bottom:8px;">TODAY</div>
+                    <h3 style="font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;margin-bottom:20px;color:#000;">${activeStage.name}</h3>
+                    <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:14px;">
+                        <li style="display:flex;gap:12px;font-size:14px;color:#475569;font-weight:500;align-items:baseline;"><span style="color:#ef4444;font-family:monospace;">—</span><span>${todayItems}</span></li>
                     </ul>
                 </div>
-                <div>
-                    <div class="mono-small" style="color: #64748b; margin-bottom: 8px;">NEXT &rarr; STAGE 0${activeStageIndex === 4 ? 5 : activeStageIndex + 2}</div>
-                    <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; margin-bottom: 8px; color: #3a7bff;">${activeStage.nextStage}</h3>
-                    <p style="font-size: 15px; color: #64748b; margin-bottom: 24px; font-weight: 500;">${activeStage.nextLooksSubhead}</p>
-                    <ul style="display: flex; flex-direction: column; gap: 16px; list-style: none; padding: 0;">
-                        ${activeStage.nextBullets.map(b => `
-                            <li style="display: flex; gap: 12px; font-size: 14px; color: #475569; font-weight: 500; align-items: baseline;">
-                                <span style="color: #10b981; font-family: monospace;">+</span>
-                                <span>${b}</span>
-                            </li>
-                        `).join('')}
+                <div style="padding-left:32px;">
+                    <div class="mono-small" style="color:#64748b;margin-bottom:8px;">POTENTIAL</div>
+                    <h3 style="font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;margin-bottom:8px;color:#3a7bff;">${potentialScore}%</h3>
+                    <p style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#94a3b8;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 20px 0;">Estimated Potential Score</p>
+                    <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:14px;">
+                        <li style="display:flex;gap:12px;font-size:14px;color:#475569;font-weight:500;align-items:baseline;"><span style="color:#10b981;font-family:monospace;">+</span><span>${potentialItems}</span></li>
                     </ul>
                 </div>
             `;
         }
 
-        // Render Pattern quotes
+        // Render Pattern quote
         const patternBlockEl = document.getElementById('bga-pattern-block');
         if (patternBlockEl) {
             patternBlockEl.innerHTML = `
-                <div class="mono-small" style="color: #64748b; margin-bottom: 16px;">PATTERN</div>
-                <blockquote style="font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 600; line-height: 1.45; color: #0f172a; border-left: none; padding-left: 0; margin: 0 0 16px 0;">
+                <div class="mono-small" style="color:#64748b;margin-bottom:16px;">PATTERN</div>
+                <blockquote style="font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:600;line-height:1.45;color:#0f172a;border-left:none;padding-left:0;margin:0 0 16px 0;">
                     &ldquo;${activeStage.patternQuote}&rdquo;
                 </blockquote>
-                <p style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #94a3b8; letter-spacing: 0.1em; text-transform: uppercase; margin: 0;">
+                <p style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#94a3b8;letter-spacing:0.1em;text-transform:uppercase;margin:0;">
                     PATTERN-LEVEL OBSERVATION ACROSS BUSINESSES AT STAGE ${activeStageIndex + 1}. NOT A CLAIM ABOUT ANY SPECIFIC COMPETITOR.
                 </p>
             `;
         }
+
+        // Section 10 + 11: Render Trust Stat + ₦5,000 Unlock Offer above paywall
+        const trustStatEl = document.getElementById('bga-trust-stat');
+        if (trustStatEl) {
+            trustStatEl.innerHTML = `
+                <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:36px;font-weight:700;color:#3a7bff;">50+</span>
+                    <p style="font-size:15px;color:#475569;line-height:1.6;max-width:52ch;margin:0;">businesses have taken our free Growth Score. Many didn't stop there — they came back for branding, web, and content support too.</p>
+                </div>
+            `;
+        }
+
+        // Populate the review line under results header
+        const reviewLineEl = document.getElementById('bga-review-line');
+        if (reviewLineEl) reviewLineEl.textContent = `Based on our review of ${userData.businessName || 'your business'}`;
+
+        // Populate report closing footer
+        const closingBusinessEl = document.getElementById('bga-closing-business');
+        if (closingBusinessEl) closingBusinessEl.textContent = `This report was generated for ${userData.businessName || 'your business'} by Builtium.`;
 
         // Lock & Unlock Management
         function applyLockState(isPaid) {
@@ -1478,6 +1617,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const partnershipEl = document.getElementById('bga-partnership');
             const schedulingCard = document.getElementById('bga-scheduling-card');
             const upsellCard = document.getElementById('bga-upsell');
+            const unlockOffer = document.getElementById('bga-unlock-offer');
+            const unlockPaidConfirm = document.getElementById('bga-unlock-paid-confirm');
 
             if (isPaid) {
                 if (breakdownLock) breakdownLock.style.display = 'none';
@@ -1488,6 +1629,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (partnershipEl) partnershipEl.classList.remove('bga-paywall-blur');
                 if (schedulingCard) schedulingCard.style.display = 'block';
                 if (upsellCard) upsellCard.style.display = 'none';
+                if (unlockOffer) unlockOffer.style.display = 'none';
+                if (unlockPaidConfirm) unlockPaidConfirm.style.display = 'block';
             } else {
                 if (breakdownLock) breakdownLock.style.display = 'flex';
                 if (breakdownList) breakdownList.classList.add('bga-paywall-blur');
@@ -1496,12 +1639,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (partnershipLock) partnershipLock.style.display = 'flex';
                 if (partnershipEl) partnershipEl.classList.add('bga-paywall-blur');
                 if (schedulingCard) schedulingCard.style.display = 'none';
-                if (upsellCard) upsellCard.style.display = 'block';
+                if (upsellCard) upsellCard.style.display = 'none'; // Use new unlock offer section instead
+                if (unlockOffer) unlockOffer.style.display = 'block';
             }
         }
 
         const isAlreadyPaid = localStorage.getItem('bga_paid') === 'true';
         applyLockState(isAlreadyPaid);
+
+        // Dismiss unlock offer ("Continue with free results")
+        const dismissUnlockBtn = document.getElementById('bga-dismiss-unlock');
+        if (dismissUnlockBtn) {
+            dismissUnlockBtn.addEventListener('click', () => {
+                const unlockOffer = document.getElementById('bga-unlock-offer');
+                if (unlockOffer) unlockOffer.style.display = 'none';
+            });
+        }
 
         // Setup Paystack Popup Triggers
         const unlockButtons = document.querySelectorAll('.bga-btn-unlock-trigger, #bga-blueprint-cta');
