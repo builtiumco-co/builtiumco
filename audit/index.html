@@ -93,8 +93,16 @@
                         <input type="email" id="bga-email" name="email" class="bga-intro__input" required
                             placeholder="you@company.com">
                     </div>
-                    <button type="submit" class="bga-btn bga-btn--full" id="bga-start-btn">Start Assessment</button>
-                    <p class="bga-intro__note">
+                    <div class="bga-intro__form-group">
+                        <label for="bga-phone">Phone Number</label>
+                        <input type="tel" id="bga-phone" name="phone" class="bga-intro__input" required
+                            placeholder="e.g. +234 803 123 4567">
+                    </div>
+                    <button type="submit" class="bga-btn bga-btn--full" id="bga-start-btn" disabled>Start Assessment</button>
+                    <p class="bga-privacy-note" style="font-size: 11px; color: #64748b; margin-top: 12px; text-align: center; line-height: 1.4;">
+                        <strong>Privacy Note:</strong> Your contact info and answers are saved securely in real-time as you progress, so you can pick up where you left off if interrupted.
+                    </p>
+                    <p class="bga-intro__note" style="margin-top: 16px;">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2">
                             <circle cx="12" cy="12" r="10"></circle>
@@ -125,9 +133,15 @@
                     <div class="bga-progress__bar-track">
                         <div id="bga-progress-bar" class="bga-progress__bar-fill"></div>
                     </div>
-                    <div class="bga-progress__info">
+                    <div class="bga-progress__info" style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 8px;">
                         <span id="bga-progress-text">Section 1 of 10 • Question 1 of 7</span>
+                        <span id="bga-progress-encouragement" style="font-weight: 600; color: var(--accent-color); font-size: 12px; transition: opacity 0.3s; opacity: 0;"></span>
                     </div>
+                </div>
+
+                <!-- Reassurance Note -->
+                <div id="bga-reassurance" style="display: none; background: #e0f2fe; color: #0369a1; padding: 14px 18px; border-radius: 8px; font-size: 13px; font-weight: 500; margin-bottom: 20px; border-left: 4px solid #0284c7; line-height: 1.5;">
+                    💡 <strong>A quick note:</strong> This assessment is streamlined to evaluate your entire digital setup in under 5 minutes. We recommend completing it in one sitting for the most accurate roadmap.
                 </div>
 
                 <!-- Section Tag -->
@@ -186,121 +200,123 @@
         <!-- ============================== -->
         <section id="bga-results" class="bga-screen">
             <div class="bga-container bga-container--wide">
+                <!-- BGA Results Header (PDF-inspired style) -->
+                <div class="bga-results__pdf-header" style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid #e2e8f0; padding-bottom: 20px; margin-bottom: 48px;">
+                    <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: -0.02em;">BUILTIUM</span>
+                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.15em; color: #64748b;">GROWTH AUDIT / REPORT 882-01</span>
+                </div>
 
-                <!-- 4A: Score Overview -->
-                <div class="bga-results__header">
-                    <div class="bga-score-circle">
-                        <svg width="200" height="200" viewBox="0 0 200 200">
-                            <circle class="bga-score-circle__track" cx="100" cy="100" r="90"></circle>
-                            <circle id="bga-score-ring-fill" class="bga-score-circle__fill" cx="100" cy="100" r="90"></circle>
-                        </svg>
-                        <div class="bga-score-circle__value">
-                            <span id="bga-score-number" class="bga-score-circle__number">0</span>
-                            <span class="bga-score-circle__percent">%</span>
-                        </div>
+                <!-- Maturity Stage Section -->
+                <div class="bga-results__stage-block" style="margin-bottom: 64px;">
+                    <div class="mono-small" style="color: #64748b; margin-bottom: 8px;">YOUR STAGE</div>
+                    <div id="bga-stage-rank" style="font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #64748b; margin-bottom: 16px;">03 / 05</div>
+                    <h1 id="bga-stage-title" style="font-family: 'Space Grotesk', sans-serif; font-size: clamp(36px, 6vw, 64px); font-weight: 700; line-height: 1.1; margin-bottom: 24px; color: #000;">Credible.</h1>
+                    <p id="bga-stage-desc" style="font-size: 20px; line-height: 1.5; color: #334155; max-width: 800px; font-weight: 500;">
+                        You have a credible baseline profile, but nothing pulls anyone back after the first visit, and there's nothing on the page telling strangers to trust you.
+                    </p>
+                </div>
+
+                <!-- Growth Ladder horizontal grid -->
+                <div class="bga-results__ladder-section" style="margin-bottom: 80px;">
+                    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px;">
+                        <span class="mono-small" style="color: #64748b;">GROWTH LADDER</span>
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #64748b;">COMPOSITE <span id="bga-composite-score">53</span></span>
                     </div>
-                    <div id="bga-readiness-badge" class="bga-readiness-badge bga-readiness-badge--growing">Growing Business</div>
-                    <h2 class="bga-results__title">Your Digital Readiness Score</h2>
-                    <p id="bga-score-description" class="bga-results__subtitle">Based on your answers</p>
-                </div>
-
-                <!-- Score Interpretation Message -->
-                <div class="bga-text-center" style="max-width: 720px; margin: -20px auto 64px; padding: 0 20px;">
-                    <h3 id="bga-score-message" style="font-size: 24px; font-weight: 700; margin-bottom: 12px; color: #0f172a;">Room for Growth</h3>
-                    <p id="bga-score-recommendation" style="font-size: 16px; color: #475569; line-height: 1.65; margin: 0;">Your digital readiness score is in the growing phase...</p>
-                </div>
-
-                <!-- 4B: Section Breakdown -->
-                <div class="bga-breakdown">
-                    <h3 class="bga-breakdown__title">Category Breakdown</h3>
-                    <div id="bga-breakdown" class="bga-breakdown__list">
-                        <!-- Breakdown bars injected dynamically in JS -->
+                    <div id="bga-ladder-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; min-height: 50px;">
+                        <!-- Ladder items rendered dynamically in JS -->
                     </div>
                 </div>
 
-                <!-- 5: Strengths & Opportunities -->
-                <div id="bga-strengths-opportunities">
-                    <div class="bga-so__grid">
-                        <div class="bga-so__column bga-so__column--strengths">
-                            <h3 class="bga-so__column-title">
-                                <svg class="bga-so__icon bga-so__icon--check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                </svg>
-                                Top Strengths
-                            </h3>
-                            <div id="bga-strengths">
-                                <!-- Injected dynamically in JS -->
-                            </div>
-                        </div>
-                        <div class="bga-so__column bga-so__column--opportunities">
-                            <h3 class="bga-so__column-title">
-                                <svg class="bga-so__icon bga-so__icon--warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                                    <line x1="12" y1="9" x2="12" y2="13"></line>
-                                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                                </svg>
-                                Growth Opportunities
-                            </h3>
-                            <div id="bga-opportunities">
-                                <!-- Injected dynamically in JS -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 6: Opportunity Cards -->
-                <section id="bga-opportunity-cards">
-                    <h3 class="bga-opp__title">What Changes If You Fix These?</h3>
-                    <p class="bga-opp__subtitle">Based on your bottom-scoring sections, here is the direct impact of making these improvements:</p>
-                    <div class="bga-opp__grid" id="bga-opportunity-cards-grid">
-                        <!-- Injected dynamically in JS -->
-                    </div>
-                </section>
-
-                <!-- 7: Future Snapshot -->
-                <section id="bga-future-snapshot">
-                    <h3 class="bga-future__title">Your Business: Today vs. Potential</h3>
-                    <p class="bga-future__subtitle">A side-by-side view of your current business states vs. your potential once optimized.</p>
+                <!-- SECTION 01: Where you stand (Paywalled Category Scores) -->
+                <div class="bga-section-block" style="margin-bottom: 80px; border-top: 1px solid #e2e8f0; padding-top: 48px;">
+                    <div class="mono-small" style="color: #64748b; margin-bottom: 12px;">SECTION 01</div>
+                    <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 700; margin-bottom: 40px;">Where you stand.</h2>
                     
-                    <div class="bga-future__comparison">
-                        <div class="bga-future__column bga-future__column--today">
-                            <h4 class="bga-future__column-title bga-future__column-title--today">Today</h4>
-                            <div id="bga-today-list">
-                                <!-- Injected dynamically in JS -->
-                            </div>
+                    <div id="bga-breakdown-wrapper" style="position: relative; border-radius: 12px; overflow: hidden; min-height: 300px; transition: all 0.3s;">
+                        <!-- Lock overlay for unauthorized users -->
+                        <div id="bga-breakdown-lock" class="bga-lock-overlay" style="position: absolute; inset: 0; background: rgba(255, 255, 255, 0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; text-align: center; backdrop-filter: blur(8px); padding: 24px; border: 1px solid #e2e8f0; border-radius: 8px;">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#3a7bff" stroke-width="2" style="margin-bottom:16px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                            <h4 style="font-size: 18px; font-weight: 700; margin-bottom: 8px; color: #000;">Full 10-Category Analytics Locked</h4>
+                            <p style="font-size: 14px; color: #64748b; max-width: 320px; margin-bottom: 20px; line-height: 1.45;">Unlock your Growth Blueprint to view detailed scoring breakdowns for all 10 operations.</p>
+                            <button class="bga-btn bga-btn-unlock-trigger" style="background:#3a7bff; color:white; border:none; padding:10px 24px; border-radius:100px; font-size:13px; font-weight:700; cursor:pointer;">Unlock for ₦5,000</button>
                         </div>
-                        <div class="bga-future__divider">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                                <polyline points="12 5 19 12 12 19"></polyline>
-                            </svg>
+                        <div id="bga-breakdown-list" style="display: flex; flex-direction: column; gap: 24px; padding: 12px 0;" class="bga-paywall-blur">
+                            <!-- Rendered in JS -->
                         </div>
-                        <div class="bga-future__column bga-future__column--improved">
-                            <h4 class="bga-future__column-title bga-future__column-title--improved">Potential</h4>
-                            <div id="bga-future-list">
-                                <!-- Injected dynamically in JS -->
-                            </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 02: Your three highest-leverage gaps (Visible for Free) -->
+                <div class="bga-section-block" style="margin-bottom: 80px; border-top: 1px solid #e2e8f0; padding-top: 48px;">
+                    <div class="mono-small" style="color: #64748b; margin-bottom: 12px;">SECTION 02</div>
+                    <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 700; margin-bottom: 40px;">Your three highest-leverage gaps.</h2>
+                    
+                    <div id="bga-gaps-list" style="display: flex; flex-direction: column; gap: 48px;">
+                        <!-- Rendered dynamically in JS based on lowest 3 scoring categories -->
+                    </div>
+                </div>
+
+                <!-- SECTION 03: What to fix first (Paywalled Sequenced Roadmap) -->
+                <div class="bga-section-block" style="margin-bottom: 80px; border-top: 1px solid #e2e8f0; padding-top: 48px;">
+                    <div class="mono-small" style="color: #64748b; margin-bottom: 12px;">SECTION 03</div>
+                    <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 700; margin-bottom: 8px;">What to fix first.</h2>
+                    <p style="font-size: 16px; color: #64748b; margin-bottom: 40px; font-weight: 500;">Sequenced, not a checklist. Each step unlocks the next.</p>
+                    
+                    <div id="bga-roadmap-wrapper" style="position: relative; border-radius: 12px; overflow: hidden; min-height: 250px; transition: all 0.3s;">
+                        <!-- Lock overlay for roadmap -->
+                        <div id="bga-roadmap-lock" class="bga-lock-overlay" style="position: absolute; inset: 0; background: rgba(255, 255, 255, 0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; text-align: center; backdrop-filter: blur(8px); padding: 24px; border: 1px solid #e2e8f0; border-radius: 8px;">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#3a7bff" stroke-width="2" style="margin-bottom:16px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                            <h4 style="font-size: 18px; font-weight: 700; margin-bottom: 8px; color: #000;">Roadmap Sequencer Locked</h4>
+                            <p style="font-size: 14px; color: #64748b; max-width: 320px; margin-bottom: 20px; line-height: 1.45;">Unlock your Growth Blueprint to view your detailed 30-day sequenced implementation roadmap.</p>
+                            <button class="bga-btn bga-btn-unlock-trigger" style="background:#3a7bff; color:white; border:none; padding:10px 24px; border-radius:100px; font-size:13px; font-weight:700; cursor:pointer;">Unlock for ₦5,000</button>
                         </div>
+                        <div id="bga-roadmap-list" style="display: flex; flex-direction: column; gap: 36px; padding: 12px 0;" class="bga-paywall-blur">
+                            <!-- Rendered dynamically in JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NOW VS POTENTIAL STAGE DETAILS (Visible for Free) -->
+                <div id="bga-stage-details-section" class="bga-section-block" style="margin-bottom: 80px; border-top: 1px solid #e2e8f0; padding-top: 48px;">
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 48px;" id="bga-stage-details-grid">
+                        <!-- Filled dynamically in JS based on stage -->
                     </div>
                     
-                    <div class="bga-future__potential">
-                        <span class="bga-future__potential-label">Estimated Potential Score</span>
-                        <span id="bga-potential-score" class="bga-future__potential-score">0%</span>
+                    <div id="bga-pattern-block" style="margin-top: 64px; border-top: 1px solid #e2e8f0; padding-top: 48px;">
+                        <!-- Pattern observation rendered dynamically in JS -->
                     </div>
-                </section>
+                </div>
 
-                <!-- 8: Growth Blueprint Upsell -->
-                <div id="bga-upsell" class="bga-upsell__card">
+                <!-- 11: Call Scheduling Handoff (Hidden until purchased) -->
+                <div id="bga-scheduling-card" class="bga-partnership__card" style="display: none; background: #f8fafc; border: 2px solid var(--accent-color); margin-top: 48px; margin-bottom: 48px; border-radius: 12px; padding: 40px; box-shadow: 0 10px 30px rgba(58, 123, 255, 0.05);">
+                    <div class="bga-partnership__badge" style="background: var(--accent-color); color: white; display: inline-block; padding: 4px 12px; border-radius: 100px; font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 20px;">Action Required</div>
+                    <h3 class="bga-partnership__title" style="font-size: 28px; font-weight: 700; color: #0f172a; margin-bottom: 12px;">Schedule Your 15-Minute Strategy Call</h3>
+                    <p class="bga-partnership__desc" style="font-size: 16px; color: #475569; line-height: 1.65; margin-bottom: 24px;">
+                        Your payment of <strong>₦5,000</strong> has been verified successfully. Your custom report is fully unlocked! 
+                        To schedule your manual strategy call, please confirm your preferred phone number below. A strategist from Builtium will reach out to you within 24 hours to coordinate available call times.
+                    </p>
+                    <div class="bga-intro__form-group" style="max-width: 400px; margin-bottom: 20px;">
+                        <label for="bga-confirm-phone" style="font-weight:600; font-size:14px; margin-bottom:8px; display:block; color: #334155;">Confirm Contact Phone Number</label>
+                        <input type="tel" id="bga-confirm-phone" class="bga-intro__input" style="width:100%; border: 1px solid #cbd5e1; padding: 14px 18px; border-radius: 6px; font-size: 15px;" required>
+                    </div>
+                    <button id="bga-submit-schedule-btn" class="bga-btn" style="height: 48px; border-radius: 100px; padding: 0 32px; font-weight:700;">Confirm & Request Schedule</button>
+                    <div id="bga-schedule-success-msg" style="display: none; color: #10b981; font-weight: 600; font-size: 15px; margin-top: 16px;">
+                        ✓ Thank you! We have received your phone number. Our strategy team will reach out within 24 hours.
+                    </div>
+                </div>
+
+                <!-- 8: Growth Blueprint Upsell (Triggers Checkout) -->
+                <div id="bga-upsell" class="bga-upsell__card" style="margin-bottom: 80px;">
                     <div class="bga-upsell__inner">
                         <div class="bga-upsell__left">
                             <div class="bga-upsell__badge">Highly Recommended</div>
                             <h3 class="bga-upsell__title">Unlock Your Complete Growth Blueprint</h3>
                             <p class="bga-upsell__desc">Get a personalized, step-by-step PDF manual mapping out exactly how to resolve every single gap identified in this audit, including design drafts, SEO keys, and checklist actions.</p>
                             <div class="bga-upsell__price">
-                                ₦3,000 – ₦5,000
-                                <span class="bga-upsell__price-note">One-time payment</span>
+                                ₦5,000
+                                <span class="bga-upsell__price-note">One-time payment • No subscription</span>
                             </div>
-                            <a href="#" class="bga-btn bga-btn--full" id="bga-blueprint-cta">Unlock Full Blueprint</a>
+                            <button class="bga-btn bga-btn--full bga-btn-unlock-trigger" id="bga-blueprint-cta" style="font-weight:700; border-radius: 100px;">Unlock My Full Analytics + Call</button>
                         </div>
                         <div class="bga-upsell__right">
                             <h4 class="bga-upsell__checklist-title">What's Included in Your Blueprint</h4>
@@ -358,42 +374,52 @@
                     </div>
                 </div>
 
-                <!-- 9: Monthly Partnership -->
-                <div id="bga-partnership" class="bga-partnership__card">
-                    <div class="bga-partnership__badge">Ongoing Implementation</div>
-                    <h3 class="bga-partnership__title">Builtium Growth Partnership</h3>
-                    <p class="bga-partnership__desc">Want us to handle everything? We will implement your entire Growth Blueprint, run your local SEO, maintain your site, build your lead capture systems, and drive growth for your business every single month.</p>
-                    <div class="bga-partnership__price">
-                        ₦100,000
-                        <span class="bga-partnership__price-note">/ Month</span>
+                <!-- 9: Monthly Partnership (Paywalled Ongoing Implementation) -->
+                <div id="bga-partnership-wrapper" style="position: relative; border-radius: 12px; overflow: hidden; min-height: 250px; transition: all 0.3s; margin-bottom: 80px;">
+                    <!-- Lock overlay for partnership -->
+                    <div id="bga-partnership-lock" class="bga-lock-overlay" style="position: absolute; inset: 0; background: rgba(255, 255, 255, 0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; text-align: center; backdrop-filter: blur(8px); padding: 24px; border: 1px solid #e2e8f0; border-radius: 8px;">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#3a7bff" stroke-width="2" style="margin-bottom:16px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                        <h4 style="font-size: 18px; font-weight: 700; margin-bottom: 8px; color: #000;">Ongoing Partnership Form Locked</h4>
+                        <p style="font-size: 14px; color: #64748b; max-width: 320px; margin-bottom: 20px; line-height: 1.45;">Unlock your Growth Blueprint to unlock eligibility details and apply for active Monthly Partnership.</p>
+                        <button class="bga-btn bga-btn-unlock-trigger" style="background:#3a7bff; color:white; border:none; padding:10px 24px; border-radius:100px; font-size:13px; font-weight:700; cursor:pointer;">Unlock for ₦5,000</button>
                     </div>
-                    <ul class="bga-partnership__features">
-                        <li class="bga-partnership__feature">
-                            <svg class="bga-partnership__feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            Professional website maintenance & regular updates
-                        </li>
-                        <li class="bga-partnership__feature">
-                            <svg class="bga-partnership__feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            Full implementation of all local SEO, reviews, & map tasks
-                        </li>
-                        <li class="bga-partnership__feature">
-                            <svg class="bga-partnership__feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            Lead generation funnel optimization & WhatsApp systems setup
-                        </li>
-                        <li class="bga-partnership__feature">
-                            <svg class="bga-partnership__feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            Monthly competitor benchmarking & performance tracking
-                        </li>
-                        <li class="bga-partnership__feature">
-                            <svg class="bga-partnership__feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            Active conversion rate optimization (CRO) tests & tweaks
-                        </li>
-                        <li class="bga-partnership__feature">
-                            <svg class="bga-partnership__feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            Monthly 1-on-1 strategy & marketing alignment calls
-                        </li>
-                    </ul>
-                    <a href="../#contact" class="bga-btn" style="margin-top: 32px;">Apply for Partnership</a>
+                    
+                    <div id="bga-partnership" class="bga-partnership__card" style="margin: 0;" class="bga-paywall-blur">
+                        <div class="bga-partnership__badge">Ongoing Implementation</div>
+                        <h3 class="bga-partnership__title">Builtium Growth Partnership</h3>
+                        <p class="bga-partnership__desc">Want us to handle everything? We will implement your entire Growth Blueprint, run your local SEO, maintain your site, build your lead capture systems, and drive growth for your business every single month.</p>
+                        <div class="bga-partnership__price">
+                            ₦100,000
+                            <span class="bga-partnership__price-note">/ Month</span>
+                        </div>
+                        <ul class="bga-partnership__features">
+                            <li class="bga-partnership__feature">
+                                <svg class="bga-partnership__feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                Professional website maintenance & regular updates
+                            </li>
+                            <li class="bga-partnership__feature">
+                                <svg class="bga-partnership__feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                Full implementation of all local SEO, reviews, & map tasks
+                            </li>
+                            <li class="bga-partnership__feature">
+                                <svg class="bga-partnership__feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                Lead generation funnel optimization & WhatsApp systems setup
+                            </li>
+                            <li class="bga-partnership__feature">
+                                <svg class="bga-partnership__feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                Monthly competitor benchmarking & performance tracking
+                            </li>
+                            <li class="bga-partnership__feature">
+                                <svg class="bga-partnership__feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                Active conversion rate optimization (CRO) tests & tweaks
+                            </li>
+                            <li class="bga-partnership__feature">
+                                <svg class="bga-partnership__feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                Monthly 1-on-1 strategy & marketing alignment calls
+                            </li>
+                        </ul>
+                        <a href="../#contact" class="bga-btn" style="margin-top: 32px; border-radius: 100px; display: inline-flex; font-weight:700;">Apply for Partnership</a>
+                    </div>
                 </div>
 
                 <!-- Hidden Netlify Form for Data Capture -->
@@ -487,6 +513,8 @@
         });
     </script>
 
+    <!-- Paystack JS -->
+    <script src="https://js.paystack.co/v1/inline.js"></script>
     <!-- Assessment Engine -->
     <script src="js/assessment.js" defer></script>
 </body>

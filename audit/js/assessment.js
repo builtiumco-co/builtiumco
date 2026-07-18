@@ -671,10 +671,26 @@ document.addEventListener('DOMContentLoaded', () => {
         COMPETITIVE: { today: 'Unaware of competition', future: 'Strategic market position' }
     };
 
+    // --- Session ID & Config Loader ---
+    let sessionId = localStorage.getItem('bga_session_id');
+    if (!sessionId) {
+        sessionId = 'BGA_SESS_' + Math.random().toString(36).substring(2, 11).toUpperCase() + '_' + Date.now();
+        localStorage.setItem('bga_session_id', sessionId);
+    }
+
+    let paystackPublicKey = '';
+    fetch('/.netlify/functions/get-config')
+        .then(res => res.json())
+        .then(config => {
+            paystackPublicKey = config.paystackPublicKey || '';
+        })
+        .catch(err => console.error("Error loading config:", err));
+
     // --- State Variables ---
     let userData = {
         businessName: "",
         email: "",
+        phone: "",
         industry: "",
         location: "",
         yearsInBusiness: "",
@@ -706,6 +722,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const backBtn = document.getElementById('bga-back-btn');
     const nextBtn = document.getElementById('bga-next-btn');
 
+    // --- Start Button Form State Check ---
+    const startBtn = document.getElementById('bga-start-btn');
+    const bizNameInput = document.getElementById('bga-business-name');
+    const emailInput = document.getElementById('bga-email');
+    const phoneInput = document.getElementById('bga-phone');
+
+    function checkStartBtnState() {
+        if (!bizNameInput || !emailInput || !phoneInput || !startBtn) return;
+        const nameVal = bizNameInput.value.trim();
+        const emailVal = emailInput.value.trim();
+        const phoneVal = phoneInput.value.trim();
+        
+        startBtn.disabled = !(nameVal !== "" && emailVal !== "" && phoneVal !== "");
+    }
+
+    if (bizNameInput && emailInput && phoneInput) {
+        bizNameInput.addEventListener('input', checkStartBtnState);
+        emailInput.addEventListener('input', checkStartBtnState);
+        phoneInput.addEventListener('input', checkStartBtnState);
+    }
+
     // --- State Storage Helpers ---
     function saveProgress() {
         const progressData = {
@@ -727,8 +764,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     resumePrompt.style.display = 'block';
                     // Populate initial form fields if they exist
                     if (parsed.userData) {
-                        document.getElementById('bga-business-name').value = parsed.userData.businessName || "";
-                        document.getElementById('bga-email').value = parsed.userData.email || "";
+                        if (bizNameInput) bizNameInput.value = parsed.userData.businessName || "";
+                        if (emailInput) emailInput.value = parsed.userData.email || "";
+                        if (phoneInput) phoneInput.value = parsed.userData.phone || "";
+                        checkStartBtnState();
                     }
                     return parsed;
                 } else {
@@ -747,23 +786,41 @@ document.addEventListener('DOMContentLoaded', () => {
     // Prefill business name from URL query parameter if present
     const urlParams = new URLSearchParams(window.location.search);
     const businessNameParam = urlParams.get('businessName');
-    if (businessNameParam && document.getElementById('bga-business-name')) {
-        document.getElementById('bga-business-name').value = businessNameParam;
+    if (businessNameParam && bizNameInput) {
+        bizNameInput.value = businessNameParam;
+        checkStartBtnState();
     }
 
     if (introForm) {
         introForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            userData.businessName = document.getElementById('bga-business-name').value.trim();
-            userData.email = document.getElementById('bga-email').value.trim();
+            userData.businessName = bizNameInput.value.trim();
+            userData.email = emailInput.value.trim();
+            userData.phone = phoneInput.value.trim();
             
             // Auto fill profile question 1 answer with business name
             answers[0] = userData.businessName;
 
             localStorage.setItem('bga_user', JSON.stringify({
                 name: userData.businessName,
-                email: userData.email
+                email: userData.email,
+                phone: userData.phone
             }));
+
+            // Sync/Create session row immediately in Google Sheets (non-blocking)
+            fetch('/.netlify/functions/audit-log', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'create',
+                    sessionId: sessionId,
+                    data: {
+                        businessName: userData.businessName,
+                        email: userData.email,
+                        phone: userData.phone
+                    }
+                })
+            }).catch(err => console.error("Logging initial creation failed:", err));
 
             showScreen(screenQuestions);
             loadQuestion(1); // Jump to question index 1 (Industry) since index 0 (Business Name) is answered
@@ -806,6 +863,25 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!isValid) return;
         }
 
+        // Log answer update to Google Sheets (non-blocking async)
+        const ansVal = answers[currentQuestionIndex];
+        const logAns = q.type === 'profile' ? ansVal : (ansVal ? ansVal.text : null);
+        if (logAns !== null) {
+            fetch('/.netlify/functions/audit-log', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'update',
+                    sessionId: sessionId,
+                    data: {
+                        type: 'answer',
+                        questionNum: currentQuestionIndex + 1,
+                        answerText: Array.isArray(logAns) ? logAns.join(', ') : String(logAns)
+                    }
+                })
+            }).catch(err => console.error("Logging answer update failed:", err));
+        }
+
         if (currentQuestionIndex < quizData.length - 1) {
             currentQuestionIndex++;
             loadQuestion(currentQuestionIndex);
@@ -821,7 +897,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         if (screenEl) screenEl.classList.add('bga-screen--active');
     }
-
     // --- Question Rendering ---
     function loadQuestion(index) {
         currentQuestionIndex = index;
@@ -833,9 +908,29 @@ document.addEventListener('DOMContentLoaded', () => {
         questionText.textContent = q.question;
 
         // Progress Calculations
-        const currentProgressPercent = ((index) / quizData.length) * 100;
+        const currentProgressPercent = Math.round((index / quizData.length) * 100);
         progressBar.style.width = `${currentProgressPercent}%`;
         progressText.textContent = `Section ${q.sectionNum} of 10 • Question ${index + 1} of ${quizData.length}`;
+
+        // Reassurance Note visibility (first profile question, index 1)
+        const reassuranceEl = document.getElementById('bga-reassurance');
+        if (reassuranceEl) {
+            reassuranceEl.style.display = (index === 1) ? 'block' : 'none';
+        }
+
+        // Progress Encouragement subtext
+        const encouragementEl = document.getElementById('bga-progress-encouragement');
+        if (encouragementEl) {
+            if (currentProgressPercent >= 50 && currentProgressPercent < 75) {
+                encouragementEl.textContent = "⚡ You're halfway there! Keep going.";
+                encouragementEl.style.opacity = '1';
+            } else if (currentProgressPercent >= 75 && currentProgressPercent < 95) {
+                encouragementEl.textContent = "🚀 Almost finished! Just a few more.";
+                encouragementEl.style.opacity = '1';
+            } else {
+                encouragementEl.style.opacity = '0';
+            }
+        }
 
         // Reset display wrappers
         optionsContainer.style.display = 'none';
@@ -1072,232 +1167,470 @@ document.addEventListener('DOMContentLoaded', () => {
         const maxScoreTotal = 1375;
         const totalPercentage = Math.min(Math.round((rawTotal / maxScoreTotal) * 100), 100);
 
-        // Readiness Levels & Styles Mapping
-        let level = "Critical";
-        let message = "Start From Scratch";
-        let recommendation = "Your digital presence needs attention now. We specialize in building custom foundations from zero to hero.";
-        let levelClass = "critical";
+        // Dictionaries for dynamic template explanations
+        const categoryWhyMatters = {
+            PROFILE: "A clear profile defines who you are and who you serve.",
+            DISCOVERABILITY: "If customers can't find you, they can't buy from you.",
+            WEBSITE: "Your website is your 24/7 digital storefront.",
+            POSITIONING: "Positioning tells buyers why they should choose you over anyone else.",
+            SOCIAL_PROOF: "Strangers need someone else's voice to trust yours.",
+            SOCIAL_MEDIA: "Social media shows that your business is active and alive.",
+            LEAD_CAPTURE: "Warm attention with no exit ramp is wasted attention.",
+            RETENTION: "Acquisition without retention is a leaky bucket.",
+            LEGAL: "Security and compliance establish institutional trust.",
+            COMPETITIVE: "Understanding the landscape lets you win the comparison game."
+        };
 
-        if (totalPercentage >= 86) {
-            level = "Market Leader";
-            message = "Digital Market Leader";
-            recommendation = "Outstanding digital setup! Let's schedule a call to optimize conversion loops, automate workflows, and design advanced scaling strategies.";
-            levelClass = "market-leader";
-        } else if (totalPercentage >= 71) {
-            level = "Growth Ready";
-            message = "Growth-Ready Business";
-            recommendation = "You have established a solid baseline presence. Ready to systematically seal the remaining gaps and launch high-impact campaigns.";
-            levelClass = "growth-ready";
-        } else if (totalPercentage >= 51) {
-            level = "Growing Business";
-            message = "Room to Scale";
-            recommendation = "Some digital mechanisms are functional, but you are losing buyers at key stages. Let's fix your user journey, clarify core positioning, and rebuild core trust signs.";
-            levelClass = "growing";
-        } else if (totalPercentage >= 31) {
-            level = "Needs Improvement";
-            message = "Significant Gaps Present";
-            recommendation = "Your brand visuals, website layout, or search visibility are holding your growth back. Let's design a modern overhaul to start winning digital traction.";
-            levelClass = "needs-improvement";
+        const categoryGapExplanations = {
+            PROFILE: "Your baseline business profiles lack clarity or complete details, making it hard for prospects to quickly understand what you offer.",
+            DISCOVERABILITY: "Your search visibility and map listings are incomplete, hiding your business from active local buyers.",
+            WEBSITE: "Slow load speeds, weak mobile layout, or technical friction are driving visitors away before they convert.",
+            POSITIONING: "Your unique value proposition isn't clear, causing prospects to view you as a commodity rather than a leader.",
+            SOCIAL_PROOF: "A lack of visible reviews, case studies, or client success signals makes prospects hesitant to engage.",
+            SOCIAL_MEDIA: "Inconsistent posts or inactive profiles signal to potential clients that your brand is dormant.",
+            LEAD_CAPTURE: "Interested visitors leave your site without any structured way to stay connected or capture their info.",
+            RETENTION: "There is no systematic follow-up or retention mechanism keeping past clients coming back.",
+            LEGAL: "Missing privacy policies, terms, or clear legal structures expose your brand to risk.",
+            COMPETITIVE: "Lack of active benchmarking means you aren't tracking competitor changes or adjusting pricing strategy."
+        };
+
+        // Dictionaries for Maturity Stages (matching PDF designs)
+        const stagesInfo = [
+            {
+                name: "Invisible",
+                rank: "01 / 05",
+                looksSubhead: "Unsearchable business, no digital footprint.",
+                bullets: [
+                    "You are not visible in local search",
+                    "You have no central website storefront",
+                    "You rely entirely on manual offline efforts"
+                ],
+                nextStage: "Present",
+                nextLooksSubhead: "Basic online footprint, disjointed presence.",
+                nextBullets: [
+                    "Basic website and listings set up",
+                    "Found by name, if not by service",
+                    "Clear baseline profiles created"
+                ],
+                patternQuote: "Businesses at this stage are digitally locked out of the market — prospects cannot confirm they exist."
+            },
+            {
+                name: "Present",
+                rank: "02 / 05",
+                looksSubhead: "Basic online footprint, disjointed presence.",
+                bullets: [
+                    "You are found by name, not by service",
+                    "Your website is basic or outdated",
+                    "Your profiles lack active postings"
+                ],
+                nextStage: "Credible",
+                nextLooksSubhead: "Looks professional, builds trust.",
+                nextBullets: [
+                    "Consistent professional design language",
+                    "Clear value proposition and positioning",
+                    "Active reviews and social proof visible"
+                ],
+                patternQuote: "Present but silent. Traffic arrives but leaves immediately because the credibility bar isn't met."
+            },
+            {
+                name: "Credible",
+                rank: "03 / 05",
+                looksSubhead: "Looks professional, builds trust.",
+                bullets: [
+                    "You look professional at a glance",
+                    "You convert when someone is already sold",
+                    "You depend on referrals and word of mouth"
+                ],
+                nextStage: "Growing",
+                nextLooksSubhead: "Systems in place, consistent traction.",
+                nextBullets: [
+                    "A structured content and channel rhythm",
+                    "Lead capture and follow-up wired together",
+                    "Traffic that returns, not just arrives"
+                ],
+                patternQuote: "Businesses at this stage look credible but almost none have set up retention — most traffic never returns."
+            },
+            {
+                name: "Growing",
+                rank: "04 / 05",
+                looksSubhead: "Systems in place, consistent traction.",
+                bullets: [
+                    "Your content has rhythmic channels",
+                    "You capture lead information systematically",
+                    "Some traffic returns automatically"
+                ],
+                nextStage: "Compounding",
+                nextLooksSubhead: "Dominating search, automated conversions.",
+                nextBullets: [
+                    "Full loop automation across channels",
+                    "Strong brand referrals and authority",
+                    "Multi-channel retention and loyalty"
+                ],
+                patternQuote: "Traction is active, but friction in lead capture or checkout leaks up to 30% of potential conversions."
+            },
+            {
+                name: "Compounding",
+                rank: "05 / 05",
+                looksSubhead: "Dominating search, automated conversions.",
+                bullets: [
+                    "You dominate local discoverability",
+                    "Your web conversions are automated",
+                    "You retain and grow customer lifetime value"
+                ],
+                nextStage: "Elite",
+                nextLooksSubhead: "Ongoing growth supremacy.",
+                nextBullets: [
+                    "Continuous CRO tests running monthly",
+                    "Active category expansion strategies"
+                ],
+                patternQuote: "Market leader status is achieved, but stay disciplined — competitor updates happen fast."
+            }
+        ];
+
+        // Determine active stage based on composite score
+        let activeStageIndex = 2; // Default to Credible (Stage 3)
+        if (totalPercentage <= 30) activeStageIndex = 0;
+        else if (totalPercentage <= 50) activeStageIndex = 1;
+        else if (totalPercentage <= 70) activeStageIndex = 2;
+        else if (totalPercentage <= 85) activeStageIndex = 3;
+        else activeStageIndex = 4;
+
+        const activeStage = stagesInfo[activeStageIndex];
+
+        // Render Stage Header & Description
+        document.getElementById('bga-stage-rank').textContent = activeStage.rank;
+        document.getElementById('bga-stage-title').textContent = activeStage.name + ".";
+        
+        // Assemble diagnostic explanation sentence
+        const diagnosticSentence = `You have a ${activeStage.name.toLowerCase()} baseline presence, but ${activeStage.looksSubhead.toLowerCase()} and ${activeStage.bullets[1].toLowerCase()}.`;
+        document.getElementById('bga-stage-desc').textContent = diagnosticSentence;
+        document.getElementById('bga-composite-score').textContent = totalPercentage;
+
+        // Render Growth Ladder Horizontal Blocks
+        const ladderGrid = document.getElementById('bga-ladder-grid');
+        if (ladderGrid) {
+            ladderGrid.innerHTML = '';
+            stagesInfo.forEach((st, idx) => {
+                const isActive = idx === activeStageIndex;
+                const isPassed = idx < activeStageIndex;
+                const item = document.createElement('div');
+                item.style.padding = '14px 10px';
+                item.style.borderTop = isActive ? '4px solid #3a7bff' : (isPassed ? '4px solid #0f172a' : '4px solid #e2e8f0');
+                item.style.color = isActive ? '#3a7bff' : (isPassed ? '#0f172a' : '#94a3b8');
+                item.style.fontWeight = isActive ? '700' : '500';
+                item.style.fontFamily = "'Space Grotesk', sans-serif";
+                item.style.textAlign = 'left';
+                item.innerHTML = `
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; margin-bottom: 4px;">0${idx+1}</div>
+                    <div style="font-size: 13px; text-transform: capitalize;">${st.name}</div>
+                `;
+                ladderGrid.appendChild(item);
+            });
         }
 
-        // Render Score Number & Badge
-        const scoreNumEl = document.getElementById('bga-score-number');
-        const scoreRingFill = document.getElementById('bga-score-ring-fill');
-        const readinessBadge = document.getElementById('bga-readiness-badge');
-        const scoreDesc = document.getElementById('bga-score-description');
-        const scoreMsg = document.getElementById('bga-score-message');
-        const scoreRec = document.getElementById('bga-score-recommendation');
-
-        // Animate Circle Ring Offset
-        // Radius of 88, circumference is 2 * PI * 88 = 552.92 (~553)
-        const offset = 553 - (553 * totalPercentage) / 100;
-        scoreRingFill.style.strokeDashoffset = offset;
-
-        // Animated Score Counter
-        let currentCount = 0;
-        const countInterval = setInterval(() => {
-            if (currentCount >= totalPercentage) {
-                scoreNumEl.textContent = totalPercentage;
-                clearInterval(countInterval);
-            } else {
-                currentCount++;
-                scoreNumEl.textContent = currentCount;
-            }
-        }, 15);
-
-        readinessBadge.textContent = level;
-        readinessBadge.className = `bga-readiness-badge bga-readiness-badge--${levelClass}`;
-        scoreDesc.textContent = `Based on BGA review of ${userData.businessName || "Your Business"}`;
-        scoreMsg.textContent = message;
-        scoreRec.textContent = recommendation;
-
-        // Render Staggered Category Progress Bars
-        const breakdownContainer = document.getElementById('bga-breakdown');
-        breakdownContainer.innerHTML = '';
-
+        // Render SECTION 01: All 10 Category scores
         const categories = Object.keys(categoryMaxPoints);
-        categories.forEach((cat, index) => {
-            const maxVal = categoryMaxPoints[cat];
-            const scoreVal = scores[cat];
-            const percent = Math.min(Math.round((scoreVal / maxVal) * 100), 100);
+        const breakdownListEl = document.getElementById('bga-breakdown-list');
+        if (breakdownListEl) {
+            breakdownListEl.innerHTML = '';
+            categories.forEach(cat => {
+                const scoreVal = scores[cat] || 0;
+                const maxVal = categoryMaxPoints[cat];
+                const pct = Math.round((scoreVal / maxVal) * 100);
+                
+                const row = document.createElement('div');
+                row.style.display = 'flex';
+                row.style.justifyContent = 'space-between';
+                row.style.alignItems = 'baseline';
+                row.style.padding = '14px 0';
+                row.style.borderBottom = '1px solid #f1f5f9';
+                row.innerHTML = `
+                    <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 15px; color: #475569; text-transform: uppercase;">${cat.replace('_', ' ')}</span>
+                    <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 15px; color: #0f172a;">${pct}</span>
+                `;
+                breakdownListEl.appendChild(row);
+            });
+        }
 
-            const breakdownItem = document.createElement('div');
-            breakdownItem.className = 'bga-breakdown__item';
-            const catClass = `bga-bar--${cat.toLowerCase().replace('_', '-')}`;
-            breakdownItem.innerHTML = `
-                <div class="bga-breakdown__label">
-                    <span class="bga-breakdown__label-name">${cat.replace('_', ' ')}</span>
-                    <span class="bga-breakdown__label-dot"></span>
-                    <span class="bga-breakdown__label-score">${percent}%</span>
-                </div>
-                <div class="bga-breakdown__bar-track">
-                    <div class="bga-breakdown__bar-fill ${catClass}" style="width: 0%;"></div>
-                </div>
-            `;
-            breakdownContainer.appendChild(breakdownItem);
-
-            // Stagger animation for breakdown bars
-            setTimeout(() => {
-                const fillBar = breakdownItem.querySelector('.bga-breakdown__bar-fill');
-                if (fillBar) fillBar.style.width = `${percent}%`;
-            }, 100 + (index * 60));
-        });
-
-        // Strengths & Opportunities Ranking logic (sort categories by performance)
+        // Identify Top 3 Gaps (lowest scoring categories)
         const sortedCats = categories.map(cat => {
-            const scoreVal = scores[cat];
+            const scoreVal = scores[cat] || 0;
             const maxVal = categoryMaxPoints[cat];
             return {
                 name: cat,
                 percentage: Math.round((scoreVal / maxVal) * 100)
             };
-        }).sort((a, b) => b.percentage - a.percentage);
+        }).sort((a, b) => a.percentage - b.percentage); // Lowest percentage first
 
-        // Render Strengths List
-        const strengthsList = document.getElementById('bga-strengths');
-        strengthsList.innerHTML = '';
-        const topStrengths = sortedCats.slice(0, 3);
-        topStrengths.forEach(s => {
-            const item = document.createElement('div');
-            item.className = 'bga-so__item';
-            item.innerHTML = `
-                <svg class="bga-so__icon bga-so__icon--check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width:18px; height:18px;">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-                <span><strong>${s.name.replace('_', ' ')} (${s.percentage}%)</strong> — Your brand baseline is healthy in this area.</span>
+        const top3Gaps = sortedCats.slice(0, 3);
+
+        // Render SECTION 02: 3 Leverage Gaps
+        const gapsListEl = document.getElementById('bga-gaps-list');
+        if (gapsListEl) {
+            gapsListEl.innerHTML = '';
+            top3Gaps.forEach((gap, idx) => {
+                const whyText = categoryWhyMatters[gap.name] || 'This area represents a crucial foundation for growth.';
+                
+                const gapItem = document.createElement('div');
+                gapItem.style.borderBottom = '1px solid #e2e8f0';
+                gapItem.style.paddingBottom = '32px';
+                gapItem.innerHTML = `
+                    <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 8px;">
+                        <div>
+                            <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #3a7bff; margin-right: 16px; font-weight: 700;">0${idx+1}</span>
+                            <span style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: #000; text-transform: uppercase;">${gap.name.replace('_', ' ')}</span>
+                        </div>
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700; color: #ef4444;">${gap.percentage} / 100</div>
+                    </div>
+                    <p style="font-size: 15px; color: #64748b; line-height: 1.6; font-weight: 500; margin: 0;">
+                        Why it matters &mdash; ${whyText}
+                    </p>
+                `;
+                gapsListEl.appendChild(gapItem);
+            });
+        }
+
+        // Render SECTION 03: Sequenced Roadmap
+        const roadmapListEl = document.getElementById('bga-roadmap-list');
+        if (roadmapListEl) {
+            roadmapListEl.innerHTML = '';
+            top3Gaps.forEach((gap, idx) => {
+                const nextGap = top3Gaps[idx + 1];
+                const gapDetail = categoryGapExplanations[gap.name] || 'Unoptimized processes slow growth.';
+                const unlocksMsg = nextGap ? `UNLOCKS &rarr; YOU'RE MISSING ${nextGap.name.replace('_', ' ')}.` : '';
+                
+                const stepItem = document.createElement('div');
+                stepItem.style.display = 'flex';
+                stepItem.style.gap = '20px';
+                stepItem.style.alignItems = 'flex-start';
+                stepItem.innerHTML = `
+                    <div style="border: 2px solid #000; padding: 6px 12px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 16px; line-height: 1; color: #000; margin-top: 2px;">
+                        ${idx + 1}
+                    </div>
+                    <div>
+                        <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: #000; margin-bottom: 6px; text-transform: uppercase;">
+                            You have no ${gap.name.toLowerCase().replace('_', ' ')} loop.
+                        </h4>
+                        <p style="font-size: 15px; color: #64748b; line-height: 1.5; margin: 0 0 10px 0; font-weight: 500;">
+                            Because ${gapDetail}
+                        </p>
+                        ${unlocksMsg ? `<div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.05em; color: #3a7bff; font-weight: 700; text-transform: uppercase;">${unlocksMsg}</div>` : ''}
+                    </div>
+                `;
+                roadmapListEl.appendChild(stepItem);
+            });
+        }
+
+        // Render NOW vs POTENTIAL stage preview
+        const detailsGridEl = document.getElementById('bga-stage-details-grid');
+        if (detailsGridEl) {
+            detailsGridEl.innerHTML = `
+                <div style="border-right: 1px solid #f1f5f9; padding-right: 24px;">
+                    <div class="mono-small" style="color: #64748b; margin-bottom: 8px;">NOW</div>
+                    <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; margin-bottom: 8px; color: #000;">${activeStage.name}</h3>
+                    <p style="font-size: 15px; color: #64748b; margin-bottom: 24px; font-weight: 500;">${activeStage.looksSubhead}</p>
+                    <ul style="display: flex; flex-direction: column; gap: 16px; list-style: none; padding: 0;">
+                        ${activeStage.bullets.map(b => `
+                            <li style="display: flex; gap: 12px; font-size: 14px; color: #475569; font-weight: 500; align-items: baseline;">
+                                <span style="color: #ef4444; font-family: monospace;">-</span>
+                                <span>${b}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+                <div>
+                    <div class="mono-small" style="color: #64748b; margin-bottom: 8px;">NEXT &rarr; STAGE 0${activeStageIndex === 4 ? 5 : activeStageIndex + 2}</div>
+                    <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; margin-bottom: 8px; color: #3a7bff;">${activeStage.nextStage}</h3>
+                    <p style="font-size: 15px; color: #64748b; margin-bottom: 24px; font-weight: 500;">${activeStage.nextLooksSubhead}</p>
+                    <ul style="display: flex; flex-direction: column; gap: 16px; list-style: none; padding: 0;">
+                        ${activeStage.nextBullets.map(b => `
+                            <li style="display: flex; gap: 12px; font-size: 14px; color: #475569; font-weight: 500; align-items: baseline;">
+                                <span style="color: #10b981; font-family: monospace;">+</span>
+                                <span>${b}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
             `;
-            strengthsList.appendChild(item);
+        }
+
+        // Render Pattern quotes
+        const patternBlockEl = document.getElementById('bga-pattern-block');
+        if (patternBlockEl) {
+            patternBlockEl.innerHTML = `
+                <div class="mono-small" style="color: #64748b; margin-bottom: 16px;">PATTERN</div>
+                <blockquote style="font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 600; line-height: 1.45; color: #0f172a; border-left: none; padding-left: 0; margin: 0 0 16px 0;">
+                    &ldquo;${activeStage.patternQuote}&rdquo;
+                </blockquote>
+                <p style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #94a3b8; letter-spacing: 0.1em; text-transform: uppercase; margin: 0;">
+                    PATTERN-LEVEL OBSERVATION ACROSS BUSINESSES AT STAGE ${activeStageIndex + 1}. NOT A CLAIM ABOUT ANY SPECIFIC COMPETITOR.
+                </p>
+            `;
+        }
+
+        // Lock & Unlock Management
+        function applyLockState(isPaid) {
+            const breakdownLock = document.getElementById('bga-breakdown-lock');
+            const breakdownList = document.getElementById('bga-breakdown-list');
+            const roadmapLock = document.getElementById('bga-roadmap-lock');
+            const roadmapList = document.getElementById('bga-roadmap-list');
+            const partnershipLock = document.getElementById('bga-partnership-lock');
+            const partnershipEl = document.getElementById('bga-partnership');
+            const schedulingCard = document.getElementById('bga-scheduling-card');
+            const upsellCard = document.getElementById('bga-upsell');
+
+            if (isPaid) {
+                if (breakdownLock) breakdownLock.style.display = 'none';
+                if (breakdownList) breakdownList.classList.remove('bga-paywall-blur');
+                if (roadmapLock) roadmapLock.style.display = 'none';
+                if (roadmapList) roadmapList.classList.remove('bga-paywall-blur');
+                if (partnershipLock) partnershipLock.style.display = 'none';
+                if (partnershipEl) partnershipEl.classList.remove('bga-paywall-blur');
+                if (schedulingCard) schedulingCard.style.display = 'block';
+                if (upsellCard) upsellCard.style.display = 'none';
+            } else {
+                if (breakdownLock) breakdownLock.style.display = 'flex';
+                if (breakdownList) breakdownList.classList.add('bga-paywall-blur');
+                if (roadmapLock) roadmapLock.style.display = 'flex';
+                if (roadmapList) roadmapList.classList.add('bga-paywall-blur');
+                if (partnershipLock) partnershipLock.style.display = 'flex';
+                if (partnershipEl) partnershipEl.classList.add('bga-paywall-blur');
+                if (schedulingCard) schedulingCard.style.display = 'none';
+                if (upsellCard) upsellCard.style.display = 'block';
+            }
+        }
+
+        const isAlreadyPaid = localStorage.getItem('bga_paid') === 'true';
+        applyLockState(isAlreadyPaid);
+
+        // Setup Paystack Popup Triggers
+        const unlockButtons = document.querySelectorAll('.bga-btn-unlock-trigger, #bga-blueprint-cta');
+        unlockButtons.forEach(btn => {
+            btn.replaceWith(btn.cloneNode(true)); // Clean listeners to prevent duplicate triggers
         });
 
-        // Render Opportunities List
-        const opportunitiesList = document.getElementById('bga-opportunities');
-        opportunitiesList.innerHTML = '';
-        const topOpportunities = sortedCats.slice(-3).reverse(); // lowest scoring
-        topOpportunities.forEach(o => {
-            const item = document.createElement('div');
-            item.className = 'bga-so__item';
-            item.innerHTML = `
-                <svg class="bga-so__icon bga-so__icon--warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px; height:18px;">
-                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                    <line x1="12" y1="9" x2="12" y2="13"></line>
-                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                </svg>
-                <span><strong>${o.name.replace('_', ' ')} (${o.percentage}%)</strong> — Crucial leaks identified. Resolving this will yield immediate gains.</span>
-            `;
-            opportunitiesList.appendChild(item);
+        const refreshedButtons = document.querySelectorAll('.bga-btn-unlock-trigger, #bga-blueprint-cta');
+        refreshedButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                if (!paystackPublicKey) {
+                    alert("Paystack payment system is currently initializing. Please try again in a few seconds.");
+                    return;
+                }
+
+                btn.textContent = "Opening Checkout...";
+                btn.disabled = true;
+
+                const handler = PaystackPop.setup({
+                    key: paystackPublicKey,
+                    email: userData.email || 'customer@company.com',
+                    amount: 5000 * 100, // ₦5,000 in kobo
+                    currency: 'NGN',
+                    ref: 'BGA_' + Math.random().toString(36).substring(2, 11).toUpperCase() + '_' + Date.now(),
+                    callback: function(response) {
+                        btn.textContent = "Verifying Payment...";
+                        
+                        // Call backend function to verify and update spreadsheet records
+                        fetch('/.netlify/functions/verify-payment', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                reference: response.reference,
+                                sessionId: sessionId,
+                                phone: userData.phone
+                            })
+                        })
+                        .then(res => res.json())
+                        .then(resData => {
+                            btn.textContent = "Unlock Full Blueprint";
+                            btn.disabled = false;
+                            
+                            if (resData.success) {
+                                localStorage.setItem('bga_paid', 'true');
+                                applyLockState(true);
+                                alert("Success! Your Growth Blueprint is fully unlocked.");
+                                const scheduleCard = document.getElementById('bga-scheduling-card');
+                                if (scheduleCard) {
+                                    scheduleCard.scrollIntoView({ behavior: 'smooth' });
+                                }
+                            } else {
+                                alert("Error verifying payment: " + (resData.error || "Please contact hello@builtiumco.com"));
+                            }
+                        })
+                        .catch(err => {
+                            btn.textContent = "Unlock Full Blueprint";
+                            btn.disabled = false;
+                            console.error("Verification error:", err);
+                            alert("A network error occurred. Please contact support with reference: " + response.reference);
+                        });
+                    },
+                    onClose: function() {
+                        btn.textContent = "Unlock My Full Analytics + Call";
+                        btn.disabled = false;
+                        console.log('Payment window closed.');
+                    }
+                });
+                handler.openIframe();
+            });
         });
 
-        // Render Opportunity Cards
-        const cardContainer = document.getElementById('bga-opportunity-cards-grid');
-        cardContainer.innerHTML = '';
-        
-        const categoryIcons = {
-            PROFILE: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>`,
-            DISCOVERABILITY: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>`,
-            WEBSITE: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>`,
-            POSITIONING: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>`,
-            SOCIAL_PROOF: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>`,
-            SOCIAL_MEDIA: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>`,
-            LEAD_CAPTURE: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`,
-            RETENTION: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>`,
-            LEGAL: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`,
-            COMPETITIVE: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line><line x1="2" y1="20" x2="22" y2="20"></line></svg>`
-        };
+        // Setup Manual Call Scheduling Handoff Form
+        const confirmPhoneInput = document.getElementById('bga-confirm-phone');
+        const submitScheduleBtn = document.getElementById('bga-submit-schedule-btn');
+        const scheduleSuccessMsg = document.getElementById('bga-schedule-success-msg');
 
-        topOpportunities.forEach(o => {
-            const outcomes = opportunityOutcomes[o.name] || ['Boost overall conversion rates', 'Acquire customers automatically', 'Establish authority in your field'];
-            const card = document.createElement('div');
-            card.className = 'bga-opp-card';
-            
-            const iconSvg = categoryIcons[o.name] || categoryIcons.PROFILE;
- 
-            card.innerHTML = `
-                <div class="bga-opp-card__icon">${iconSvg}</div>
-                <h4 class="bga-opp-card__area">${o.name.replace('_', ' ')}</h4>
-                <p class="bga-opp-card__prompt">If you improve this area...</p>
-                <ul class="bga-opp-card__outcomes">
-                    ${outcomes.map(out => `
-                        <li class="bga-opp-card__outcome">
-                            <svg class="bga-opp-card__outcome-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                            <span>${out}</span>
-                        </li>
-                    `).join('')}
-                </ul>
-            `;
-            cardContainer.appendChild(card);
-        });
+        if (confirmPhoneInput && userData.phone) {
+            confirmPhoneInput.value = userData.phone;
+        }
 
-        // Render Snapshot Lists (Today vs. With Improvements)
-        const todayList = document.getElementById('bga-today-list');
-        const futureList = document.getElementById('bga-future-list');
-        todayList.innerHTML = '';
-        futureList.innerHTML = '';
- 
-        // Select lowest categories to populate lists
-        const snapshotCats = sortedCats.slice(-5);
-        snapshotCats.forEach(sc => {
-            const states = snapshotStates[sc.name] || { today: 'Unoptimized processes', future: 'Streamlined growth outcomes' };
-            
-            const todayItem = document.createElement('div');
-            todayItem.className = 'bga-future__item';
-            todayItem.innerHTML = `
-                <span class="bga-future__dot bga-future__dot--red"></span>
-                <span>${states.today}</span>
-            `;
-            todayList.appendChild(todayItem);
- 
-            const futureItem = document.createElement('div');
-            futureItem.className = 'bga-future__item';
-            futureItem.innerHTML = `
-                <span class="bga-future__dot bga-future__dot--green"></span>
-                <span>${states.future}</span>
-            `;
-            futureList.appendChild(futureItem);
-        });
+        if (submitScheduleBtn) {
+            submitScheduleBtn.replaceWith(submitScheduleBtn.cloneNode(true));
+        }
 
-        // Calculate potential score (assume bottom opportunity areas improve to 80%+)
-        let potentialTotal = 0;
-        categories.forEach(cat => {
-            const scoreVal = scores[cat];
-            const maxVal = categoryMaxPoints[cat];
-            const currentPercent = (scoreVal / maxVal) * 100;
-            
-            // If current percentage is less than 85, boost it to 85% for potential calculation
-            const potentialPercent = Math.max(currentPercent, 85);
-            potentialTotal += (potentialPercent / 100) * maxVal;
-        });
-        const potentialPercentCalculated = Math.min(Math.round((potentialTotal / maxScoreTotal) * 100), 100);
-        document.getElementById('bga-potential-score').textContent = `${potentialPercentCalculated}%`;
+        const refreshedScheduleBtn = document.getElementById('bga-submit-schedule-btn');
+        if (refreshedScheduleBtn) {
+            refreshedScheduleBtn.addEventListener('click', () => {
+                const confirmedPhone = confirmPhoneInput.value.trim();
+                if (confirmedPhone === "") {
+                    confirmPhoneInput.style.borderColor = 'red';
+                    return;
+                }
+                
+                refreshedScheduleBtn.disabled = true;
+                refreshedScheduleBtn.textContent = "Submitting...";
 
-        // Populate hidden fields and submit to Netlify forms automatically
+                // Notify backend of phone and final completion state
+                fetch('/.netlify/functions/verify-payment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        reference: 'MANUAL_CONFIRMED',
+                        sessionId: sessionId,
+                        phone: confirmedPhone
+                    })
+                })
+                .then(res => res.json())
+                .then(() => {
+                    refreshedScheduleBtn.style.display = 'none';
+                    confirmPhoneInput.disabled = true;
+                    scheduleSuccessMsg.style.display = 'block';
+                })
+                .catch(err => {
+                    console.error("Scheduling confirm error:", err);
+                    refreshedScheduleBtn.disabled = false;
+                    refreshedScheduleBtn.textContent = "Confirm & Request Schedule";
+                });
+            });
+        }
+
+        // Post completion results silently to Netlify Form for redundancy
         const hiddenForm = document.getElementById('bga-lead-form');
         if (hiddenForm) {
             document.getElementById('bga-hidden-name').value = userData.businessName;
             document.getElementById('bga-hidden-email').value = userData.email;
             document.getElementById('bga-hidden-score').value = `${totalPercentage}%`;
-            document.getElementById('bga-hidden-level').value = level;
+            document.getElementById('bga-hidden-level').value = activeStage.name;
             document.getElementById('bga-hidden-timestamp').value = new Date().toISOString();
             
             // Map individual section scores
@@ -1318,7 +1651,23 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             document.getElementById('bga-hidden-answers').value = JSON.stringify(parsedAnswers);
 
-            // Post Form silently
+            // Log completion to Sheet
+            fetch('/.netlify/functions/audit-log', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'update',
+                    sessionId: sessionId,
+                    data: {
+                        type: 'completion',
+                        paid: isAlreadyPaid,
+                        finalResult: activeStage.name,
+                        scores: scores
+                    }
+                })
+            }).catch(err => console.error("Logging completion failed:", err));
+
+            // Post Form silently to Netlify Forms
             const formData = new FormData(hiddenForm);
             fetch("/", {
                 method: "POST",

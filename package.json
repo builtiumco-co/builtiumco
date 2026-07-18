@@ -1,0 +1,16 @@
+{
+  "name": "builtium-digital-growth-audit",
+  "version": "1.0.0",
+  "description": "Builtium Digital Growth Audit funnel integration with real-time Google Sheets logging, Paystack payment verification, and manual scheduling handoff email triggers.",
+  "main": "index.html",
+  "dependencies": {
+    "googleapis": "^140.0.0",
+    "nodemailer": "^6.9.14"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Builtium Team",
+  "license": "ISC"
+}

@@ -1,8 +1,10 @@
 // Smooth scrolling for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href === '#') return;
         e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
+        const target = document.querySelector(href);
         if (target) {
             target.scrollIntoView({
                 behavior: 'smooth'
@@ -11,67 +13,81 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Contact Form Handler
-const contactForm = document.getElementById('contactForm');
-if (contactForm) {
-    contactForm.addEventListener('submit', function (e) {
-        e.preventDefault(); // Prevent default to control the flow
+// Auto-update year in footer
+const yearEl = document.getElementById('year');
+if (yearEl) {
+    yearEl.textContent = new Date().getFullYear();
+}
 
-        const submitBtn = this.querySelector('.form-submit');
-        const successMessage = document.getElementById('successMessage');
-        const originalText = submitBtn.textContent;
-
-        // 1. Loading State
-        submitBtn.textContent = 'Sending...';
-        submitBtn.disabled = true;
-
-        // 2. Collect form data and send to Netlify
-        const formData = new FormData(this);
-
-        fetch('/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams(formData).toString()
-        })
-            .then(() => {
-                // 3. Show Success Message
-                if (successMessage) {
-                    successMessage.classList.add('active');
-                }
-
-                // 4. Reset Form & Button
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
-                contactForm.reset();
-
-                // 5. Hide Overlay after delay
+// Reveal Line Animations
+const revealLines = document.querySelectorAll('.reveal-line');
+if (revealLines.length > 0) {
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const delay = parseInt(entry.target.getAttribute('data-delay') || '0', 10);
                 setTimeout(() => {
-                    if (successMessage) {
-                        successMessage.classList.remove('active');
+                    entry.target.classList.add('in');
+                }, delay);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15 });
+
+    revealLines.forEach(line => revealObserver.observe(line));
+}
+
+// Stat Counter Animation (0+ to 50+)
+const stats = document.querySelectorAll('.stat-number');
+if (stats.length > 0) {
+    const statObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const targetEl = entry.target;
+                const targetVal = parseInt(targetEl.getAttribute('data-target') || '0', 10);
+                let currentVal = 0;
+                // Count up to targetVal within 1.5 seconds (1500ms)
+                const duration = 1500;
+                const steps = Math.min(targetVal, 50); // cap steps to avoid extreme fast intervals
+                const increment = Math.ceil(targetVal / steps);
+                const stepTime = Math.floor(duration / steps);
+
+                const countInterval = setInterval(() => {
+                    currentVal += increment;
+                    if (currentVal >= targetVal) {
+                        targetEl.textContent = targetVal + '+';
+                        clearInterval(countInterval);
+                    } else {
+                        targetEl.textContent = currentVal + '+';
                     }
-                }, 2500);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
-            });
-    });
+                }, stepTime);
+
+                observer.unobserve(targetEl);
+            }
+        });
+    }, { threshold: 0.15 });
+
+    stats.forEach(stat => statObserver.observe(stat));
 }
 
-// Mobile Navigation Toggle
-const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
-const body = document.body;
+// Scorecard Progress Bar Animation
+const bars = document.querySelectorAll('.bar');
+if (bars.length > 0) {
+    const barObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const fillEl = entry.target.querySelector('.bar-fill');
+                const targetValue = entry.target.getAttribute('data-value');
+                if (fillEl && targetValue) {
+                    // Small delay to let viewport transition feel smooth
+                    setTimeout(() => {
+                        fillEl.style.width = targetValue + '%';
+                    }, 100);
+                }
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15 });
 
-if (mobileNavToggle) {
-    mobileNavToggle.addEventListener('click', () => {
-        body.classList.toggle('nav-open');
-    });
+    bars.forEach(bar => barObserver.observe(bar));
 }
-
-// Close mobile menu when a link is clicked
-document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-        body.classList.remove('nav-open');
-    });
-});
