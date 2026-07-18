@@ -82,6 +82,8 @@ if (bars.length > 0) {
                     // Small delay to let viewport transition feel smooth
                     setTimeout(() => {
                         fillEl.style.width = targetValue + '%';
+                        // After the bar finishes expanding, add shimmer glow animation
+                        setTimeout(() => fillEl.classList.add('animated'), 2000);
                     }, 100);
                 }
                 observer.unobserve(entry.target);
