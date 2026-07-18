@@ -80,10 +80,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="quiz.css">
     <script src="script.js" defer></script>
     <script src="project-loader.js" defer></script>
-    <script src="quiz.js" defer></script>
 
 
     <meta name="google-site-verification" content="_HLp35wQF8kP8l26A-whB8RZ91_CPH3dIfbcoZvCd2I" />
@@ -167,139 +165,6 @@
 
                 <p class="services-supporting-copy">Designed to help founders and businesses launch with clarity and
                     credibility.</p>
-            </div>
-        </section>
-
-        <!-- Digital Readiness Audit Section -->
-        <section id="digital-audit" class="audit-section">
-            <div class="container audit-container">
-                <div id="quiz-app" class="quiz-app-container">
-                    <!-- Step 1: Intro Screen -->
-                    <div id="quiz-intro" class="quiz-step active">
-                        <div class="quiz-badge">Free Audit</div>
-                        <h2 class="quiz-headline">What's Your Digital Readiness Score?</h2>
-                        <p class="quiz-subheading">Take a 2-minute audit to see how prepared your business is for growth.</p>
-                        
-                        <form id="quiz-intro-form" class="quiz-form">
-                            <div class="form-group">
-                                <label for="businessName" class="form-label">Business Name</label>
-                                <input type="text" id="businessName" class="form-input" required placeholder="Enter your business name">
-                            </div>
-                            <div class="form-group">
-                                <label for="businessType" class="form-label">Business Type</label>
-                                <select id="businessType" class="form-input" required>
-                                    <option value="" disabled selected>Select business type</option>
-                                    <option value="Agency">Agency</option>
-                                    <option value="SaaS">SaaS</option>
-                                    <option value="Ecommerce">Ecommerce</option>
-                                    <option value="Service">Service</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="cta-button quiz-start-btn">Start Audit</button>
-                            <div class="quiz-time-estimate">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                                <span>Takes ~2 minutes</span>
-                            </div>
-                        </form>
-                    </div>
-
-                    <!-- Step 2: Question Screens -->
-                    <div id="quiz-questions" class="quiz-step">
-                        <div class="quiz-progress-wrapper">
-                            <div class="quiz-progress-text">Question <span id="current-q-num">1</span> of 12</div>
-                            <div class="quiz-progress-bar-container">
-                                <div id="quiz-progress-bar" class="quiz-progress-bar"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="quiz-category-tag" id="q-category-tag">BRAND</div>
-                        
-                        <h3 class="quiz-question-text" id="q-text">Question text here?</h3>
-                        
-                        <div class="quiz-options" id="q-options">
-                            <!-- Options injected here -->
-                        </div>
-                        
-                        <div class="quiz-nav-buttons">
-                            <button id="quiz-back-btn" class="quiz-nav-btn back-btn" type="button" disabled>← Back</button>
-                            <button id="quiz-next-btn" class="cta-button quiz-nav-btn next-btn" type="button" disabled>Next</button>
-                        </div>
-                    </div>
-
-                    <!-- Step 3: Results Screen -->
-                    <div id="quiz-results" class="quiz-step">
-                        <div class="results-header">
-                            <div class="score-overall">
-                                <div class="score-circle">
-                                    <span id="final-score-number" class="score-number">0%</span>
-                                </div>
-                                <h3 class="score-label">Your Digital Readiness Score</h3>
-                                <p id="score-description" class="score-description">Based on [Business Name]</p>
-                            </div>
-                            <div class="score-interpretation">
-                                <h4 id="score-message" class="score-message">Message here</h4>
-                                <p id="score-recommendation" class="score-recommendation">Recommendation here.</p>
-                            </div>
-                        </div>
-
-                        <div class="score-breakdown">
-                            <h4 class="breakdown-title">Score Breakdown</h4>
-                            <div class="breakdown-item">
-                                <div class="breakdown-label">
-                                    <span>Brand Identity</span>
-                                    <span id="score-brand">0/75</span>
-                                </div>
-                                <div class="breakdown-bar-bg"><div id="bar-brand" class="breakdown-bar-fill"></div></div>
-                            </div>
-                            <div class="breakdown-item">
-                                <div class="breakdown-label">
-                                    <span>Website</span>
-                                    <span id="score-website">0/100</span>
-                                </div>
-                                <div class="breakdown-bar-bg"><div id="bar-website" class="breakdown-bar-fill"></div></div>
-                            </div>
-                            <div class="breakdown-item">
-                                <div class="breakdown-label">
-                                    <span>Launch Support</span>
-                                    <span id="score-launch">0/125</span>
-                                </div>
-                                <div class="breakdown-bar-bg"><div id="bar-launch" class="breakdown-bar-fill"></div></div>
-                            </div>
-                        </div>
-
-                        <div class="gap-analysis">
-                            <h4 class="gap-title">Gap Analysis</h4>
-                            <div id="gap-brand" class="gap-category"></div>
-                            <div id="gap-website" class="gap-category"></div>
-                            <div id="gap-launch" class="gap-category"></div>
-                        </div>
-
-                        <div class="quiz-lead-capture" id="quiz-lead-section">
-                            <h4 class="lead-headline">Ready to Close These Gaps?</h4>
-                            <p class="lead-subheading">Get a personalized plan from our team.</p>
-                            <form id="quiz-lead-form" class="lead-form" name="audit-lead" method="POST" data-netlify="true" netlify>
-                                <input type="hidden" name="form-name" value="audit-lead">
-                                <input type="hidden" id="hidden-business-name" name="businessName" value="">
-                                <input type="hidden" id="hidden-business-type" name="businessType" value="">
-                                <input type="hidden" id="hidden-total-score" name="score" value="">
-                                <input type="email" id="lead-email" name="email" class="form-input" required placeholder="Your email address">
-                                <input type="tel" id="lead-phone" name="phone" class="form-input" required placeholder="Your phone number">
-                                <button type="submit" class="cta-button">Get My Plan</button>
-                            </form>
-                        </div>
-                        
-                        <div id="quiz-success-msg" class="quiz-success-message" style="display: none;">
-                            <div class="check-icon">
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </div>
-                            <h4>Check your email for your full report + next steps</h4>
-                            <button id="quiz-reset-btn" class="cta-button secondary-btn">Back to Home</button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </section>
 
