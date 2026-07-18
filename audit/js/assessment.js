@@ -1416,30 +1416,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Render SECTION 01: All 10 Category scores
-        const categories = Object.keys(categoryMaxPoints);
-        const breakdownListEl = document.getElementById('bga-breakdown-list');
-        if (breakdownListEl) {
-            breakdownListEl.innerHTML = '';
-            categories.forEach(cat => {
-                const scoreVal = scores[cat] || 0;
-                const maxVal = categoryMaxPoints[cat];
-                const pct = Math.round((scoreVal / maxVal) * 100);
-                
-                const row = document.createElement('div');
-                row.style.display = 'flex';
-                row.style.justifyContent = 'space-between';
-                row.style.alignItems = 'baseline';
-                row.style.padding = '14px 0';
-                row.style.borderBottom = '1px solid #f1f5f9';
-                row.innerHTML = `
-                    <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 15px; color: #475569; text-transform: uppercase;">${cat.replace('_', ' ')}</span>
-                    <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 15px; color: #0f172a;">${pct}</span>
-                `;
-                breakdownListEl.appendChild(row);
-            });
-        }
-
         // Identify sorted categories (lowest → highest) for all 10
         const sortedCats = categories.map(cat => {
             const scoreVal = scores[cat] || 0;
@@ -1458,25 +1434,44 @@ document.addEventListener('DOMContentLoaded', () => {
         const diagSentence = `Your ${top3Gaps[0].displayName}, ${top3Gaps[1].displayName}, and ${top3Gaps[2].displayName} are the areas holding your growth back most right now.`;
         document.getElementById('bga-stage-desc').textContent = diagSentence;
 
-        // Render SECTION 01: All 10 Category scores with per-category strength/gap lines
+        // Render SECTION 01: All 10 Category scores with animated bars + per-category lines
         const breakdownListEl = document.getElementById('bga-breakdown-list');
         if (breakdownListEl) {
             breakdownListEl.innerHTML = '';
-            sortedCats.slice().sort((a,b) => b.percentage - a.percentage).forEach(cat => {
+            sortedCats.slice().sort((a, b) => b.percentage - a.percentage).forEach((cat, i) => {
                 const isGap = top3Gaps.some(g => g.name === cat.name);
                 const line = isGap ? (categoryGapLines[cat.name] || '') : (categoryStrengthLines[cat.name] || '');
+                const barColor = isGap ? '#ef4444' : '#3a7bff';
+
                 const row = document.createElement('div');
-                row.style.padding = '16px 0';
+                row.style.padding = '18px 0';
                 row.style.borderBottom = '1px solid #f1f5f9';
                 row.innerHTML = `
-                    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;">
+                    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;">
                         <span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;color:#0f172a;">${cat.displayName}</span>
-                        <span style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;color:${isGap ? '#ef4444' : '#10b981'};">${cat.percentage}%</span>
+                        <span style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;color:${barColor};">${cat.percentage}%</span>
                     </div>
-                    <p style="font-size:13px;color:#64748b;margin:0;line-height:1.5;">${line}</p>
+                    <div style="height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;margin-bottom:8px;">
+                        <div class="bga-result-bar-fill" data-target="${cat.percentage}" style="height:100%;width:0%;background:${barColor};border-radius:2px;transition:width 1.2s cubic-bezier(0.4,0,0.2,1);transition-delay:${i * 0.07}s;"></div>
+                    </div>
+                    <p style="font-size:12px;color:#94a3b8;margin:0;line-height:1.4;">${line}</p>
                 `;
                 breakdownListEl.appendChild(row);
             });
+
+            // Animate bars when the breakdown section scrolls into view
+            const barObserver = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.querySelectorAll('.bga-result-bar-fill').forEach(fill => {
+                            const target = fill.getAttribute('data-target');
+                            setTimeout(() => { fill.style.width = target + '%'; }, 80);
+                        });
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            barObserver.observe(breakdownListEl);
         }
 
         // Render SECTION 02: 3 Leverage Gaps (section 6 per-category lines)
