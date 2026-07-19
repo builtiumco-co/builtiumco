@@ -32,21 +32,48 @@
     document.body.classList.remove('modal-open');
   }
 
+  // ---- Mobile Nav Toggle ----
+  const hamburger = document.getElementById('nav-hamburger');
+  const navLinksEl = document.getElementById('nav-links');
+  function closeMobileNav() {
+    if (hamburger && navLinksEl) {
+      hamburger.setAttribute('aria-expanded', 'false');
+      navLinksEl.classList.remove('is-open');
+    }
+  }
+  if (hamburger && navLinksEl) {
+    hamburger.addEventListener('click', () => {
+      const isOpen = navLinksEl.classList.toggle('is-open');
+      hamburger.setAttribute('aria-expanded', String(isOpen));
+    });
+    navLinksEl.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', closeMobileNav);
+    });
+  }
+
   // ---- Button wiring ----
   const btnLaunch = document.getElementById('btn-launch');
-  if (btnLaunch) btnLaunch.addEventListener('click', () => openModal('modal-launch'));
+  if (btnLaunch) btnLaunch.addEventListener('click', () => {
+    closeMobileNav();
+    openModal('modal-launch');
+  });
 
   const btnCustom = document.getElementById('btn-custom');
-  if (btnCustom) btnCustom.addEventListener('click', () => openModal('modal-custom'));
+  if (btnCustom) btnCustom.addEventListener('click', () => {
+    closeMobileNav();
+    openModal('modal-custom');
+  });
 
   // Close on backdrop / close button clicks
   document.querySelectorAll('[data-close-modal]').forEach(el => {
     el.addEventListener('click', closeAllModals);
   });
 
-  // Close on Escape key
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeAllModals();
+    if (e.key === 'Escape') {
+      closeAllModals();
+      closeMobileNav();
+    }
   });
 
   // Retry buttons reset form state

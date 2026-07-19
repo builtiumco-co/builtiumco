@@ -28,38 +28,22 @@
 </head>
 
 <body class="bga-page">
-    <!-- Navigation -->
-    <header class="site-header">
-        <div class="container header-container">
-            <a href="../" class="brand-logo">
-                <img src="../Assests/logo/B ICON.svg" alt="Builtium Logo" class="logo-icon">
-                <span class="brand-name">Builtium</span>
-            </a>
-
-            <button class="mobile-nav-toggle" aria-label="Toggle navigation">
-                <svg class="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <line x1="3" y1="12" x2="21" y2="12"></line>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <line x1="3" y1="18" x2="21" y2="18"></line>
-                </svg>
-                <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-            </button>
-
-            <nav class="site-nav">
-                <a href="../" class="nav-link">Home</a>
-                <a href="../#services" class="nav-link">Services</a>
-                <a href="../#work" class="nav-link">Work</a>
-                <a href="#" class="nav-link" style="color: var(--accent-color);">Audit</a>
-                <a href="../#contact" class="nav-link">Contact</a>
-            </nav>
+    <!-- Nav -->
+    <nav class="nav" id="main-nav">
+      <div class="nav-inner">
+        <a href="../" class="brand">BUILTIUM</a>
+        <button class="nav-hamburger" id="nav-hamburger" aria-label="Open navigation" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="nav-links" id="nav-links">
+          <a href="../" class="nav-link">Home</a>
+          <a href="../services/" class="nav-link">Services</a>
+          <a href="../#work" class="nav-link">Work</a>
+          <a href="#" class="nav-link" style="color: var(--brand);">Audit</a>
+          <a href="../services/" class="btn btn-dark nav-cta">Start a project</a>
         </div>
-    </header>
+      </div>
+    </nav>
 
     <main class="bga-main">
 
@@ -536,12 +520,25 @@
 
     <!-- Mobile Nav Toggle Script -->
     <script>
-        const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
-        if (mobileNavToggle) {
-            mobileNavToggle.addEventListener('click', () => document.body.classList.toggle('nav-open'));
+        const hamburger = document.getElementById('nav-hamburger');
+        const navLinksEl = document.getElementById('nav-links');
+        function closeMobileNav() {
+            if (hamburger && navLinksEl) {
+                hamburger.setAttribute('aria-expanded', 'false');
+                navLinksEl.classList.remove('is-open');
+            }
         }
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => document.body.classList.remove('nav-open'));
+        if (hamburger && navLinksEl) {
+            hamburger.addEventListener('click', () => {
+                const isOpen = navLinksEl.classList.toggle('is-open');
+                hamburger.setAttribute('aria-expanded', String(isOpen));
+            });
+            navLinksEl.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', closeMobileNav);
+            });
+        }
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeMobileNav();
         });
     </script>
 
