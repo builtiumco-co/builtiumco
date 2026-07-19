@@ -4,6 +4,8 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         const href = this.getAttribute('href');
         if (href === '#') return;
         e.preventDefault();
+        // Close mobile nav if open
+        closeMobileNav();
         const target = document.querySelector(href);
         if (target) {
             target.scrollIntoView({
@@ -12,6 +14,29 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     });
 });
+
+// Mobile nav toggle
+const hamburger = document.getElementById('nav-hamburger');
+const navLinksEl = document.getElementById('nav-links');
+function closeMobileNav() {
+    if (hamburger && navLinksEl) {
+        hamburger.setAttribute('aria-expanded', 'false');
+        navLinksEl.classList.remove('is-open');
+    }
+}
+if (hamburger && navLinksEl) {
+    hamburger.addEventListener('click', () => {
+        const isOpen = navLinksEl.classList.toggle('is-open');
+        hamburger.setAttribute('aria-expanded', String(isOpen));
+    });
+    navLinksEl.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', closeMobileNav);
+    });
+}
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeMobileNav();
+});
+
 
 // Auto-update year in footer
 const yearEl = document.getElementById('year');
