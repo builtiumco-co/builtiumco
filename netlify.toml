@@ -10,3 +10,23 @@
   to = "https://builtiumco.com/:splat"
   status = 301
   force = true
+
+[[redirects]]
+  from = "/services"
+  to = "/services.html"
+  status = 200
+
+[[redirects]]
+  from = "/work"
+  to = "/work.html"
+  status = 200
+
+[[redirects]]
+  from = "/audit"
+  to = "/audit.html"
+  status = 200
+
+[[redirects]]
+  from = "/learn"
+  to = "/learn.html"
+  status = 200

@@ -10,8 +10,8 @@
     <!-- Open Graph Tags -->
     <meta property="og:title" content="Growth Score | Builtium">
     <meta property="og:description" content="Discover your Growth Score and actionable insights to grow your business online.">
-    <meta property="og:image" content="../Assests/images/og-image.webp">
-    <meta property="og:url" content="https://www.builtiumco.com/audit/">
+    <meta property="og:image" content="Assests/images/og-image.webp">
+    <meta property="og:url" content="https://www.builtiumco.com/audit">
     <meta property="og:type" content="website">
 
     <!-- Fonts -->
@@ -20,30 +20,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="../Assests/logo/B ICON.svg">
+    <link rel="icon" type="image/svg+xml" href="Assests/logo/B ICON.svg">
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="css/assessment.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles/assessment.css">
 </head>
 
 <body class="bga-page">
-    <!-- Nav -->
-    <nav class="nav" id="main-nav">
-      <div class="nav-inner">
-        <a href="../" class="brand">BUILTIUM</a>
-        <button class="nav-hamburger" id="nav-hamburger" aria-label="Open navigation" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
-        <div class="nav-links" id="nav-links">
-          <a href="../" class="nav-link">Home</a>
-          <a href="../services/" class="nav-link">Services</a>
-          <a href="../#work" class="nav-link">Work</a>
-          <a href="#" class="nav-link" style="color: var(--brand);">Audit</a>
-          <a href="../services/" class="btn btn-dark nav-cta">Start a project</a>
-        </div>
-      </div>
-    </nav>
+    <!-- Nav Placeholder -->
+    <div id="nav-placeholder"></div>
 
     <main class="bga-main">
 
@@ -53,13 +39,7 @@
         <section id="bga-intro" class="bga-screen bga-screen--active">
             <div class="bga-container">
                 <div class="bga-intro__icon">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="20" x2="18" y2="10"></line>
-                        <line x1="12" y1="20" x2="12" y2="4"></line>
-                        <line x1="6" y1="20" x2="6" y2="14"></line>
-                        <polyline points="4 10 12 2 20 8"></polyline>
-                    </svg>
+                    <img src="Assests/logo/B ICON.svg" alt="Builtium Logo" style="width: 50px; height: 50px; display: block; object-fit: contain;">
                 </div>
                 <h1 class="bga-intro__headline">Discover Your Digital Growth Potential</h1>
                 <p class="bga-intro__subheading">5-minute assessment. Personalized insights. No credit card needed.</p>
@@ -466,7 +446,7 @@
                                 Monthly 1-on-1 strategy & marketing alignment calls
                             </li>
                         </ul>
-                        <a href="../#contact" class="bga-btn" style="margin-top: 32px; border-radius: 100px; display: inline-flex; font-weight:700;">Apply for Partnership</a>
+                        <a href="/#contact" class="bga-btn" style="margin-top: 32px; border-radius: 100px; display: inline-flex; font-weight:700;">Apply for Partnership</a>
                     </div>
                 </div>
 
@@ -495,7 +475,7 @@
                             hello@builtiumco.com
                         </a>
                         <span class="bga-footer-cta__divider">|</span>
-                        <a href="../#contact" class="bga-footer-cta__link">
+                        <a href="/#contact" class="bga-footer-cta__link">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                             </svg>
@@ -518,34 +498,11 @@
         </div>
     </footer>
 
-    <!-- Mobile Nav Toggle Script -->
-    <script>
-        const hamburger = document.getElementById('nav-hamburger');
-        const navLinksEl = document.getElementById('nav-links');
-        function closeMobileNav() {
-            if (hamburger && navLinksEl) {
-                hamburger.setAttribute('aria-expanded', 'false');
-                navLinksEl.classList.remove('is-open');
-            }
-        }
-        if (hamburger && navLinksEl) {
-            hamburger.addEventListener('click', () => {
-                const isOpen = navLinksEl.classList.toggle('is-open');
-                hamburger.setAttribute('aria-expanded', String(isOpen));
-            });
-            navLinksEl.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', closeMobileNav);
-            });
-        }
-        document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') closeMobileNav();
-        });
-    </script>
-
     <!-- Paystack JS -->
     <script src="https://js.paystack.co/v1/inline.js"></script>
+    <!-- Global Script -->
+    <script src="scripts/global.js"></script>
     <!-- Assessment Engine -->
-    <script src="js/assessment.js" defer></script>
+    <script src="scripts/assessment.js" defer></script>
 </body>
-
 </html>

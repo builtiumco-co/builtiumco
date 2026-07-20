@@ -25,8 +25,9 @@
     />
     
     <link rel="stylesheet" href="style.css" />
-    <script src="script.js" defer></script>
-    <script src="project-loader.js" defer></script>
+    <script src="scripts/global.js" defer></script>
+    <script src="scripts/home.js" defer></script>
+    <script src="scripts/project-loader.js" defer></script>
   </head>
   <body>
     <!-- Grid overlay -->
@@ -38,22 +39,8 @@
       </div>
     </div>
 
-    <!-- Nav -->
-    <nav class="nav" id="main-nav">
-      <div class="nav-inner">
-        <a href="#" class="brand">BUILTIUM</a>
-        <button class="nav-hamburger" id="nav-hamburger" aria-label="Open navigation" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
-        <div class="nav-links" id="nav-links">
-          <a href="#services" class="nav-link">Studio</a>
-          <a href="services/" class="nav-link">Services</a>
-          <a href="#work" class="nav-link">Work</a>
-          <a href="audit/" class="nav-link">Audit</a>
-          <a href="services/" class="btn btn-dark nav-cta">Start a project</a>
-        </div>
-      </div>
-    </nav>
+    <!-- Nav Placeholder -->
+    <div id="nav-placeholder"></div>
 
     <main>
       <!-- Hero -->
@@ -69,7 +56,7 @@
           </p>
           <div class="cta-row">
             <a href="#contact" class="btn btn-brand">Start a project</a>
-            <a href="audit/" class="btn btn-outline">See Your Growth Score</a>
+            <a href="/audit" class="btn btn-outline">See Your Growth Score</a>
           </div>
         </div>
       </section>
@@ -201,7 +188,7 @@
                   </div>
                 </div>
 
-                <a href="audit/" class="scorecard-cta">Start Free Assessment</a>
+                <a href="/audit" class="scorecard-cta">Start Free Assessment</a>
               </div>
             </div>
 
@@ -220,20 +207,44 @@
         </div>
       </section>
 
-      <!-- Contact -->
-      <footer id="contact" class="section contact">
+      <!-- Contact Section -->
+      <section id="contact" class="section contact">
         <div class="container contact-grid">
-          <div>
-            <span class="mono-label mb-md">Contact</span>
-            <h2 class="h2">Start a conversation.</h2>
-            <a href="mailto:hello@builtiumco.com" class="email">hello@builtiumco.com</a>
+          <div class="contact-info">
+            <div>
+              <span class="mono-label mb-md">Contact</span>
+              <h2 class="h2">Start a conversation.</h2>
+              <a href="mailto:hello@builtiumco.com" class="email">hello@builtiumco.com</a>
+            </div>
+            
+            <div class="footer-meta">
+              <span>BUILTIUM STUDIO &copy; <span id="year"></span></span>
+              <span>DESIGNED FOR PRECISION</span>
+            </div>
           </div>
-          <div class="footer-meta">
-            <span>BUILTIUM STUDIO &copy; <span id="year"></span></span>
-            <span>DESIGNED FOR PRECISION</span>
+
+          <div class="contact-form-wrap">
+            <form name="contact" method="POST" data-netlify="true" class="contact-form" netlify-honeypot="bot-field">
+              <input type="hidden" name="form-name" value="contact" />
+              <p style="display:none;"><label>Don't fill this: <input name="bot-field" /></label></p>
+              
+              <div class="form-group">
+                <input type="text" name="name" placeholder="Your Name" required class="form-input">
+              </div>
+              <div class="form-group">
+                <input type="email" name="email" placeholder="Email Address" required class="form-input">
+              </div>
+              <div class="form-group">
+                <textarea name="message" placeholder="Tell us about your project..." required class="form-input form-textarea" rows="4"></textarea>
+              </div>
+              <button type="submit" class="btn btn-brand" style="width:100%; height:48px;">Send Message</button>
+            </form>
           </div>
         </div>
-      </footer>
+      </section>
+
+      <!-- Footer Placeholder -->
+      <footer class="site-footer" id="footer-placeholder"></footer>
     </main>
 
     <!-- Portfolio Case Study Modal (Preserved for Dynamic Loading) -->

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Work — Builtium | Case Studies & Portfolio</title>
+  <meta name="description" content="Explore our portfolio of clean websites, brand identities, and structured launches designed for early-stage companies and founders." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+
+  <!-- Grid overlay -->
+  <div class="grid-overlay" aria-hidden="true">
+    <div class="grid-inner">
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <!-- Nav Placeholder -->
+  <div id="nav-placeholder"></div>
+
+  <main style="padding-top: 100px; min-height: 80vh;">
+    <!-- Project Showcase -->
+    <section id="work" class="projects-section" style="padding-top: 40px; padding-bottom: 80px;">
+      <div class="container">
+        <div class="row-between mb-lg" style="margin-bottom: 48px;">
+          <div>
+            <span class="mono-label" style="display: block; margin-bottom: 12px;">Selected Work</span>
+            <h1 class="h1" style="font-size: clamp(36px, 6vw, 56px); margin: 0; letter-spacing: -0.03em;">Proven Results.</h1>
+          </div>
+          <p class="projects-subtext" style="max-width: 40ch; margin: 0; color: rgba(0,0,0,0.6); font-size: 16px; line-height: 1.6;">
+            In today's crowded digital world, it's not about being louder — it's about being sharper. Explore how we help companies launch with clarity.
+          </p>
+        </div>
+        <div class="projects-grid">
+          <!-- Projects are dynamically loaded via project-loader.js from projects.json -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer Placeholder -->
+  <footer class="site-footer" id="footer-placeholder"></footer>
+
+  <!-- Portfolio Case Study Modal (Preserved for Dynamic Loading) -->
+  <div id="portfolio-modal" class="portfolio-modal" aria-hidden="true" role="dialog">
+      <div class="modal-overlay" id="modal-overlay"></div>
+      <div class="modal-dialog">
+          <div class="modal-header-actions">
+              <button id="modal-close-btn" class="modal-close-btn" aria-label="Close Case Study">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+              </button>
+              <div class="modal-help-text">Press ESC or click X to close</div>
+          </div>
+          
+          <div class="modal-content-area" id="modal-content">
+              <!-- Case Study content injected here dynamically -->
+          </div>
+          
+          <!-- Project Navigation -->
+          <div class="modal-nav">
+              <button id="modal-prev-btn" class="modal-nav-btn">&larr; Previous Project</button>
+              <button id="modal-next-btn" class="modal-nav-btn">Next Project &rarr;</button>
+          </div>
+      </div>
+  </div>
+
+  <!-- Global & Project Loader Scripts -->
+  <script src="/scripts/global.js"></script>
+  <script src="/scripts/project-loader.js" defer></script>
+</body>
+</html>
