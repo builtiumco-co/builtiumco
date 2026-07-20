@@ -2,6 +2,7 @@
     {
         "id": "jcutz",
         "project_name": "JCUTZ",
+        "category": "Websites",
         "project_tagline": "Modern Barbershop Booking Platform",
         "short_description": "A modern digital experience for Jcutz Barbershop. Designed to showcase precision grooming services with a seamless online booking system, blending classic craft with modern convenience.",
         "tags": ["Web Design", "Branding", "Booking"],
@@ -26,6 +27,7 @@
     {
         "id": "sky-interior",
         "project_name": "SKY Interior",
+        "category": "Websites",
         "project_tagline": "High-end Digital Portfolio",
         "short_description": "A high-end digital portfolio for SKY Interior, a premier interior design firm. We created a visually-driven website that showcases their luxury projects with a focus on architectural elegance and modern aesthetics.",
         "tags": ["Web Design", "Branding", "Interior Design"],
@@ -50,6 +52,7 @@
     {
         "id": "lexbound",
         "project_name": "Lexbound",
+        "category": "Websites",
         "project_tagline": "Modern Law Firm Digital Experience",
         "short_description": "A high-end digital portfolio for Lexbound, a premier law firm. We created a visually-driven website that showcases their system.",
         "tags": ["Web Design", "Audit", "Law Firm"],
@@ -74,6 +77,7 @@
     {
         "id": "top-slides",
         "project_name": "Top Slides",
+        "category": "Websites",
         "project_tagline": "Artisanal Luxury Slides",
         "short_description": "An elegant e-commerce experience showcasing artisanal luxury slides handmade in Lagos. We created a visually stunning platform reflecting their deliberate, 72-hour craftsmanship.",
         "tags": ["Web Design", "E-commerce", "Fashion"],
@@ -85,7 +89,7 @@
             "High-resolution product showcasing",
             "Brand storytelling integration"
         ],
-        "product_description": "A refined digital storefront prioritizing effortless navigation, high-end visual storytelling, and a seamless checkout experience.",
+        "product_description": "A refined digital storefront prioritizing lifestyle photography, high-end visual storytelling, and a seamless checkout experience.",
         "metrics": [
             { "value": "+40%", "label": "Online Sales" },
             { "value": "1.5x", "label": "Session Duration" },
@@ -94,5 +98,30 @@
         "client_quote": "Finally, a Nigerian brand that understands the balance between luxury and everyday comfort.",
         "client_name": "The Mover",
         "client_role": "Verified Customer"
+    },
+    {
+        "id": "pure-farm",
+        "project_name": "Pure Farm",
+        "category": "Branding",
+        "project_tagline": "Pure Farm Product Ventures — Brand Identity",
+        "short_description": "A clean, memorable brand identity reflecting agriculture, sustainability, and trust. Designed for print and digital materials.",
+        "tags": ["Logo Design", "Brand Identity", "Agriculture"],
+        "key_metric": "Premium Brand Identity",
+        "problem_text": "Pure Farm Product Ventures required a clean and memorable brand identity that reflects agriculture, sustainability, and trust. The objective was to create a visual identity that communicates growth, freshness, and professionalism while remaining simple enough to be used consistently across digital and print materials.",
+        "strategy_intro": "We designed a modern brand identity centered around simplicity and symbolism. Every design element was selected to reinforce the company's values while ensuring consistency across all touchpoints.",
+        "strategy_points": [
+            "Logo Symbolism: roof outline for protection & stability, human figure for community & growth, and leaves for fresh produce/agriculture.",
+            "Typography selection: Poppins Bold for strong visual hierarchy in headings, paired with Open Sans and Montserrat for readability and modern appearance.",
+            "Color Palette: Primary Green (#1B5E20) for agriculture/growth, Accent Yellow (#E4D121) for harvest/energy, and Neutral White (#FAF9F6) for cleanliness."
+        ],
+        "product_description": "A high-end brand identity package including a primary logo, color palette, typography system, and brand identity foundation designed to communicate a professional, natural, and sustainable personality.",
+        "metrics": [
+            { "value": "100%", "label": "Brand Foundation" },
+            { "value": "3", "label": "Cohesive Typefaces" },
+            { "value": "3", "label": "Defined Brand Colors" }
+        ],
+        "client_quote": "Builtium designed an identity that perfectly matches our values. It feels fresh, modern, and highly professional.",
+        "client_name": "Pure Farm Ventures",
+        "client_role": "Management Team"
     }
 ]
