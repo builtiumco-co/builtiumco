@@ -185,6 +185,54 @@
     return radio ? radio.value : '';
   }
 
+  // ---- SUBMIT HELPER (Netlify Forms + Serverless Function) ----
+  async function performSubmission(formElement, payload, formName) {
+    let netlifySuccess = false;
+
+    // 1. Submit to Netlify Forms endpoint (always reliable on Netlify static hosting)
+    try {
+      const fd = new FormData(formElement);
+      if (!fd.has('form-name')) {
+        fd.append('form-name', formName);
+      }
+      const searchParams = new URLSearchParams();
+      for (const [key, value] of fd.entries()) {
+        searchParams.append(key, value);
+      }
+      const netlifyRes = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: searchParams.toString()
+      });
+      if (netlifyRes.ok) {
+        netlifySuccess = true;
+      }
+    } catch (err) {
+      console.warn('Netlify Forms submission error:', err);
+    }
+
+    // 2. Submit to Netlify Serverless Function (Google Sheets & email notification)
+    let functionSuccess = false;
+    try {
+      const fnRes = await fetch('/.netlify/functions/services-submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (fnRes.ok) {
+        const data = await fnRes.json();
+        if (data && data.success) {
+          functionSuccess = true;
+        }
+      }
+    } catch (err) {
+      console.warn('Serverless function services-submit error:', err);
+    }
+
+    // If EITHER succeeds, we count the submission as successful
+    return netlifySuccess || functionSuccess;
+  }
+
   // ---- LAUNCH FORM ----
   const formLaunch = document.getElementById('form-launch');
   if (formLaunch) {
@@ -228,41 +276,22 @@
         additionalNotes: document.getElementById('launch-notes').value.trim()
       };
 
-      try {
-        const res = await fetch('/.netlify/functions/services-submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
+      const success = await performSubmission(formLaunch, payload, 'launch-brief');
+      setSubmitting(submitBtn, labelEl, spinnerEl, false);
 
-        const data = await res.json();
-
-        if (res.ok && data.success) {
-          // Also submit to Netlify Forms for redundancy
-          try {
-            const fd = new FormData(formLaunch);
-            await fetch('/', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-              body: new URLSearchParams(fd).toString()
-            });
-          } catch (_) { /* non-fatal */ }
-
-          hide('launch-form-state');
-          hide('launch-error-state');
-          document.getElementById('launch-success-biz').textContent = payload.businessName;
-          show('launch-success-state');
-          // Scroll to top of modal panel
-          document.querySelector('#modal-launch .svc-modal__panel').scrollTop = 0;
-        } else {
-          throw new Error(data.error || 'Submission failed.');
-        }
-      } catch (err) {
-        console.error('Launch form error:', err);
-        setSubmitting(submitBtn, labelEl, spinnerEl, false);
+      if (success) {
+        hide('launch-form-state');
+        hide('launch-error-state');
+        const bizNameEl = document.getElementById('launch-success-biz');
+        if (bizNameEl) bizNameEl.textContent = payload.businessName;
+        show('launch-success-state');
+        const panel = document.querySelector('#modal-launch .svc-modal__panel');
+        if (panel) panel.scrollTop = 0;
+      } else {
         hide('launch-form-state');
         show('launch-error-state');
-        document.querySelector('#modal-launch .svc-modal__panel').scrollTop = 0;
+        const panel = document.querySelector('#modal-launch .svc-modal__panel');
+        if (panel) panel.scrollTop = 0;
       }
     });
   }
@@ -313,40 +342,22 @@
         additionalInformation: document.getElementById('custom-info').value.trim()
       };
 
-      try {
-        const res = await fetch('/.netlify/functions/services-submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
+      const success = await performSubmission(formCustom, payload, 'custom-solution');
+      setSubmitting(submitBtn, labelEl, spinnerEl, false);
 
-        const data = await res.json();
-
-        if (res.ok && data.success) {
-          // Netlify Forms fallback
-          try {
-            const fd = new FormData(formCustom);
-            await fetch('/', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-              body: new URLSearchParams(fd).toString()
-            });
-          } catch (_) { /* non-fatal */ }
-
-          hide('custom-form-state');
-          hide('custom-error-state');
-          document.getElementById('custom-success-biz').textContent = payload.businessName;
-          show('custom-success-state');
-          document.querySelector('#modal-custom .svc-modal__panel').scrollTop = 0;
-        } else {
-          throw new Error(data.error || 'Submission failed.');
-        }
-      } catch (err) {
-        console.error('Custom form error:', err);
-        setSubmitting(submitBtn, labelEl, spinnerEl, false);
+      if (success) {
+        hide('custom-form-state');
+        hide('custom-error-state');
+        const bizNameEl = document.getElementById('custom-success-biz');
+        if (bizNameEl) bizNameEl.textContent = payload.businessName;
+        show('custom-success-state');
+        const panel = document.querySelector('#modal-custom .svc-modal__panel');
+        if (panel) panel.scrollTop = 0;
+      } else {
         hide('custom-form-state');
         show('custom-error-state');
-        document.querySelector('#modal-custom .svc-modal__panel').scrollTop = 0;
+        const panel = document.querySelector('#modal-custom .svc-modal__panel');
+        if (panel) panel.scrollTop = 0;
       }
     });
   }

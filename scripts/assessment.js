@@ -1009,7 +1009,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Progress Calculations
         const currentProgressPercent = Math.round((index / quizData.length) * 100);
         progressBar.style.width = `${currentProgressPercent}%`;
-        progressText.textContent = `Section ${q.sectionNum} of 10 • Question ${index + 1} of ${quizData.length}`;
+        progressText.textContent = `Section ${q.sectionNum} of 10 • ${currentProgressPercent}% Complete`;
 
         // Reassurance Note visibility (first profile question, index 1)
         const reassuranceEl = document.getElementById('bga-reassurance');
