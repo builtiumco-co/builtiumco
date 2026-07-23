@@ -897,18 +897,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (introForm) {
-        introForm.addEventListener('submit', (e) => {
-            e.preventDefault();
+        const handleIntroStart = (e) => {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
             const nameVal = bizNameInput ? bizNameInput.value.trim() : '';
             const emailVal = emailInput ? emailInput.value.trim() : '';
             const phoneVal = phoneInput ? phoneInput.value.trim() : '';
 
             if (!nameVal || !emailVal || !phoneVal) {
                 checkStartBtnState();
-                if (startBtn && startBtn.disabled) {
-                    alert("Please fill in your Business Name, Email Address, and Phone Number.");
-                    return;
-                }
+                alert("Please fill in your Business Name, Email Address, and Phone Number.");
+                return false;
             }
 
             userData.businessName = nameVal;
@@ -941,7 +942,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             showScreen(screenQuestions);
             loadQuestion(1); // Jump to question index 1 (Industry) since index 0 (Business Name) is answered
-        });
+            return false;
+        };
+
+        introForm.addEventListener('submit', handleIntroStart);
+        if (startBtn) {
+            startBtn.addEventListener('click', handleIntroStart);
+        }
     }
 
     if (resumeBtn && savedSession) {

@@ -72,3 +72,50 @@ if (bars.length > 0) {
 
     bars.forEach(bar => barObserver.observe(bar));
 }
+
+// Contact Form AJAX Submission & Custom Thank-You Message
+document.addEventListener('DOMContentLoaded', () => {
+    const contactForm = document.getElementById('homepage-contact-form') || document.querySelector('form[name="contact"]');
+    const contactThankYou = document.getElementById('contact-thank-you');
+
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Sending Message...';
+            }
+
+            const formData = new FormData(contactForm);
+            if (!formData.has('form-name')) {
+                formData.append('form-name', 'contact');
+            }
+
+            const searchParams = new URLSearchParams();
+            for (const [key, value] of formData.entries()) {
+                searchParams.append(key, value);
+            }
+
+            fetch('/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: searchParams.toString()
+            })
+            .then(() => {
+                contactForm.style.display = 'none';
+                if (contactThankYou) {
+                    contactThankYou.style.display = 'block';
+                }
+            })
+            .catch(err => {
+                console.error('Contact form submission error:', err);
+                contactForm.style.display = 'none';
+                if (contactThankYou) {
+                    contactThankYou.style.display = 'block';
+                }
+            });
+        });
+    }
+});

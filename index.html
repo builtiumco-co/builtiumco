@@ -224,7 +224,7 @@
           </div>
 
           <div class="contact-form-wrap">
-            <form name="contact" method="POST" data-netlify="true" class="contact-form" netlify-honeypot="bot-field">
+            <form name="contact" id="homepage-contact-form" method="POST" data-netlify="true" class="contact-form" netlify-honeypot="bot-field">
               <input type="hidden" name="form-name" value="contact" />
               <p style="display:none;"><label>Don't fill this: <input name="bot-field" /></label></p>
               
@@ -240,6 +240,24 @@
               <button type="submit" class="btn btn-brand" style="width:100%; height:48px;">Send Message</button>
               <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(0,0,0,0.4); text-align: center; margin-top: 12px; margin-bottom: 0; text-transform: uppercase; letter-spacing: 0.05em;">We respect your privacy.</p>
             </form>
+
+            <!-- Custom Builtium Thank You Message (shown upon submission) -->
+            <div id="contact-thank-you" class="contact-thank-you" style="display:none; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 40px 28px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                <div style="width: 64px; height: 64px; background: rgba(16, 185, 129, 0.12); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: #10b981;">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                </div>
+                <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; color: #0f172a; margin-bottom: 12px;">Message Received!</h3>
+                <p style="font-size: 15px; color: #475569; line-height: 1.6; margin-bottom: 24px;">
+                    Thank you for reaching out to Builtium. A strategist from our team will review your message and reach out within 24 hours.
+                </p>
+                <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                    <a href="/audit/" class="btn btn-brand" style="border-radius: 100px; padding: 12px 24px; font-size: 14px; text-decoration: none;">Take Free Audit &rarr;</a>
+                    <a href="/services.html" class="btn btn-dark" style="border-radius: 100px; padding: 12px 24px; font-size: 14px; text-decoration: none;">Explore Services</a>
+                </div>
+            </div>
           </div>
         </div>
       </section>
