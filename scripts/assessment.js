@@ -833,13 +833,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const emailVal = emailInput.value.trim();
         const phoneVal = phoneInput.value.trim();
         
-        startBtn.disabled = !(nameVal !== "" && emailVal !== "" && phoneVal !== "");
+        const isFilled = (nameVal !== "" && emailVal !== "" && phoneVal !== "");
+        startBtn.disabled = !isFilled;
     }
 
     if (bizNameInput && emailInput && phoneInput) {
-        bizNameInput.addEventListener('input', checkStartBtnState);
-        emailInput.addEventListener('input', checkStartBtnState);
-        phoneInput.addEventListener('input', checkStartBtnState);
+        ['input', 'change', 'keyup', 'paste', 'blur', 'focus'].forEach(evt => {
+            bizNameInput.addEventListener(evt, checkStartBtnState);
+            emailInput.addEventListener(evt, checkStartBtnState);
+            phoneInput.addEventListener(evt, checkStartBtnState);
+        });
+        checkStartBtnState();
+        setTimeout(checkStartBtnState, 200);
+        setTimeout(checkStartBtnState, 600);
     }
 
     // --- State Storage Helpers ---
@@ -893,9 +899,21 @@ document.addEventListener('DOMContentLoaded', () => {
     if (introForm) {
         introForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            userData.businessName = bizNameInput.value.trim();
-            userData.email = emailInput.value.trim();
-            userData.phone = phoneInput.value.trim();
+            const nameVal = bizNameInput ? bizNameInput.value.trim() : '';
+            const emailVal = emailInput ? emailInput.value.trim() : '';
+            const phoneVal = phoneInput ? phoneInput.value.trim() : '';
+
+            if (!nameVal || !emailVal || !phoneVal) {
+                checkStartBtnState();
+                if (startBtn && startBtn.disabled) {
+                    alert("Please fill in your Business Name, Email Address, and Phone Number.");
+                    return;
+                }
+            }
+
+            userData.businessName = nameVal;
+            userData.email = emailVal;
+            userData.phone = phoneVal;
             
             // Auto fill profile question 1 answer with business name
             answers[0] = userData.businessName;
