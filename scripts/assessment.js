@@ -778,14 +778,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     let paystackPublicKey = 'pk_live_37e6be6558a9d9998c9ec0c2a22b72e854fd54c5';
-    fetch('/.netlify/functions/get-config')
-        .then(res => res.json())
-        .then(config => {
-            if (config.paystackPublicKey) {
-                paystackPublicKey = config.paystackPublicKey;
-            }
-        })
-        .catch(err => console.error("Error loading config:", err));
+    (window.requestIdleCallback || setTimeout)(() => {
+        fetch('/.netlify/functions/get-config')
+            .then(res => res.json())
+            .then(config => {
+                if (config.paystackPublicKey) {
+                    paystackPublicKey = config.paystackPublicKey;
+                }
+            })
+            .catch(err => console.error("Error loading config:", err));
+    }, 1000);
 
     // --- State Variables ---
     let userData = {
@@ -840,14 +842,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (bizNameInput && emailInput && phoneInput) {
-        ['input', 'change', 'keyup', 'paste', 'blur', 'focus'].forEach(evt => {
-            bizNameInput.addEventListener(evt, checkStartBtnState);
-            emailInput.addEventListener(evt, checkStartBtnState);
-            phoneInput.addEventListener(evt, checkStartBtnState);
+        ['input', 'change'].forEach(evt => {
+            bizNameInput.addEventListener(evt, checkStartBtnState, { passive: true });
+            emailInput.addEventListener(evt, checkStartBtnState, { passive: true });
+            phoneInput.addEventListener(evt, checkStartBtnState, { passive: true });
         });
-        checkStartBtnState();
-        setTimeout(checkStartBtnState, 200);
-        setTimeout(checkStartBtnState, 600);
+        requestAnimationFrame(checkStartBtnState);
     }
 
     // --- State Storage Helpers ---

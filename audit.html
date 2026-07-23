@@ -438,53 +438,7 @@
                     </div>
                 </div>
 
-                <!-- 9: Monthly Partnership (Paywalled Ongoing Implementation) -->
-                <div id="bga-partnership-wrapper" style="position: relative; border-radius: 12px; overflow: hidden; min-height: 250px; transition: all 0.3s; margin-bottom: 80px;">
-                    <!-- Lock overlay for partnership -->
-                    <div id="bga-partnership-lock" class="bga-lock-overlay" style="position: absolute; inset: 0; background: rgba(255, 255, 255, 0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; text-align: center; backdrop-filter: blur(8px); padding: 24px; border: 1px solid #e2e8f0; border-radius: 8px;">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#3a7bff" stroke-width="2" style="margin-bottom:16px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                        <h4 style="font-size: 18px; font-weight: 700; margin-bottom: 8px; color: #000;">Ongoing Partnership Form Locked</h4>
-                        <p style="font-size: 14px; color: #64748b; max-width: 320px; margin-bottom: 20px; line-height: 1.45;">Unlock your Growth Blueprint to unlock eligibility details and apply for active Monthly Partnership.</p>
-                        <button class="bga-btn bga-btn-unlock-trigger" style="background:#3a7bff; color:white; border:none; padding:10px 24px; border-radius:100px; font-size:13px; font-weight:700; cursor:pointer;">Unlock for ₦500</button>
-                    </div>
-                    
-                    <div id="bga-partnership" class="bga-partnership__card" style="margin: 0;" class="bga-paywall-blur">
-                        <div class="bga-partnership__badge">Ongoing Implementation</div>
-                        <h3 class="bga-partnership__title">Builtium Growth Partnership</h3>
-                        <p class="bga-partnership__desc">Want us to handle everything? We will implement your entire Growth Blueprint, run your local SEO, maintain your site, build your lead capture systems, and drive growth for your business every single month.</p>
-                        <div class="bga-partnership__price">
-                            ₦100,000
-                            <span class="bga-partnership__price-note">/ Month</span>
-                        </div>
-                        <ul class="bga-partnership__features">
-                            <li class="bga-partnership__feature">
-                                <svg class="bga-partnership__feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                Professional website maintenance & regular updates
-                            </li>
-                            <li class="bga-partnership__feature">
-                                <svg class="bga-partnership__feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                Full implementation of all local SEO, reviews, & map tasks
-                            </li>
-                            <li class="bga-partnership__feature">
-                                <svg class="bga-partnership__feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                Lead generation funnel optimization & WhatsApp systems setup
-                            </li>
-                            <li class="bga-partnership__feature">
-                                <svg class="bga-partnership__feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                Monthly competitor benchmarking & performance tracking
-                            </li>
-                            <li class="bga-partnership__feature">
-                                <svg class="bga-partnership__feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                Active conversion rate optimization (CRO) tests & tweaks
-                            </li>
-                            <li class="bga-partnership__feature">
-                                <svg class="bga-partnership__feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                Monthly 1-on-1 strategy & marketing alignment calls
-                            </li>
-                        </ul>
-                        <a href="/#contact" class="bga-btn" style="margin-top: 32px; border-radius: 100px; display: inline-flex; font-weight:700;">Apply for Partnership</a>
-                    </div>
-                </div>
+
 
                 <!-- Hidden Netlify Form for Data Capture -->
                 <form id="bga-lead-form" name="bga-results" method="POST" data-netlify="true" netlify style="display:none;">
@@ -605,9 +559,9 @@
     </footer>
 
     <!-- Paystack JS -->
-    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <script src="https://js.paystack.co/v1/inline.js" async></script>
     <!-- Global Script -->
-    <script src="scripts/global.js"></script>
+    <script src="scripts/global.js" defer></script>
     <!-- Assessment Engine -->
     <script src="scripts/assessment.js" defer></script>
 </body>
