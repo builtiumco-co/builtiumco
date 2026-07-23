@@ -778,7 +778,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     let paystackPublicKey = 'pk_live_37e6be6558a9d9998c9ec0c2a22b72e854fd54c5';
-    (window.requestIdleCallback || setTimeout)(() => {
+    setTimeout(() => {
         fetch('/.netlify/functions/get-config')
             .then(res => res.json())
             .then(config => {
