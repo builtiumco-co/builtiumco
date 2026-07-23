@@ -432,20 +432,24 @@ body {
 
 /* Progress Bar */
 .bga-progress {
-    position: fixed;
-    top: 0;
-    left: 0;
+    position: relative;
+    width: 100%;
+    margin-bottom: 36px;
+}
+
+.bga-progress__bar-track {
     width: 100%;
     height: 8px;
-    background: var(--bg-secondary);
-    z-index: 100;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    background: #e2e8f0;
+    border-radius: 100px;
+    overflow: hidden;
 }
 
 .bga-progress__bar-fill {
     height: 100%;
     background: linear-gradient(90deg, var(--accent-color) 0%, var(--accent-hover) 100%);
     width: 0%;
+    border-radius: 100px;
     transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -453,16 +457,13 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 40px 18px;
+    padding: 14px 0 16px;
     font-size: var(--font-sm);
     font-weight: 600;
     color: var(--text-tertiary);
     border-bottom: 1px solid var(--border-light);
-    background: var(--bg-primary);
-    margin-top: 8px;
-    position: sticky;
-    top: 8px;
-    z-index: 50;
+    background: transparent;
+    margin-top: 12px;
 }
 
 .bga-progress__text {
@@ -1938,4 +1939,549 @@ body {
     user-select: none;
     opacity: 0.35;
     transition: filter 0.5s ease, opacity 0.5s ease;
+}
+
+/* =========================================================================
+   PAYMENT CARD, VERIFICATION FORM MODAL & THANK YOU SCREEN
+   ========================================================================= */
+
+/* Payment Card */
+.bga-payment-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
+  border: 2px solid var(--secondary-color, #cfe8ff);
+  border-radius: 16px;
+  padding: 44px;
+  margin: 48px 0 60px;
+  box-shadow: 0 8px 24px rgba(58, 123, 255, 0.1);
+  animation: slideInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bga-payment-card__title {
+  font-size: var(--font-2xl, 28px);
+  font-weight: 800;
+  margin-bottom: 32px;
+  color: var(--text-primary);
+  text-align: center;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+/* Amount Display */
+.bga-payment-amount {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 40px;
+  padding-bottom: 32px;
+  border-bottom: 2px solid var(--border-light);
+}
+
+.bga-payment-amount__label {
+  font-size: var(--font-sm, 14px);
+  font-weight: 700;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.bga-payment-amount__value {
+  font-size: 56px;
+  font-weight: 900;
+  color: var(--accent-color);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+/* Payment Details */
+.bga-payment-details {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 28px;
+  margin-bottom: 32px;
+}
+
+.bga-payment-details__title {
+  font-size: var(--font-base, 16px);
+  font-weight: 800;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.bga-payment-detail-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.bga-payment-detail-item:last-child {
+  border-bottom: none;
+}
+
+.bga-payment-detail-label {
+  font-size: var(--font-sm, 14px);
+  font-weight: 700;
+  color: var(--text-secondary);
+  min-width: 140px;
+}
+
+.bga-payment-detail-value {
+  font-size: var(--font-base, 16px);
+  font-weight: 600;
+  color: var(--text-primary);
+  flex: 1;
+  text-align: right;
+  margin-right: 12px;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  letter-spacing: 0.05em;
+}
+
+/* Copy Button */
+.bga-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: var(--font-xs, 12px);
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.bga-copy-btn:hover {
+  background: var(--accent-color);
+  color: #ffffff;
+  border-color: var(--accent-color);
+  transform: translateY(-2px);
+}
+
+.bga-copy-btn.copied {
+  background: #10b981;
+  border-color: #10b981;
+  color: #ffffff;
+}
+
+.bga-copy-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Instructions */
+.bga-payment-instructions {
+  background: rgba(58, 123, 255, 0.05);
+  border-left: 4px solid var(--accent-color);
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 28px;
+  font-size: var(--font-sm, 14px);
+}
+
+.bga-payment-instructions p {
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.bga-payment-instructions ol {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--text-secondary);
+}
+
+.bga-payment-instructions li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.bga-payment-instructions li:last-child {
+  margin-bottom: 0;
+}
+
+/* Note */
+.bga-payment-note {
+  font-size: var(--font-sm, 14px);
+  color: var(--text-tertiary);
+  text-align: center;
+  margin-top: 20px;
+  line-height: 1.6;
+}
+
+/* Modal */
+.bga-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.bga-modal__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+}
+
+.bga-modal__content {
+  position: relative;
+  z-index: 1;
+  background: var(--bg-primary);
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 50, 150, 0.2);
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bga-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 28px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.bga-modal__header h2 {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-primary);
+  font-family: 'Space Grotesk', sans-serif;
+  margin: 0;
+}
+
+.bga-modal__close {
+  background: none;
+  border: none;
+  font-size: 32px;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bga-modal__close:hover {
+  color: var(--text-primary);
+  transform: scale(1.1);
+}
+
+/* Form inside modal */
+.bga-modal__content form {
+  padding: 28px;
+}
+
+.bga-form-group {
+  margin-bottom: 24px;
+}
+
+.bga-form-group:last-child {
+  margin-bottom: 28px;
+}
+
+.bga-form-label {
+  display: block;
+  font-size: var(--font-xs, 12px);
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.bga-form-input,
+.bga-form-textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: var(--font-base, 16px);
+  font-family: inherit;
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.bga-form-input:focus,
+.bga-form-textarea:focus {
+  border-color: var(--accent-color);
+  background: var(--bg-primary);
+  box-shadow: 0 0 0 4px rgba(58, 123, 255, 0.12);
+}
+
+.bga-form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* File Upload */
+.bga-file-upload {
+  position: relative;
+  cursor: pointer;
+}
+
+.bga-file-input {
+  display: none;
+}
+
+.bga-file-upload__placeholder {
+  border: 2px dashed var(--border-color);
+  border-radius: 10px;
+  padding: 28px 20px;
+  text-align: center;
+  transition: all 0.2s ease;
+  background: var(--bg-secondary);
+}
+
+.bga-file-upload:hover .bga-file-upload__placeholder {
+  border-color: var(--accent-color);
+  background: rgba(58, 123, 255, 0.05);
+}
+
+.bga-file-upload__placeholder svg {
+  color: var(--accent-color);
+  margin-bottom: 12px;
+}
+
+.bga-file-upload__placeholder p {
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin: 0 0 4px;
+  font-size: var(--font-base, 16px);
+}
+
+.bga-file-upload__placeholder span {
+  display: block;
+  font-size: var(--font-xs, 12px);
+  color: var(--text-tertiary);
+}
+
+.bga-file-upload.has-file .bga-file-upload__placeholder {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.bga-file-upload.has-file .bga-file-upload__placeholder svg {
+  color: #10b981;
+}
+
+.bga-file-upload.has-file .bga-file-upload__placeholder p {
+  color: #10b981;
+}
+
+/* Modal Footer Note */
+.bga-modal__footer-note {
+  font-size: var(--font-sm, 14px);
+  color: var(--text-tertiary);
+  text-align: center;
+  padding: 0 28px 28px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Thank You Screen */
+.bga-thank-you {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #f0f4ff 0%, #ffffff 100%);
+  z-index: 2000;
+  overflow-y: auto;
+  padding: 60px 20px;
+}
+
+.bga-thank-you.active {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bga-thank-you__content {
+  text-align: center;
+  max-width: 520px;
+  width: 100%;
+  background: var(--bg-primary);
+  border-radius: 16px;
+  padding: 50px 36px;
+  box-shadow: 0 20px 60px rgba(58, 123, 255, 0.15);
+  animation: slideInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  margin: auto;
+}
+
+.bga-thank-you__icon {
+  width: 90px;
+  height: 90px;
+  background: rgba(16, 185, 129, 0.12);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 28px;
+  color: #10b981;
+}
+
+.bga-thank-you__title {
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.bga-thank-you__message {
+  font-size: var(--font-base, 16px);
+  color: var(--text-secondary);
+  margin-bottom: 28px;
+  line-height: 1.7;
+}
+
+.bga-thank-you__details {
+  background: var(--bg-secondary);
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-bottom: 28px;
+}
+
+.bga-thank-you__detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.bga-thank-you__detail-item:last-child {
+  padding-bottom: 0;
+}
+
+.bga-thank-you__detail-label {
+  font-size: var(--font-sm, 14px);
+  font-weight: 600;
+  color: var(--text-tertiary);
+}
+
+.bga-thank-you__detail-value {
+  font-size: var(--font-base, 16px);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.bga-thank-you__next-steps {
+  text-align: left;
+  background: rgba(58, 123, 255, 0.05);
+  border-left: 4px solid var(--accent-color);
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-bottom: 28px;
+}
+
+.bga-thank-you__next-steps h3 {
+  font-size: var(--font-base, 16px);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 14px;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.bga-thank-you__next-steps ol {
+  margin: 0;
+  padding-left: 20px;
+  font-size: var(--font-sm, 14px);
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+.bga-thank-you__next-steps li {
+  margin-bottom: 8px;
+}
+
+.bga-thank-you__contact {
+  font-size: var(--font-sm, 14px);
+  color: var(--text-secondary);
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+
+.bga-thank-you__contact strong {
+  color: var(--accent-color);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .bga-payment-card {
+    padding: 32px 24px;
+    margin: 40px 0;
+  }
+
+  .bga-payment-detail-value {
+    font-size: var(--font-sm, 14px);
+  }
+
+  .bga-payment-amount__value {
+    font-size: 44px;
+  }
+
+  .bga-payment-detail-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .bga-payment-detail-value {
+    text-align: left;
+    margin-right: 0;
+  }
+
+  .bga-modal__content {
+    width: 95%;
+    max-height: 95vh;
+  }
+
+  .bga-modal__header {
+    padding: 20px;
+  }
+
+  .bga-modal__content form {
+    padding: 20px;
+  }
+
+  .bga-thank-you__content {
+    padding: 40px 24px;
+  }
+
+  .bga-thank-you__title {
+    font-size: 26px;
+  }
 }

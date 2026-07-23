@@ -155,7 +155,7 @@ async function sendEmails(rowData, customerEmail, customerPhone, businessName, s
     subject: `🚨 Paid BGA Unlock: ${businessName}`,
     html: `
       <h2>New Growth Blueprint Payment Received!</h2>
-      <p>A user has successfully paid <strong>₦5,000</strong> to unlock their Digital Growth Blueprint.</p>
+      <p>A user has successfully paid <strong>₦500</strong> to unlock their Digital Growth Blueprint.</p>
       <ul>
         <li><strong>Business Name:</strong> ${businessName}</li>
         <li><strong>Email:</strong> ${customerEmail}</li>
@@ -176,7 +176,7 @@ async function sendEmails(rowData, customerEmail, customerPhone, businessName, s
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #1e293b; line-height: 1.6;">
         <h2 style="color: #3a7bff; border-bottom: 2px solid #3a7bff; padding-bottom: 8px;">Your Blueprint is Ready!</h2>
         <p>Hi ${businessName} Team,</p>
-        <p>Thank you for unlocking your <strong>Digital Growth Blueprint</strong>. We have successfully processed your payment of <strong>₦5,000</strong>.</p>
+        <p>Thank you for unlocking your <strong>Digital Growth Blueprint</strong>. We have successfully processed your payment of <strong>₦500</strong>.</p>
         <p><strong>Next Steps:</strong></p>
         <ol>
           <li>Your full digital scorecard, Roadmap, and gap breakdown are now fully visible on your results page.</li>
@@ -242,7 +242,7 @@ exports.handler = async (event) => {
     }
 
     const amountPaid = paystackResult.data.amount; // in kobo
-    if (amountPaid < 500000) { // ₦5,000 = 500,000 kobo
+    if (amountPaid < 50000) { // ₦500 = 50,000 kobo
       return {
         statusCode: 400,
         headers: { 'Access-Control-Allow-Origin': '*' },

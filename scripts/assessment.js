@@ -1228,13 +1228,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Execute calculating screen delay (1.5 seconds)
         setTimeout(() => {
-            renderResultsReport(profilePoints);
+            try {
+                renderResultsReport(profilePoints);
+            } catch (err) {
+                console.error("Error rendering results report:", err);
+            }
             showScreen(screenResults);
             localStorage.removeItem('bga_progress'); // Clean up progress
         }, 1500);
     }
 
     function renderResultsReport(profilePoints) {
+        const isAlreadyPaid = localStorage.getItem('bga_paid') === 'true';
+        const categories = Object.keys(categoryMaxPoints);
+
         let scores = {
             PROFILE: profilePoints,
             DISCOVERABILITY: 0,
@@ -1381,6 +1388,7 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (totalPercentage <= 80) activeStageIndex = 3;
         else activeStageIndex = 4;
 
+        const activeStage = stagesInfo[activeStageIndex];
 
         // Section 9: Calculate Estimated Potential Score
         const potentialScore = Math.min(Math.round(totalPercentage + (100 - totalPercentage) * 0.6), 92);
@@ -1673,7 +1681,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const handler = PaystackPop.setup({
                     key: paystackPublicKey,
                     email: userData.email || 'customer@company.com',
-                    amount: 5000 * 100, // ₦5,000 in kobo
+                    amount: 500 * 100, // ₦500 in kobo
                     currency: 'NGN',
                     ref: 'BGA_' + Math.random().toString(36).substring(2, 11).toUpperCase() + '_' + Date.now(),
                     callback: function(response) {
@@ -1697,6 +1705,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (resData.success) {
                                 localStorage.setItem('bga_paid', 'true');
                                 applyLockState(true);
+                                submitHiddenForm(true);
                                 alert("Success! Your Growth Blueprint is fully unlocked.");
                                 const scheduleCard = document.getElementById('bga-scheduling-card');
                                 if (scheduleCard) {
@@ -1772,34 +1781,65 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Post completion results silently to Netlify Form for redundancy
-        const hiddenForm = document.getElementById('bga-lead-form');
-        if (hiddenForm) {
-            document.getElementById('bga-hidden-name').value = userData.businessName;
-            document.getElementById('bga-hidden-email').value = userData.email;
-            document.getElementById('bga-hidden-score').value = `${totalPercentage}%`;
-            document.getElementById('bga-hidden-level').value = activeStage.name;
-            document.getElementById('bga-hidden-timestamp').value = new Date().toISOString();
-            
+        // Function to submit ALL 55 answers + metadata to Netlify Forms & Function
+        function submitHiddenForm(isPaidStatus = false) {
+            const hiddenForm = document.getElementById('bga-lead-form');
+            if (!hiddenForm) return;
+
+            const setVal = (id, val) => {
+                const el = document.getElementById(id);
+                if (el) el.value = val || '';
+            };
+
+            setVal('bga-hidden-name', userData.businessName);
+            setVal('bga-hidden-email', userData.email);
+            setVal('bga-hidden-phone', userData.phone);
+            setVal('bga-hidden-industry', userData.industry);
+            setVal('bga-hidden-location', userData.location);
+            setVal('bga-hidden-years', userData.yearsInBusiness);
+            setVal('bga-hidden-employees', userData.employeesCount);
+            setVal('bga-hidden-website', userData.websiteUrl);
+            setVal('bga-hidden-socials', Array.isArray(userData.socialPlatforms) ? userData.socialPlatforms.join(', ') : (userData.socialPlatforms || ''));
+            setVal('bga-hidden-score', `${totalPercentage}%`);
+            setVal('bga-hidden-level', activeStage ? activeStage.name : '');
+            setVal('bga-hidden-timestamp', new Date().toISOString());
+
             // Map individual section scores
             const parsedSectionScores = {};
             for (const key in scores) {
                 parsedSectionScores[key] = `${scores[key]} / ${categoryMaxPoints[key]}`;
             }
-            document.getElementById('bga-hidden-scores').value = JSON.stringify(parsedSectionScores);
-            
-            // Clean question answers map
+            setVal('bga-hidden-scores', JSON.stringify(parsedSectionScores));
+
+            // Map ALL 55 questions + answers + points
             const parsedAnswers = quizData.map((q, idx) => {
+                const userAns = answers[idx];
+                let ansText = '';
+                let pts = 0;
+                if (q.type === 'profile') {
+                    ansText = typeof userAns === 'object' ? JSON.stringify(userAns) : (userAns || '');
+                    pts = null;
+                } else {
+                    if (userAns && userAns.text) {
+                        ansText = userAns.text;
+                        pts = userAns.points || 0;
+                    } else if (typeof userAns === 'string') {
+                        ansText = userAns;
+                    } else {
+                        ansText = 'Not answered';
+                    }
+                }
                 return {
-                    question: q.question,
+                    qNum: idx + 1,
                     section: q.section,
-                    answer: q.type === 'profile' ? answers[idx] : (answers[idx] ? answers[idx].text : null),
-                    points: q.type === 'profile' ? null : (answers[idx] ? answers[idx].points : 0)
+                    question: q.question,
+                    answer: ansText,
+                    points: pts
                 };
             });
-            document.getElementById('bga-hidden-answers').value = JSON.stringify(parsedAnswers);
+            setVal('bga-hidden-answers', JSON.stringify(parsedAnswers));
 
-            // Log completion to Sheet
+            // Log completion to Google Sheets via Netlify Function
             fetch('/.netlify/functions/audit-log', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -1808,22 +1848,173 @@ document.addEventListener('DOMContentLoaded', () => {
                     sessionId: sessionId,
                     data: {
                         type: 'completion',
-                        paid: isAlreadyPaid,
-                        finalResult: activeStage.name,
-                        scores: scores
+                        paid: isPaidStatus,
+                        finalResult: activeStage ? activeStage.name : '',
+                        scores: scores,
+                        answers: parsedAnswers
                     }
                 })
             }).catch(err => console.error("Logging completion failed:", err));
 
-            // Post Form silently to Netlify Forms
-            const formData = new FormData(hiddenForm);
-            fetch("/", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: new URLSearchParams(formData).toString()
-            })
-            .then(() => console.log("BGA results saved successfully via Netlify Forms."))
-            .catch(err => console.error("Error submitting BGA metrics to Netlify:", err));
+            // Post Form silently to Netlify Forms endpoint
+            try {
+                const formData = new FormData(hiddenForm);
+                if (!formData.has('form-name')) {
+                    formData.append('form-name', 'bga-results');
+                }
+                const searchParams = new URLSearchParams();
+                for (const [key, value] of formData.entries()) {
+                    searchParams.append(key, value);
+                }
+                fetch("/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: searchParams.toString()
+                })
+                .then(() => console.log("All 55 answers + metadata successfully submitted to Netlify Forms."))
+                .catch(err => console.error("Error submitting BGA metrics to Netlify:", err));
+            } catch (err) {
+                console.error("Error constructing FormData for Netlify Forms:", err);
+            }
         }
+
+        // Trigger hidden submission upon report generation
+        submitHiddenForm(isAlreadyPaid);
+    }
+
+    // --- Moniepoint Payment Flow & Verification Modal Setup ---
+
+    // Copy to clipboard functionality for Moniepoint details
+    document.querySelectorAll('.bga-copy-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const textToCopy = this.getAttribute('data-copy');
+            if (!textToCopy) return;
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalHtml = this.innerHTML;
+                this.classList.add('copied');
+                this.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    Copied!
+                `;
+                setTimeout(() => {
+                    this.classList.remove('copied');
+                    this.innerHTML = originalHtml;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                alert('Failed to copy. Please copy manually.');
+            });
+        });
+    });
+
+    // When user clicks "I've Paid, Verify My Payment"
+    const paidBtn = document.getElementById('bga-payment-paid-btn');
+    const paymentModal = document.getElementById('bga-payment-form-modal');
+    const paymentOverlay = document.getElementById('bga-payment-form-overlay');
+    const paymentCloseBtn = document.getElementById('bga-payment-form-close');
+
+    if (paidBtn && paymentModal) {
+        paidBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            // Pre-fill name and email from assessment data
+            const nameInput = document.getElementById('payment-name');
+            const emailInput = document.getElementById('payment-email');
+            const subDateInput = document.getElementById('payment-submission-date');
+
+            if (nameInput) nameInput.value = userData.businessName || '';
+            if (emailInput) emailInput.value = userData.email || '';
+            if (subDateInput) subDateInput.value = new Date().toLocaleDateString();
+
+            // Open modal
+            paymentModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        });
+    }
+
+    // Function to close payment verification modal
+    function closePaymentModal() {
+        if (paymentModal) {
+            paymentModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    if (paymentCloseBtn) paymentCloseBtn.addEventListener('click', closePaymentModal);
+    if (paymentOverlay) paymentOverlay.addEventListener('click', closePaymentModal);
+
+    // File upload preview trigger & display
+    const fileUploadContainer = document.querySelector('.bga-file-upload');
+    const fileInput = document.getElementById('payment-receipt');
+
+    if (fileUploadContainer && fileInput) {
+        fileUploadContainer.addEventListener('click', (e) => {
+            if (e.target !== fileInput) {
+                fileInput.click();
+            }
+        });
+
+        fileInput.addEventListener('change', function() {
+            if (this.files && this.files.length > 0) {
+                fileUploadContainer.classList.add('has-file');
+                const placeholderP = fileUploadContainer.querySelector('.bga-file-upload__placeholder p');
+                if (placeholderP) placeholderP.textContent = 'Selected: ' + this.files[0].name;
+            }
+        });
+    }
+
+    // Payment verification form submission handler
+    const verificationForm = document.querySelector('form[name="payment-verification"]');
+    const thankYouScreen = document.getElementById('bga-payment-thank-you');
+
+    if (verificationForm) {
+        verificationForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('bga-payment-submit');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = "Submitting Verification...";
+            }
+
+            // Submit FormData to Netlify Forms endpoint
+            const formData = new FormData(verificationForm);
+            fetch('/', {
+                method: 'POST',
+                body: formData
+            })
+            .then(() => {
+                closePaymentModal();
+                showPaymentThankYou();
+            })
+            .catch(err => {
+                console.error("Payment verification submission error:", err);
+                closePaymentModal();
+                showPaymentThankYou(); // Show thank you as fallback
+            });
+        });
+    }
+
+    function showPaymentThankYou() {
+        // Mark paid status in localStorage
+        localStorage.setItem('bga_paid', 'true');
+
+        if (thankYouScreen) {
+            thankYouScreen.classList.add('active');
+            thankYouScreen.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    // Thank You screen "Back to Home" button
+    const thankYouHomeBtn = document.getElementById('bga-thank-you-home-btn');
+    if (thankYouHomeBtn) {
+        thankYouHomeBtn.addEventListener('click', () => {
+            window.location.href = '/';
+        });
     }
 });
