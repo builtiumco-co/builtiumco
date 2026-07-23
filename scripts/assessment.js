@@ -1019,7 +1019,10 @@ document.addEventListener('DOMContentLoaded', () => {
         [screenIntro, screenQuestions, screenCalculating, screenResults].forEach(s => {
             if (s) s.classList.remove('bga-screen--active');
         });
-        if (screenEl) screenEl.classList.add('bga-screen--active');
+        if (screenEl) {
+            screenEl.classList.add('bga-screen--active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     }
     // --- Question Rendering ---
     function loadQuestion(index) {
@@ -1672,7 +1675,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        const isAlreadyPaid = localStorage.getItem('bga_paid') === 'true';
         applyLockState(isAlreadyPaid);
 
         // Dismiss unlock offer ("Continue with free results")

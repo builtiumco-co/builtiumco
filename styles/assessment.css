@@ -434,7 +434,7 @@ body {
 .bga-progress {
     position: relative;
     width: 100%;
-    margin-bottom: 36px;
+    margin-bottom: 48px;
 }
 
 .bga-progress__bar-track {
