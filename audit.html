@@ -342,86 +342,29 @@
                         This is a diagnostic step &mdash; no obligation to use any of our other services afterward.
                     </p>
 
-                    <!-- Payment Info Card -->
-                    <div class="bga-payment-card">
-                      <h3 class="bga-payment-card__title">Get Your Full Analytics + Strategy Call</h3>
-                      
-                      <!-- Amount -->
-                      <div class="bga-payment-amount">
-                        <span class="bga-payment-amount__label">One-time Payment</span>
-                        <span class="bga-payment-amount__value">&#8358;500</span>
-                      </div>
-                      
-                      <!-- Moniepoint Details -->
-                      <div class="bga-payment-details">
-                        <h4 class="bga-payment-details__title">Transfer Via Moniepoint</h4>
-                        
-                        <div class="bga-payment-detail-item">
-                          <span class="bga-payment-detail-label">Account Name:</span>
-                          <span class="bga-payment-detail-value">Akinde shinaayo {Builtium Staff}</span>
-                          <button type="button" class="bga-copy-btn" data-copy="Akinde shinaayo {Builtium Staff}">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                              <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                            </svg>
-                            Copy
-                          </button>
-                        </div>
-                        
-                        <div class="bga-payment-detail-item">
-                          <span class="bga-payment-detail-label">Account Number:</span>
-                          <span class="bga-payment-detail-value">9166742722</span>
-                          <button type="button" class="bga-copy-btn" data-copy="9166742722">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                              <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                            </svg>
-                            Copy
-                          </button>
-                        </div>
-                        
-                        <div class="bga-payment-detail-item">
-                          <span class="bga-payment-detail-label">Amount:</span>
-                          <span class="bga-payment-detail-value">&#8358;500</span>
-                          <button type="button" class="bga-copy-btn" data-copy="500">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                              <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                            </svg>
-                            Copy
-                          </button>
-                        </div>
-                      </div>
-                      
-                      <!-- Instructions -->
-                      <div class="bga-payment-instructions">
-                        <p><strong>Steps:</strong></p>
-                        <ol>
-                          <li>Open Moniepoint or your bank app</li>
-                          <li>Transfer &#8358;500 to the account above</li>
-                          <li>Take a screenshot of the payment confirmation</li>
-                          <li>Click "I've Paid" below</li>
-                        </ol>
-                      </div>
-                      
-                      <!-- CTA Button -->
-                      <button type="button" class="bga-btn bga-btn--full" id="bga-payment-paid-btn" style="height: 52px; border-radius: 100px; font-weight: 700; font-size: 16px;">
-                        I've Paid, Verify My Payment
+                    <!-- Paystack Payment Box -->
+                    <div id="bga-unlock-offer" style="margin-top: 24px;">
+                      <button 
+                        id="bga-paystack-btn" 
+                        class="bga-btn bga-btn--full bga-btn-unlock-trigger"
+                        style="height: 54px; background: #0066ff; color: #ffffff; border: none; border-radius: 100px; font-size: 16px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;"
+                      >
+                        Pay ₦5,000 with Paystack
                       </button>
 
                       <div style="margin-top: 14px; text-align: center;">
                         <button id="bga-dismiss-unlock" style="background: none; border: none; color: #94a3b8; font-size: 14px; cursor: pointer; padding: 0; font-family: 'Space Grotesk', sans-serif;">Continue with free results</button>
                       </div>
                       
-                      <p class="bga-payment-note">
-                        We'll verify your payment within 24 hours and send you your complete report + schedule your strategy call.
+                      <p class="bga-payment-note" style="text-align: center; color: #94a3b8; font-size: 12px; margin-top: 12px; line-height: 1.5;">
+                        🔒 Secure payment processed via Paystack. Includes full 10-category audit report + 30-min strategy call.
                       </p>
                     </div>
 
                     <!-- Post-payment confirmation (hidden until paid) -->
                     <div id="bga-unlock-paid-confirm" style="display: none; margin-top: 24px; background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 20px 24px;">
                         <p style="color: #166534; font-weight: 600; font-size: 15px; margin: 0; line-height: 1.6;">
-                            Payment received. Check your email &mdash; we'll send you available times for your 10-minute call within 24 hours.
+                            Payment received. Check your email &mdash; we'll send you available times for your strategy call within 24 hours.
                         </p>
                     </div>
                 </div>
@@ -562,112 +505,18 @@
                     <input type="hidden" id="bga-hidden-timestamp" name="timestamp" value="">
                 </form>
 
-                <!-- Payment Verification Form (Hidden until user clicks "I've Paid") -->
-                <div id="bga-payment-form-modal" class="bga-modal" style="display:none;">
-                  <div class="bga-modal__overlay" id="bga-payment-form-overlay"></div>
-                  <div class="bga-modal__content">
-                    <div class="bga-modal__header">
-                      <h2>Verify Your Payment</h2>
-                      <button type="button" class="bga-modal__close" id="bga-payment-form-close">&times;</button>
-                    </div>
-                    
-                    <form name="payment-verification" method="POST" data-netlify="true" netlify enctype="multipart/form-data">
-                      <input type="hidden" name="form-name" value="payment-verification">
-                      
-                      <!-- Full Name (Pre-filled from assessment) -->
-                      <div class="bga-form-group">
-                        <label for="payment-name" class="bga-form-label">Full Name *</label>
-                        <input 
-                          type="text" 
-                          id="payment-name"
-                          name="full_name" 
-                          class="bga-form-input"
-                          placeholder="John Smith"
-                          required
-                        />
-                      </div>
-                      
-                      <!-- Email (Pre-filled from assessment) -->
-                      <div class="bga-form-group">
-                        <label for="payment-email" class="bga-form-label">Email Address *</label>
-                        <input 
-                          type="email" 
-                          id="payment-email"
-                          name="email" 
-                          class="bga-form-input"
-                          placeholder="john@example.com"
-                          required
-                        />
-                      </div>
-                      
-                      <!-- Amount Paid (Fixed) -->
-                      <div class="bga-form-group">
-                        <label for="payment-amount" class="bga-form-label">Amount Paid *</label>
-                        <input 
-                          type="text" 
-                          id="payment-amount"
-                          name="amount_paid" 
-                          class="bga-form-input"
-                          value="&#8358;500"
-                          readonly
-                          style="background: var(--bg-secondary); cursor: not-allowed;"
-                        />
-                      </div>
-                      
-                      <!-- Receipt Upload -->
-                      <div class="bga-form-group">
-                        <label for="payment-receipt" class="bga-form-label">Payment Receipt/Screenshot *</label>
-                        <div class="bga-file-upload">
-                          <input 
-                            type="file" 
-                            id="payment-receipt"
-                            name="payment_receipt" 
-                            class="bga-file-input"
-                            accept="image/*,.pdf"
-                            required
-                          />
-                          <div class="bga-file-upload__placeholder">
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                              <polyline points="17 8 12 3 7 8"></polyline>
-                              <line x1="12" y1="3" x2="12" y2="15"></line>
-                            </svg>
-                            <p>Click to upload or drag and drop</p>
-                            <span>PNG, JPG, PDF up to 10MB</span>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <!-- Message (Optional) -->
-                      <div class="bga-form-group">
-                        <label for="payment-message" class="bga-form-label">Additional Message (Optional)</label>
-                        <textarea 
-                          id="payment-message"
-                          name="message" 
-                          class="bga-form-textarea"
-                          placeholder="Any details about your payment..."
-                          rows="4"
-                        ></textarea>
-                      </div>
-                      
-                      <!-- Hidden fields -->
-                      <input type="hidden" name="submission_date" id="payment-submission-date" value="">
-                      <input type="hidden" name="product" value="Full Analytics + Strategy Call">
-                      <input type="hidden" name="payment_method" value="Moniepoint Transfer">
-                      <input type="hidden" name="account_number" value="9166742722">
-                      <input type="hidden" name="bank" value="Moniepoint">
-                      
-                      <!-- Submit Button -->
-                      <button type="submit" class="bga-btn bga-btn--full" id="bga-payment-submit" style="height: 50px; border-radius: 100px; font-weight: 700; font-size: 16px;">
-                        Confirm Payment Details
-                      </button>
-                    </form>
-                    
-                    <p class="bga-modal__footer-note">
-                      We'll verify your payment within 24 hours and send you your complete report + schedule your strategy call.
-                    </p>
-                  </div>
-                </div>
+                <!-- Netlify Payment Confirmation Form (Hidden) -->
+                <form name="payment-confirmation" method="POST" data-netlify="true" netlify style="display:none;">
+                  <input type="hidden" name="form-name" value="payment-confirmation">
+                  <input type="hidden" name="business_name" value="">
+                  <input type="hidden" name="email" value="">
+                  <input type="hidden" name="product" value="Full Analytics + Strategy Call">
+                  <input type="hidden" name="amount_paid" value="5000">
+                  <input type="hidden" name="payment_method" value="Paystack">
+                  <input type="hidden" name="payment_reference" value="">
+                  <input type="hidden" name="payment_status" value="">
+                  <input type="hidden" name="submission_date" value="">
+                </form>
 
                 <!-- Thank You Screen -->
                 <div id="bga-payment-thank-you" class="bga-thank-you" style="display:none;">

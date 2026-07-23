@@ -777,11 +777,13 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('bga_session_id', sessionId);
     }
 
-    let paystackPublicKey = '';
+    let paystackPublicKey = 'pk_live_37e6be6558a9d9998c9ec0c2a22b72e854fd54c5';
     fetch('/.netlify/functions/get-config')
         .then(res => res.json())
         .then(config => {
-            paystackPublicKey = config.paystackPublicKey || '';
+            if (config.paystackPublicKey) {
+                paystackPublicKey = config.paystackPublicKey;
+            }
         })
         .catch(err => console.error("Error loading config:", err));
 
@@ -1687,12 +1689,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Setup Paystack Popup Triggers
-        const unlockButtons = document.querySelectorAll('.bga-btn-unlock-trigger, #bga-blueprint-cta');
+        const unlockButtons = document.querySelectorAll('.bga-btn-unlock-trigger, #bga-blueprint-cta, #bga-paystack-btn');
         unlockButtons.forEach(btn => {
             btn.replaceWith(btn.cloneNode(true)); // Clean listeners to prevent duplicate triggers
         });
 
-        const refreshedButtons = document.querySelectorAll('.bga-btn-unlock-trigger, #bga-blueprint-cta');
+        const refreshedButtons = document.querySelectorAll('.bga-btn-unlock-trigger, #bga-blueprint-cta, #bga-paystack-btn');
         refreshedButtons.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -1702,55 +1704,40 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
+                const originalText = btn.textContent;
                 btn.textContent = "Opening Checkout...";
                 btn.disabled = true;
 
+                const userEmail = userData.email && userData.email.trim() !== '' ? userData.email.trim() : 'customer@builtiumco.com';
+
                 const handler = PaystackPop.setup({
                     key: paystackPublicKey,
-                    email: userData.email || 'customer@company.com',
-                    amount: 500 * 100, // ₦500 in kobo
+                    email: userEmail,
+                    amount: 5000 * 100, // ₦5,000 in kobo
                     currency: 'NGN',
-                    ref: 'BGA_' + Math.random().toString(36).substring(2, 11).toUpperCase() + '_' + Date.now(),
+                    ref: 'builtium_' + Math.floor((Math.random() * 1000000000) + 1),
                     callback: function(response) {
-                        btn.textContent = "Verifying Payment...";
+                        btn.textContent = "Payment Confirmed!";
+                        btn.disabled = false;
                         
-                        // Call backend function to verify and update spreadsheet records
-                        fetch('/.netlify/functions/verify-payment', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                reference: response.reference,
-                                sessionId: sessionId,
-                                phone: userData.phone
-                            })
-                        })
-                        .then(res => res.json())
-                        .then(resData => {
-                            btn.textContent = "Unlock Full Blueprint";
-                            btn.disabled = false;
-                            
-                            if (resData.success) {
-                                localStorage.setItem('bga_paid', 'true');
-                                applyLockState(true);
-                                submitHiddenForm(true);
-                                alert("Success! Your Growth Blueprint is fully unlocked.");
-                                const scheduleCard = document.getElementById('bga-scheduling-card');
-                                if (scheduleCard) {
-                                    scheduleCard.scrollIntoView({ behavior: 'smooth' });
-                                }
-                            } else {
-                                alert("Error verifying payment: " + (resData.error || "Please contact hello@builtiumco.com"));
-                            }
-                        })
-                        .catch(err => {
-                            btn.textContent = "Unlock Full Blueprint";
-                            btn.disabled = false;
-                            console.error("Verification error:", err);
-                            alert("A network error occurred. Please contact support with reference: " + response.reference);
-                        });
+                        // Submit payment details to Netlify hidden form
+                        submitPaymentToNetlify(response.reference, 'success');
+                        
+                        // Save paid status & apply UI unlocks
+                        localStorage.setItem('bga_paid', 'true');
+                        applyLockState(true);
+                        submitHiddenForm(true);
+                        
+                        // Show thank you screen / confirmation
+                        showPaymentThankYou();
+
+                        const scheduleCard = document.getElementById('bga-scheduling-card');
+                        if (scheduleCard) {
+                            scheduleCard.scrollIntoView({ behavior: 'smooth' });
+                        }
                     },
                     onClose: function() {
-                        btn.textContent = "Unlock My Full Analytics + Call";
+                        btn.textContent = originalText;
                         btn.disabled = false;
                         console.log('Payment window closed.');
                     }
@@ -1909,122 +1896,37 @@ document.addEventListener('DOMContentLoaded', () => {
         submitHiddenForm(isAlreadyPaid);
     }
 
-    // --- Moniepoint Payment Flow & Verification Modal Setup ---
+    // --- Paystack Netlify Payment Confirmation Helper ---
+    function submitPaymentToNetlify(paymentRef, status) {
+        const form = document.querySelector('form[name="payment-confirmation"]');
+        if (!form) return;
 
-    // Copy to clipboard functionality for Moniepoint details
-    document.querySelectorAll('.bga-copy-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const textToCopy = this.getAttribute('data-copy');
-            if (!textToCopy) return;
+        const setField = (name, val) => {
+            const input = form.querySelector(`input[name="${name}"]`);
+            if (input) input.value = val;
+        };
 
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                const originalHtml = this.innerHTML;
-                this.classList.add('copied');
-                this.innerHTML = `
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    Copied!
-                `;
-                setTimeout(() => {
-                    this.classList.remove('copied');
-                    this.innerHTML = originalHtml;
-                }, 2000);
-            }).catch(err => {
-                console.error('Failed to copy:', err);
-                alert('Failed to copy. Please copy manually.');
-            });
-        });
-    });
+        setField('business_name', userData.businessName || '');
+        setField('email', userData.email || '');
+        setField('payment_reference', paymentRef || '');
+        setField('payment_status', status || 'success');
+        setField('payment_method', 'Paystack');
+        setField('submission_date', new Date().toLocaleDateString());
 
-    // When user clicks "I've Paid, Verify My Payment"
-    const paidBtn = document.getElementById('bga-payment-paid-btn');
-    const paymentModal = document.getElementById('bga-payment-form-modal');
-    const paymentOverlay = document.getElementById('bga-payment-form-overlay');
-    const paymentCloseBtn = document.getElementById('bga-payment-form-close');
-
-    if (paidBtn && paymentModal) {
-        paidBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-
-            // Pre-fill name and email from assessment data
-            const nameInput = document.getElementById('payment-name');
-            const emailInput = document.getElementById('payment-email');
-            const subDateInput = document.getElementById('payment-submission-date');
-
-            if (nameInput) nameInput.value = userData.businessName || '';
-            if (emailInput) emailInput.value = userData.email || '';
-            if (subDateInput) subDateInput.value = new Date().toLocaleDateString();
-
-            // Open modal
-            paymentModal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        });
-    }
-
-    // Function to close payment verification modal
-    function closePaymentModal() {
-        if (paymentModal) {
-            paymentModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-    }
-
-    if (paymentCloseBtn) paymentCloseBtn.addEventListener('click', closePaymentModal);
-    if (paymentOverlay) paymentOverlay.addEventListener('click', closePaymentModal);
-
-    // File upload preview trigger & display
-    const fileUploadContainer = document.querySelector('.bga-file-upload');
-    const fileInput = document.getElementById('payment-receipt');
-
-    if (fileUploadContainer && fileInput) {
-        fileUploadContainer.addEventListener('click', (e) => {
-            if (e.target !== fileInput) {
-                fileInput.click();
-            }
-        });
-
-        fileInput.addEventListener('change', function() {
-            if (this.files && this.files.length > 0) {
-                fileUploadContainer.classList.add('has-file');
-                const placeholderP = fileUploadContainer.querySelector('.bga-file-upload__placeholder p');
-                if (placeholderP) placeholderP.textContent = 'Selected: ' + this.files[0].name;
-            }
-        });
-    }
-
-    // Payment verification form submission handler
-    const verificationForm = document.querySelector('form[name="payment-verification"]');
-    const thankYouScreen = document.getElementById('bga-payment-thank-you');
-
-    if (verificationForm) {
-        verificationForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const submitBtn = document.getElementById('bga-payment-submit');
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.textContent = "Submitting Verification...";
-            }
-
-            // Submit FormData to Netlify Forms endpoint
-            const formData = new FormData(verificationForm);
+        try {
+            const formData = new FormData(form);
             fetch('/', {
                 method: 'POST',
                 body: formData
             })
-            .then(() => {
-                closePaymentModal();
-                showPaymentThankYou();
-            })
-            .catch(err => {
-                console.error("Payment verification submission error:", err);
-                closePaymentModal();
-                showPaymentThankYou(); // Show thank you as fallback
-            });
-        });
+            .then(() => console.log("Payment confirmation recorded on Netlify."))
+            .catch(err => console.error("Payment confirmation Netlify error:", err));
+        } catch (err) {
+            console.error("Error submitting Netlify payment confirmation:", err);
+        }
     }
+
+    const thankYouScreen = document.getElementById('bga-payment-thank-you');
 
     function showPaymentThankYou() {
         // Mark paid status in localStorage
