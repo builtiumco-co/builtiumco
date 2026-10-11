@@ -605,6 +605,7 @@ select.svc-form__input {
   transform: none !important;
 }
 .svc-form__submit-spinner { display: flex; }
+.svc-form__submit-spinner[hidden] { display: none; }
 .svc-spin {
   animation: spin 0.9s linear infinite;
 }

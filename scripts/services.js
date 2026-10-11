@@ -1,7 +1,7 @@
 /* =====================================================
    BUILTIUM SERVICES PAGE — services.js
    Handles: modal open/close, form validation,
-   submission to Netlify function, success/error states
+   submission to Netlify Forms, success/error states
    ===================================================== */
 
 (function () {
@@ -171,195 +171,94 @@
     return true;
   }
 
-  // ---- Collect checkboxes (multiple values same name) ----
-  function collectCheckboxes(form, name) {
-    const checked = [];
-    form.querySelectorAll(`input[name="${name}"]:checked`).forEach(cb => {
-      checked.push(cb.value);
-    });
-    return checked.join(', ');
+  // ---- Netlify Forms submission ----
+  function prepareSubmission(form) {
+    const formData = new FormData(form);
+    const body = new URLSearchParams();
+
+    // Send each checkbox group as one readable list, including every selection.
+    // Keep every declared field so unanswered optional questions are explicit.
+    const fieldNames = new Set(Array.from(form.elements, field => field.name).filter(Boolean));
+    for (const name of fieldNames) {
+      const values = formData.getAll(name).map(value => value.trim()).filter(Boolean);
+      const isCheckboxGroup = Array.from(form.elements).some(field =>
+        field.name === name && field.type === 'checkbox'
+      );
+      body.set(name, isCheckboxGroup
+        ? (values.length ? values.map(value => `• ${value}`).join('\n') : 'Not specified')
+        : (values.join('\n') || 'Not specified'));
+    }
+
+    // Netlify uses the email field as Reply-To. Never replace the honeypot's
+    // empty value with a placeholder: that would flag real enquiries as spam.
+    body.set('bot-field', formData.get('bot-field') || '');
+    const businessName = body.get('Business name').replace(/[\r\n]+/g, ' ').slice(0, 120);
+    body.set('subject', `${formData.get('subject')} | ${businessName}`);
+    return body;
   }
 
-  function collectRadio(form, name) {
-    const radio = form.querySelector(`input[name="${name}"]:checked`);
-    return radio ? radio.value : '';
-  }
-
-  // ---- SUBMIT HELPER (Netlify Forms + Serverless Function) ----
-  async function performSubmission(formElement, payload, formName) {
-    let netlifySuccess = false;
-
-    // 1. Submit to Netlify Forms endpoint (always reliable on Netlify static hosting)
+  async function performSubmission(form) {
     try {
-      const fd = new FormData(formElement);
-      if (!fd.has('form-name')) {
-        fd.append('form-name', formName);
-      }
-      const searchParams = new URLSearchParams();
-      for (const [key, value] of fd.entries()) {
-        searchParams.append(key, value);
-      }
-      const netlifyRes = await fetch('/', {
+      const response = await fetch(form.action, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: searchParams.toString()
+        body: prepareSubmission(form).toString()
       });
-      if (netlifyRes.ok) {
-        netlifySuccess = true;
+      if (!response.ok) {
+        console.warn('Netlify Forms rejected the submission:', {
+          form: form.name,
+          status: response.status,
+          statusText: response.statusText
+        });
       }
-    } catch (err) {
-      console.warn('Netlify Forms submission error:', err);
+      return response.ok;
+    } catch (error) {
+      console.warn('Netlify Forms submission error:', error);
+      return false;
     }
-
-    // 2. Submit to Netlify Serverless Function (Google Sheets & email notification)
-    let functionSuccess = false;
-    try {
-      const fnRes = await fetch('/.netlify/functions/services-submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      if (fnRes.ok) {
-        const data = await fnRes.json();
-        if (data && data.success) {
-          functionSuccess = true;
-        }
-      }
-    } catch (err) {
-      console.warn('Serverless function services-submit error:', err);
-    }
-
-    // If EITHER succeeds, we count the submission as successful
-    return netlifySuccess || functionSuccess;
   }
 
-  // ---- LAUNCH FORM ----
-  const formLaunch = document.getElementById('form-launch');
-  if (formLaunch) {
-    formLaunch.addEventListener('submit', async (e) => {
-      e.preventDefault();
+  function bindServiceForm(type) {
+    const form = document.getElementById(`form-${type}`);
+    if (!form) return;
 
-      const errEl = document.getElementById('launch-form-error');
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const submitBtn = document.getElementById(`${type}-submit-btn`);
+      if (submitBtn.disabled) return;
+
+      const errEl = document.getElementById(`${type}-form-error`);
       clearFormError(errEl);
 
-      const bizName = document.getElementById('launch-business-name');
-      const contactName = document.getElementById('launch-contact-name');
-      const email = document.getElementById('launch-email');
-      const phone = document.getElementById('launch-phone');
+      const businessName = document.getElementById(`${type}-business-name`);
+      const contactName = document.getElementById(`${type}-contact-name`);
+      const email = document.getElementById(`${type}-email`);
+      const phone = document.getElementById(`${type}-phone`);
+      if (!validateRequired([businessName, contactName, email, phone], errEl)) return;
+      if (!validateEmail(email, errEl) || !validatePhone(phone, errEl)) return;
+      if (!form.reportValidity()) return;
 
-      // Required field check
-      if (!validateRequired([bizName, contactName, email, phone], errEl)) return;
-      // Email format
-      if (!validateEmail(email, errEl)) return;
-      // Phone format
-      if (!validatePhone(phone, errEl)) return;
-
-      const submitBtn = document.getElementById('launch-submit-btn');
       const labelEl = submitBtn.querySelector('.svc-form__submit-label');
       const spinnerEl = submitBtn.querySelector('.svc-form__submit-spinner');
       setSubmitting(submitBtn, labelEl, spinnerEl, true);
-
-      // Collect all form data
-      const payload = {
-        formType: 'launch',
-        businessName: bizName.value.trim(),
-        contactName: contactName.value.trim(),
-        email: email.value.trim(),
-        phone: phone.value.trim(),
-        industry: document.getElementById('launch-industry').value,
-        businessDescription: document.getElementById('launch-desc').value.trim(),
-        websiteGoals: collectCheckboxes(formLaunch, 'website-goals'),
-        brandAssets: collectCheckboxes(formLaunch, 'brand-assets'),
-        preferredPages: collectCheckboxes(formLaunch, 'preferred-pages'),
-        preferredFeatures: collectCheckboxes(formLaunch, 'preferred-features'),
-        inspirationWebsites: document.getElementById('launch-inspiration').value.trim(),
-        additionalNotes: document.getElementById('launch-notes').value.trim()
-      };
-
-      const success = await performSubmission(formLaunch, payload, 'launch-brief');
+      const success = await performSubmission(form);
       setSubmitting(submitBtn, labelEl, spinnerEl, false);
 
+      hide(`${type}-form-state`);
       if (success) {
-        hide('launch-form-state');
-        hide('launch-error-state');
-        const bizNameEl = document.getElementById('launch-success-biz');
-        if (bizNameEl) bizNameEl.textContent = payload.businessName;
-        show('launch-success-state');
-        const panel = document.querySelector('#modal-launch .svc-modal__panel');
-        if (panel) panel.scrollTop = 0;
+        hide(`${type}-error-state`);
+        const businessNameEl = document.getElementById(`${type}-success-biz`);
+        if (businessNameEl) businessNameEl.textContent = businessName.value.trim();
+        show(`${type}-success-state`);
       } else {
-        hide('launch-form-state');
-        show('launch-error-state');
-        const panel = document.querySelector('#modal-launch .svc-modal__panel');
-        if (panel) panel.scrollTop = 0;
+        show(`${type}-error-state`);
       }
+      const panel = document.querySelector(`#modal-${type} .svc-modal__panel`);
+      if (panel) panel.scrollTop = 0;
     });
   }
 
-  // ---- CUSTOM FORM ----
-  const formCustom = document.getElementById('form-custom');
-  if (formCustom) {
-    formCustom.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const errEl = document.getElementById('custom-form-error');
-      clearFormError(errEl);
-
-      const bizName = document.getElementById('custom-business-name');
-      const contactName = document.getElementById('custom-contact-name');
-      const email = document.getElementById('custom-email');
-      const phone = document.getElementById('custom-phone');
-
-      // Required field check
-      if (!validateRequired([bizName, contactName, email, phone], errEl)) return;
-      if (!validateEmail(email, errEl)) return;
-      if (!validatePhone(phone, errEl)) return;
-
-      const submitBtn = document.getElementById('custom-submit-btn');
-      const labelEl = submitBtn.querySelector('.svc-form__submit-label');
-      const spinnerEl = submitBtn.querySelector('.svc-form__submit-spinner');
-      setSubmitting(submitBtn, labelEl, spinnerEl, true);
-
-      const payload = {
-        formType: 'custom',
-        businessName: bizName.value.trim(),
-        industry: document.getElementById('custom-industry').value,
-        businessLocation: document.getElementById('custom-location').value.trim(),
-        contactName: contactName.value.trim(),
-        email: email.value.trim(),
-        phone: phone.value.trim(),
-        existingWebsite: document.getElementById('custom-website').value.trim(),
-        businessGoals: collectCheckboxes(formCustom, 'business-goals'),
-        servicesRequired: collectCheckboxes(formCustom, 'services-required'),
-        existingAssets: collectCheckboxes(formCustom, 'existing-assets'),
-        pageCount: collectRadio(formCustom, 'page-count'),
-        userAccounts: collectRadio(formCustom, 'user-accounts'),
-        onlinePayments: collectRadio(formCustom, 'online-payments'),
-        adminDashboard: collectRadio(formCustom, 'admin-dashboard'),
-        customerCapabilities: collectCheckboxes(formCustom, 'customer-capabilities'),
-        timeline: collectRadio(formCustom, 'timeline'),
-        budgetRange: collectRadio(formCustom, 'budget-range'),
-        additionalInformation: document.getElementById('custom-info').value.trim()
-      };
-
-      const success = await performSubmission(formCustom, payload, 'custom-solution');
-      setSubmitting(submitBtn, labelEl, spinnerEl, false);
-
-      if (success) {
-        hide('custom-form-state');
-        hide('custom-error-state');
-        const bizNameEl = document.getElementById('custom-success-biz');
-        if (bizNameEl) bizNameEl.textContent = payload.businessName;
-        show('custom-success-state');
-        const panel = document.querySelector('#modal-custom .svc-modal__panel');
-        if (panel) panel.scrollTop = 0;
-      } else {
-        hide('custom-form-state');
-        show('custom-error-state');
-        const panel = document.querySelector('#modal-custom .svc-modal__panel');
-        if (panel) panel.scrollTop = 0;
-      }
-    });
-  }
+  bindServiceForm('launch');
+  bindServiceForm('custom');
 
 })();

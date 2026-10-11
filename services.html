@@ -257,16 +257,21 @@
           <p class="svc-modal__sub">Fill in what you know — we'll handle the rest in the proposal. All fields marked * are required.</p>
         </div>
 
-        <!-- Netlify form fallback -->
+        <!-- Netlify detects this form and its fields during deployment. -->
         <form
           name="launch-brief"
           method="POST"
+          action="/"
+          data-netlify-subject="Builtium | Launch project brief"
           data-netlify="true"
           netlify-honeypot="bot-field"
           id="form-launch"
           novalidate
         >
           <input type="hidden" name="form-name" value="launch-brief" />
+          <input type="hidden" name="subject" value="Builtium | Launch project brief" />
+          <input type="hidden" name="Request type" value="Launch project brief" />
+          <input type="hidden" name="Next step" value="Review the website brief and email a tailored proposal within 48 hours." />
           <p class="svc-form__honeypot"><label>Don't fill this out: <input name="bot-field" /></label></p>
 
           <div class="svc-form__section">
@@ -275,11 +280,11 @@
             <div class="svc-form__row svc-form__row--2">
               <div class="svc-form__group">
                 <label class="svc-form__label" for="launch-business-name">Business Name *</label>
-                <input class="svc-form__input" type="text" id="launch-business-name" name="business-name" placeholder="Your business name" required />
+                <input class="svc-form__input" type="text" id="launch-business-name" name="Business name" placeholder="Your business name" required />
               </div>
               <div class="svc-form__group">
                 <label class="svc-form__label" for="launch-contact-name">Contact Name *</label>
-                <input class="svc-form__input" type="text" id="launch-contact-name" name="contact-name" placeholder="Your full name" required />
+                <input class="svc-form__input" type="text" id="launch-contact-name" name="Contact name" placeholder="Your full name" required />
               </div>
             </div>
 
@@ -290,13 +295,13 @@
               </div>
               <div class="svc-form__group">
                 <label class="svc-form__label" for="launch-phone">Phone / WhatsApp *</label>
-                <input class="svc-form__input" type="tel" id="launch-phone" name="phone" placeholder="+234 800 000 0000" required />
+                <input class="svc-form__input" type="tel" id="launch-phone" name="Phone / WhatsApp" placeholder="+234 800 000 0000" required />
               </div>
             </div>
 
             <div class="svc-form__group">
               <label class="svc-form__label" for="launch-industry">Business Industry</label>
-              <select class="svc-form__input" id="launch-industry" name="industry">
+              <select class="svc-form__input" id="launch-industry" name="Industry">
                 <option value="">Select your industry</option>
                 <option>Technology</option>
                 <option>Healthcare</option>
@@ -317,7 +322,7 @@
 
             <div class="svc-form__group">
               <label class="svc-form__label" for="launch-desc">Tell us about your business</label>
-              <textarea class="svc-form__input svc-form__textarea" id="launch-desc" name="business-description" placeholder="What does your business do? Who do you serve? What problem do you solve?" rows="3"></textarea>
+              <textarea class="svc-form__input svc-form__textarea" id="launch-desc" name="Business description" placeholder="What does your business do? Who do you serve? What problem do you solve?" rows="3"></textarea>
             </div>
           </div>
 
@@ -327,68 +332,68 @@
             <div class="svc-form__group">
               <label class="svc-form__label">What are your main website goals?</label>
               <div class="svc-form__checks">
-                <label class="svc-form__check"><input type="checkbox" name="website-goals" value="Get more leads / inquiries" /><span>Get more leads / inquiries</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="website-goals" value="Sell products / services online" /><span>Sell products / services online</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="website-goals" value="Build credibility / trust" /><span>Build credibility / trust</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="website-goals" value="Replace outdated website" /><span>Replace outdated website</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="website-goals" value="Rank on Google / improve SEO" /><span>Rank on Google / improve SEO</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="website-goals" value="Launch a new brand" /><span>Launch a new brand</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Website goals" value="Get more leads / inquiries" /><span>Get more leads / inquiries</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Website goals" value="Sell products / services online" /><span>Sell products / services online</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Website goals" value="Build credibility / trust" /><span>Build credibility / trust</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Website goals" value="Replace outdated website" /><span>Replace outdated website</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Website goals" value="Rank on Google / improve SEO" /><span>Rank on Google / improve SEO</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Website goals" value="Launch a new brand" /><span>Launch a new brand</span></label>
               </div>
             </div>
 
             <div class="svc-form__group">
               <label class="svc-form__label">Existing brand assets you already have</label>
               <div class="svc-form__checks">
-                <label class="svc-form__check"><input type="checkbox" name="brand-assets" value="Logo" /><span>Logo</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="brand-assets" value="Brand Guidelines" /><span>Brand Guidelines</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="brand-assets" value="Website Content (Copy)" /><span>Website Content (Copy)</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="brand-assets" value="Images / Photography" /><span>Images / Photography</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="brand-assets" value="Domain Name" /><span>Domain Name</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="brand-assets" value="Hosting" /><span>Hosting</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="brand-assets" value="None — starting from scratch" /><span>None — starting from scratch</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Brand assets available" value="Logo" /><span>Logo</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Brand assets available" value="Brand Guidelines" /><span>Brand Guidelines</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Brand assets available" value="Website Content (Copy)" /><span>Website Content (Copy)</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Brand assets available" value="Images / Photography" /><span>Images / Photography</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Brand assets available" value="Domain Name" /><span>Domain Name</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Brand assets available" value="Hosting" /><span>Hosting</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Brand assets available" value="None — starting from scratch" /><span>None — starting from scratch</span></label>
               </div>
             </div>
 
             <div class="svc-form__group">
               <label class="svc-form__label">Preferred pages for your website</label>
               <div class="svc-form__checks">
-                <label class="svc-form__check"><input type="checkbox" name="preferred-pages" value="Home" /><span>Home</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="preferred-pages" value="About" /><span>About</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="preferred-pages" value="Services" /><span>Services</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="preferred-pages" value="Portfolio / Work" /><span>Portfolio / Work</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="preferred-pages" value="Blog" /><span>Blog</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="preferred-pages" value="Contact" /><span>Contact</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="preferred-pages" value="Pricing" /><span>Pricing</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="preferred-pages" value="FAQ" /><span>FAQ</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="preferred-pages" value="Shop / Store" /><span>Shop / Store</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="preferred-pages" value="Landing Page only" /><span>Landing Page only</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Preferred website pages" value="Home" /><span>Home</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Preferred website pages" value="About" /><span>About</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Preferred website pages" value="Services" /><span>Services</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Preferred website pages" value="Portfolio / Work" /><span>Portfolio / Work</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Preferred website pages" value="Blog" /><span>Blog</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Preferred website pages" value="Contact" /><span>Contact</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Preferred website pages" value="Pricing" /><span>Pricing</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Preferred website pages" value="FAQ" /><span>FAQ</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Preferred website pages" value="Shop / Store" /><span>Shop / Store</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Preferred website pages" value="Landing Page only" /><span>Landing Page only</span></label>
               </div>
             </div>
 
             <div class="svc-form__group">
               <label class="svc-form__label">Features you need</label>
               <div class="svc-form__checks">
-                <label class="svc-form__check"><input type="checkbox" name="preferred-features" value="Contact / inquiry form" /><span>Contact / inquiry form</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="preferred-features" value="Online booking / scheduling" /><span>Online booking / scheduling</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="preferred-features" value="E-commerce / product catalogue" /><span>E-commerce / product catalogue</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="preferred-features" value="Payment integration" /><span>Payment integration</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="preferred-features" value="Photo / video gallery" /><span>Photo / video gallery</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="preferred-features" value="Live chat widget" /><span>Live chat widget</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="preferred-features" value="Blog / news section" /><span>Blog / news section</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="preferred-features" value="Email newsletter signup" /><span>Email newsletter signup</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="preferred-features" value="Social media integration" /><span>Social media integration</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="preferred-features" value="Multi-language support" /><span>Multi-language support</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Website features needed" value="Contact / inquiry form" /><span>Contact / inquiry form</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Website features needed" value="Online booking / scheduling" /><span>Online booking / scheduling</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Website features needed" value="E-commerce / product catalogue" /><span>E-commerce / product catalogue</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Website features needed" value="Payment integration" /><span>Payment integration</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Website features needed" value="Photo / video gallery" /><span>Photo / video gallery</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Website features needed" value="Live chat widget" /><span>Live chat widget</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Website features needed" value="Blog / news section" /><span>Blog / news section</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Website features needed" value="Email newsletter signup" /><span>Email newsletter signup</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Website features needed" value="Social media integration" /><span>Social media integration</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Website features needed" value="Multi-language support" /><span>Multi-language support</span></label>
               </div>
             </div>
 
             <div class="svc-form__group">
               <label class="svc-form__label" for="launch-inspiration">Inspiration websites (optional)</label>
-              <input class="svc-form__input" type="text" id="launch-inspiration" name="inspiration-websites" placeholder="e.g. stripe.com, linear.app, notion.so" />
+              <input class="svc-form__input" type="text" id="launch-inspiration" name="Inspiration websites" placeholder="e.g. stripe.com, linear.app, notion.so" />
             </div>
 
             <div class="svc-form__group">
               <label class="svc-form__label" for="launch-notes">Anything else we should know?</label>
-              <textarea class="svc-form__input svc-form__textarea" id="launch-notes" name="additional-notes" placeholder="Any specific requirements, timeline pressures, or context that helps us prepare your proposal." rows="3"></textarea>
+              <textarea class="svc-form__input svc-form__textarea" id="launch-notes" name="Additional notes" placeholder="Any specific requirements, timeline pressures, or context that helps us prepare your proposal." rows="3"></textarea>
             </div>
           </div>
 
@@ -454,12 +459,17 @@
         <form
           name="custom-solution"
           method="POST"
+          action="/"
+          data-netlify-subject="Builtium | Custom solution request"
           data-netlify="true"
           netlify-honeypot="bot-field"
           id="form-custom"
           novalidate
         >
           <input type="hidden" name="form-name" value="custom-solution" />
+          <input type="hidden" name="subject" value="Builtium | Custom solution request" />
+          <input type="hidden" name="Request type" value="Custom solution request" />
+          <input type="hidden" name="Next step" value="Review the scope, timeline and budget, then email a tailored proposal within 48 hours." />
           <p class="svc-form__honeypot"><label>Don't fill this out: <input name="bot-field" /></label></p>
 
           <div class="svc-form__section">
@@ -468,11 +478,11 @@
             <div class="svc-form__row svc-form__row--2">
               <div class="svc-form__group">
                 <label class="svc-form__label" for="custom-business-name">Business Name *</label>
-                <input class="svc-form__input" type="text" id="custom-business-name" name="business-name" placeholder="Your business name" required />
+                <input class="svc-form__input" type="text" id="custom-business-name" name="Business name" placeholder="Your business name" required />
               </div>
               <div class="svc-form__group">
                 <label class="svc-form__label" for="custom-industry">Industry</label>
-                <select class="svc-form__input" id="custom-industry" name="industry">
+                <select class="svc-form__input" id="custom-industry" name="Industry">
                   <option value="">Select industry</option>
                   <option>Technology</option>
                   <option>Healthcare</option>
@@ -495,11 +505,11 @@
             <div class="svc-form__row svc-form__row--2">
               <div class="svc-form__group">
                 <label class="svc-form__label" for="custom-location">Business Location</label>
-                <input class="svc-form__input" type="text" id="custom-location" name="business-location" placeholder="City, Country (e.g., Lagos, Nigeria)" />
+                <input class="svc-form__input" type="text" id="custom-location" name="Business location" placeholder="City, Country (e.g., Lagos, Nigeria)" />
               </div>
               <div class="svc-form__group">
                 <label class="svc-form__label" for="custom-website">Existing Website (if any)</label>
-                <input class="svc-form__input" type="url" id="custom-website" name="existing-website" placeholder="https://yourwebsite.com" />
+                <input class="svc-form__input" type="url" id="custom-website" name="Existing website" placeholder="https://yourwebsite.com" />
               </div>
             </div>
           </div>
@@ -509,7 +519,7 @@
             <div class="svc-form__row svc-form__row--2">
               <div class="svc-form__group">
                 <label class="svc-form__label" for="custom-contact-name">Contact Name *</label>
-                <input class="svc-form__input" type="text" id="custom-contact-name" name="contact-name" placeholder="Your full name" required />
+                <input class="svc-form__input" type="text" id="custom-contact-name" name="Contact name" placeholder="Your full name" required />
               </div>
               <div class="svc-form__group">
                 <label class="svc-form__label" for="custom-email">Email Address *</label>
@@ -518,7 +528,7 @@
             </div>
             <div class="svc-form__group">
               <label class="svc-form__label" for="custom-phone">Phone Number *</label>
-              <input class="svc-form__input" type="tel" id="custom-phone" name="phone" placeholder="+234 800 000 0000" required />
+              <input class="svc-form__input" type="tel" id="custom-phone" name="Phone / WhatsApp" placeholder="+234 800 000 0000" required />
             </div>
           </div>
 
@@ -527,14 +537,14 @@
             <div class="svc-form__group">
               <label class="svc-form__label">What are you trying to achieve?</label>
               <div class="svc-form__checks">
-                <label class="svc-form__check"><input type="checkbox" name="business-goals" value="Build or rebuild our brand identity" /><span>Build or rebuild our brand identity</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="business-goals" value="Launch or redesign our website" /><span>Launch or redesign our website</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="business-goals" value="Build a web application or custom platform" /><span>Build a web application or custom platform</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="business-goals" value="Increase visibility and get found online" /><span>Increase visibility and get found online</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="business-goals" value="Generate more leads and sales" /><span>Generate more leads and sales</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="business-goals" value="Automate business processes" /><span>Automate business processes</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="business-goals" value="Grow and manage our social presence" /><span>Grow and manage our social presence</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="business-goals" value="Ongoing strategic digital support" /><span>Ongoing strategic digital support</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Business goals" value="Build or rebuild our brand identity" /><span>Build or rebuild our brand identity</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Business goals" value="Launch or redesign our website" /><span>Launch or redesign our website</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Business goals" value="Build a web application or custom platform" /><span>Build a web application or custom platform</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Business goals" value="Increase visibility and get found online" /><span>Increase visibility and get found online</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Business goals" value="Generate more leads and sales" /><span>Generate more leads and sales</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Business goals" value="Automate business processes" /><span>Automate business processes</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Business goals" value="Grow and manage our social presence" /><span>Grow and manage our social presence</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Business goals" value="Ongoing strategic digital support" /><span>Ongoing strategic digital support</span></label>
               </div>
             </div>
           </div>
@@ -546,61 +556,61 @@
             <div class="svc-form__service-group">
               <div class="svc-form__service-label">Strategy &amp; Discovery</div>
               <div class="svc-form__checks">
-                <label class="svc-form__check"><input type="checkbox" name="services-required" value="Growth Score Audit" /><span>Growth Score Audit</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="services-required" value="Digital Strategy Consulting" /><span>Digital Strategy Consulting</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="services-required" value="Competitor + Market Research" /><span>Competitor + Market Research</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Services required" value="Growth Score Audit" /><span>Growth Score Audit</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Services required" value="Digital Strategy Consulting" /><span>Digital Strategy Consulting</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Services required" value="Competitor + Market Research" /><span>Competitor + Market Research</span></label>
               </div>
             </div>
 
             <div class="svc-form__service-group">
               <div class="svc-form__service-label">Website</div>
               <div class="svc-form__checks">
-                <label class="svc-form__check"><input type="checkbox" name="services-required" value="Website Design + Development" /><span>Website Design + Development</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="services-required" value="Landing Page" /><span>Landing Page</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="services-required" value="Website Redesign" /><span>Website Redesign</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="services-required" value="Website Maintenance" /><span>Website Maintenance</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Services required" value="Website Design + Development" /><span>Website Design + Development</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Services required" value="Landing Page" /><span>Landing Page</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Services required" value="Website Redesign" /><span>Website Redesign</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Services required" value="Website Maintenance" /><span>Website Maintenance</span></label>
               </div>
             </div>
 
             <div class="svc-form__service-group">
               <div class="svc-form__service-label">Custom Development</div>
               <div class="svc-form__checks">
-                <label class="svc-form__check"><input type="checkbox" name="services-required" value="Web Application" /><span>Web Application</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="services-required" value="E-commerce Platform" /><span>E-commerce Platform</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="services-required" value="Customer Portal / Dashboard" /><span>Customer Portal / Dashboard</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="services-required" value="API Integration" /><span>API Integration</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="services-required" value="Booking / Scheduling System" /><span>Booking / Scheduling System</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Services required" value="Web Application" /><span>Web Application</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Services required" value="E-commerce Platform" /><span>E-commerce Platform</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Services required" value="Customer Portal / Dashboard" /><span>Customer Portal / Dashboard</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Services required" value="API Integration" /><span>API Integration</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Services required" value="Booking / Scheduling System" /><span>Booking / Scheduling System</span></label>
               </div>
             </div>
 
             <div class="svc-form__service-group">
               <div class="svc-form__service-label">Branding</div>
               <div class="svc-form__checks">
-                <label class="svc-form__check"><input type="checkbox" name="services-required" value="Logo Design" /><span>Logo Design</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="services-required" value="Full Brand Identity" /><span>Full Brand Identity</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="services-required" value="Brand Guidelines" /><span>Brand Guidelines</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="services-required" value="Social Media Kit" /><span>Social Media Kit</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Services required" value="Logo Design" /><span>Logo Design</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Services required" value="Full Brand Identity" /><span>Full Brand Identity</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Services required" value="Brand Guidelines" /><span>Brand Guidelines</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Services required" value="Social Media Kit" /><span>Social Media Kit</span></label>
               </div>
             </div>
 
             <div class="svc-form__service-group">
               <div class="svc-form__service-label">Marketing &amp; Advertising</div>
               <div class="svc-form__checks">
-                <label class="svc-form__check"><input type="checkbox" name="services-required" value="SEO + Local Discoverability" /><span>SEO + Local Discoverability</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="services-required" value="Social Media Management" /><span>Social Media Management</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="services-required" value="Meta Ads (Facebook / Instagram)" /><span>Meta Ads (Facebook / Instagram)</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="services-required" value="Google Ads" /><span>Google Ads</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="services-required" value="Email Marketing" /><span>Email Marketing</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="services-required" value="Content Creation" /><span>Content Creation</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Services required" value="SEO + Local Discoverability" /><span>SEO + Local Discoverability</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Services required" value="Social Media Management" /><span>Social Media Management</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Services required" value="Meta Ads (Facebook / Instagram)" /><span>Meta Ads (Facebook / Instagram)</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Services required" value="Google Ads" /><span>Google Ads</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Services required" value="Email Marketing" /><span>Email Marketing</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Services required" value="Content Creation" /><span>Content Creation</span></label>
               </div>
             </div>
 
             <div class="svc-form__service-group">
               <div class="svc-form__service-label">Automation &amp; Support</div>
               <div class="svc-form__checks">
-                <label class="svc-form__check"><input type="checkbox" name="services-required" value="Business Process Automation" /><span>Business Process Automation</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="services-required" value="CRM Setup" /><span>CRM Setup</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="services-required" value="Ongoing Monthly Support Retainer" /><span>Ongoing Monthly Support Retainer</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Services required" value="Business Process Automation" /><span>Business Process Automation</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Services required" value="CRM Setup" /><span>CRM Setup</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Services required" value="Ongoing Monthly Support Retainer" /><span>Ongoing Monthly Support Retainer</span></label>
               </div>
             </div>
           </div>
@@ -610,13 +620,13 @@
             <div class="svc-form__group">
               <label class="svc-form__label">What do you already have?</label>
               <div class="svc-form__checks">
-                <label class="svc-form__check"><input type="checkbox" name="existing-assets" value="Logo / Brand Guidelines" /><span>Logo / Brand Guidelines</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="existing-assets" value="Website Content (Copy)" /><span>Website Content (Copy)</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="existing-assets" value="Images / Photography" /><span>Images / Photography</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="existing-assets" value="Domain Name" /><span>Domain Name</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="existing-assets" value="Hosting" /><span>Hosting</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="existing-assets" value="Existing Website" /><span>Existing Website</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="existing-assets" value="None — starting fresh" /><span>None — starting fresh</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Existing assets" value="Logo / Brand Guidelines" /><span>Logo / Brand Guidelines</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Existing assets" value="Website Content (Copy)" /><span>Website Content (Copy)</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Existing assets" value="Images / Photography" /><span>Images / Photography</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Existing assets" value="Domain Name" /><span>Domain Name</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Existing assets" value="Hosting" /><span>Hosting</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Existing assets" value="Existing Website" /><span>Existing Website</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Existing assets" value="None — starting fresh" /><span>None — starting fresh</span></label>
               </div>
             </div>
           </div>
@@ -627,51 +637,51 @@
             <div class="svc-form__group">
               <label class="svc-form__label">Approximate number of pages / screens</label>
               <div class="svc-form__radios">
-                <label class="svc-form__radio"><input type="radio" name="page-count" value="1–3 pages" /><span>1–3 pages</span></label>
-                <label class="svc-form__radio"><input type="radio" name="page-count" value="4–8 pages" /><span>4–8 pages</span></label>
-                <label class="svc-form__radio"><input type="radio" name="page-count" value="9–15 pages" /><span>9–15 pages</span></label>
-                <label class="svc-form__radio"><input type="radio" name="page-count" value="15+ pages" /><span>15+ pages</span></label>
-                <label class="svc-form__radio"><input type="radio" name="page-count" value="Not sure yet" /><span>Not sure yet</span></label>
+                <label class="svc-form__radio"><input type="radio" name="Number of pages / screens" value="1–3 pages" /><span>1–3 pages</span></label>
+                <label class="svc-form__radio"><input type="radio" name="Number of pages / screens" value="4–8 pages" /><span>4–8 pages</span></label>
+                <label class="svc-form__radio"><input type="radio" name="Number of pages / screens" value="9–15 pages" /><span>9–15 pages</span></label>
+                <label class="svc-form__radio"><input type="radio" name="Number of pages / screens" value="15+ pages" /><span>15+ pages</span></label>
+                <label class="svc-form__radio"><input type="radio" name="Number of pages / screens" value="Not sure yet" /><span>Not sure yet</span></label>
               </div>
             </div>
 
             <div class="svc-form__group">
               <label class="svc-form__label">Do you need user accounts / logins?</label>
               <div class="svc-form__radios">
-                <label class="svc-form__radio"><input type="radio" name="user-accounts" value="Yes" /><span>Yes</span></label>
-                <label class="svc-form__radio"><input type="radio" name="user-accounts" value="No" /><span>No</span></label>
-                <label class="svc-form__radio"><input type="radio" name="user-accounts" value="Not sure" /><span>Not sure</span></label>
+                <label class="svc-form__radio"><input type="radio" name="User accounts / logins needed" value="Yes" /><span>Yes</span></label>
+                <label class="svc-form__radio"><input type="radio" name="User accounts / logins needed" value="No" /><span>No</span></label>
+                <label class="svc-form__radio"><input type="radio" name="User accounts / logins needed" value="Not sure" /><span>Not sure</span></label>
               </div>
             </div>
 
             <div class="svc-form__group">
               <label class="svc-form__label">Do you need online payments?</label>
               <div class="svc-form__radios">
-                <label class="svc-form__radio"><input type="radio" name="online-payments" value="Yes" /><span>Yes</span></label>
-                <label class="svc-form__radio"><input type="radio" name="online-payments" value="No" /><span>No</span></label>
-                <label class="svc-form__radio"><input type="radio" name="online-payments" value="Not sure" /><span>Not sure</span></label>
+                <label class="svc-form__radio"><input type="radio" name="Online payments needed" value="Yes" /><span>Yes</span></label>
+                <label class="svc-form__radio"><input type="radio" name="Online payments needed" value="No" /><span>No</span></label>
+                <label class="svc-form__radio"><input type="radio" name="Online payments needed" value="Not sure" /><span>Not sure</span></label>
               </div>
             </div>
 
             <div class="svc-form__group">
               <label class="svc-form__label">Do you need an admin dashboard?</label>
               <div class="svc-form__radios">
-                <label class="svc-form__radio"><input type="radio" name="admin-dashboard" value="Yes" /><span>Yes</span></label>
-                <label class="svc-form__radio"><input type="radio" name="admin-dashboard" value="No" /><span>No</span></label>
-                <label class="svc-form__radio"><input type="radio" name="admin-dashboard" value="Not sure" /><span>Not sure</span></label>
+                <label class="svc-form__radio"><input type="radio" name="Admin dashboard needed" value="Yes" /><span>Yes</span></label>
+                <label class="svc-form__radio"><input type="radio" name="Admin dashboard needed" value="No" /><span>No</span></label>
+                <label class="svc-form__radio"><input type="radio" name="Admin dashboard needed" value="Not sure" /><span>Not sure</span></label>
               </div>
             </div>
 
             <div class="svc-form__group">
               <label class="svc-form__label">Customer-facing capabilities needed</label>
               <div class="svc-form__checks">
-                <label class="svc-form__check"><input type="checkbox" name="customer-capabilities" value="Book appointments" /><span>Book appointments</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="customer-capabilities" value="Purchase products" /><span>Purchase products</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="customer-capabilities" value="Track orders" /><span>Track orders</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="customer-capabilities" value="Submit support requests" /><span>Submit support requests</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="customer-capabilities" value="Access member content" /><span>Access member content</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="customer-capabilities" value="Fill in forms / applications" /><span>Fill in forms / applications</span></label>
-                <label class="svc-form__check"><input type="checkbox" name="customer-capabilities" value="None of the above" /><span>None of the above</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Customer capabilities needed" value="Book appointments" /><span>Book appointments</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Customer capabilities needed" value="Purchase products" /><span>Purchase products</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Customer capabilities needed" value="Track orders" /><span>Track orders</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Customer capabilities needed" value="Submit support requests" /><span>Submit support requests</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Customer capabilities needed" value="Access member content" /><span>Access member content</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Customer capabilities needed" value="Fill in forms / applications" /><span>Fill in forms / applications</span></label>
+                <label class="svc-form__check"><input type="checkbox" name="Customer capabilities needed" value="None of the above" /><span>None of the above</span></label>
               </div>
             </div>
           </div>
@@ -682,23 +692,23 @@
             <div class="svc-form__group">
               <label class="svc-form__label">When do you need this delivered?</label>
               <div class="svc-form__radios">
-                <label class="svc-form__radio"><input type="radio" name="timeline" value="ASAP (under 2 weeks)" /><span>ASAP (under 2 weeks)</span></label>
-                <label class="svc-form__radio"><input type="radio" name="timeline" value="1 month" /><span>1 month</span></label>
-                <label class="svc-form__radio"><input type="radio" name="timeline" value="1–3 months" /><span>1–3 months</span></label>
-                <label class="svc-form__radio"><input type="radio" name="timeline" value="3–6 months" /><span>3–6 months</span></label>
-                <label class="svc-form__radio"><input type="radio" name="timeline" value="Flexible / ongoing" /><span>Flexible / ongoing</span></label>
+                <label class="svc-form__radio"><input type="radio" name="Delivery timeline" value="ASAP (under 2 weeks)" /><span>ASAP (under 2 weeks)</span></label>
+                <label class="svc-form__radio"><input type="radio" name="Delivery timeline" value="1 month" /><span>1 month</span></label>
+                <label class="svc-form__radio"><input type="radio" name="Delivery timeline" value="1–3 months" /><span>1–3 months</span></label>
+                <label class="svc-form__radio"><input type="radio" name="Delivery timeline" value="3–6 months" /><span>3–6 months</span></label>
+                <label class="svc-form__radio"><input type="radio" name="Delivery timeline" value="Flexible / ongoing" /><span>Flexible / ongoing</span></label>
               </div>
             </div>
 
             <div class="svc-form__group">
               <label class="svc-form__label">Estimated budget range</label>
               <div class="svc-form__radios">
-                <label class="svc-form__radio"><input type="radio" name="budget-range" value="Under ₦150,000" /><span>Under ₦150,000</span></label>
-                <label class="svc-form__radio"><input type="radio" name="budget-range" value="₦150,000 – ₦500,000" /><span>₦150,000 – ₦500,000</span></label>
-                <label class="svc-form__radio"><input type="radio" name="budget-range" value="₦500,000 – ₦1,500,000" /><span>₦500,000 – ₦1,500,000</span></label>
-                <label class="svc-form__radio"><input type="radio" name="budget-range" value="₦1,500,000 – ₦5,000,000" /><span>₦1,500,000 – ₦5,000,000</span></label>
-                <label class="svc-form__radio"><input type="radio" name="budget-range" value="₦5,000,000+" /><span>₦5,000,000+</span></label>
-                <label class="svc-form__radio"><input type="radio" name="budget-range" value="Not sure — help me scope it" /><span>Not sure — help me scope it</span></label>
+                <label class="svc-form__radio"><input type="radio" name="Budget range" value="Under ₦150,000" /><span>Under ₦150,000</span></label>
+                <label class="svc-form__radio"><input type="radio" name="Budget range" value="₦150,000 – ₦500,000" /><span>₦150,000 – ₦500,000</span></label>
+                <label class="svc-form__radio"><input type="radio" name="Budget range" value="₦500,000 – ₦1,500,000" /><span>₦500,000 – ₦1,500,000</span></label>
+                <label class="svc-form__radio"><input type="radio" name="Budget range" value="₦1,500,000 – ₦5,000,000" /><span>₦1,500,000 – ₦5,000,000</span></label>
+                <label class="svc-form__radio"><input type="radio" name="Budget range" value="₦5,000,000+" /><span>₦5,000,000+</span></label>
+                <label class="svc-form__radio"><input type="radio" name="Budget range" value="Not sure — help me scope it" /><span>Not sure — help me scope it</span></label>
               </div>
             </div>
           </div>
@@ -707,7 +717,7 @@
             <h4 class="svc-form__section-label">Anything else?</h4>
             <div class="svc-form__group">
               <label class="svc-form__label" for="custom-info">Additional information</label>
-              <textarea class="svc-form__input svc-form__textarea" id="custom-info" name="additional-information" placeholder="Any other context, requirements, constraints, or questions that will help us scope your project accurately." rows="4"></textarea>
+              <textarea class="svc-form__input svc-form__textarea" id="custom-info" name="Additional information" placeholder="Any other context, requirements, constraints, or questions that will help us scope your project accurately." rows="4"></textarea>
             </div>
           </div>
 
