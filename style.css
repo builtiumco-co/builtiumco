@@ -65,7 +65,8 @@ ul { list-style: none; }
 .grid-inner span { border-right: 1px solid var(--hairline); }
 
 /* Nav */
-.nav {
+.nav,
+#nav-placeholder {
   position: sticky; top: 0; z-index: 50;
   background: rgba(255,255,255,0.8);
   backdrop-filter: blur(12px);
