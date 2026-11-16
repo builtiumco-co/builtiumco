@@ -18,6 +18,21 @@ async function loadComponent(placeholderId, url) {
         const response = await fetch(url);
         if (!response.ok) throw new Error(`Failed to load ${url}`);
         el.innerHTML = await response.text();
+        // Pages can customise the shared footer without duplicating its markup.
+        if (placeholderId === 'footer-placeholder') {
+            const tagline = el.querySelector('.footer-tagline');
+            if (tagline && el.dataset.tagline) tagline.textContent = el.dataset.tagline;
+            const brand = el.querySelector('.footer-brand .brand');
+            if (brand && el.dataset.brandIcon) {
+                const icon = document.createElement('img');
+                icon.src = el.dataset.brandIcon;
+                icon.alt = '';
+                icon.width = 28;
+                icon.height = 28;
+                icon.className = 'learn-footer-icon';
+                brand.prepend(icon);
+            }
+        }
     } catch (err) {
         console.error(err);
     }
