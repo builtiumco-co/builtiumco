@@ -22,3 +22,9 @@ walkthrough.md
 implementation_plan.md
 task.md
 browser/
+
+# Local Netlify state and generated development files
+/.netlify/
+
+# Installed dependencies are restored from package-lock.json
+/node_modules/
